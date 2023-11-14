@@ -37,6 +37,9 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
                 IsTemporaryRegistrationName = c.IsTemporaryRegistration ? "موقت" : "ثبت نام شده",
                 PaidAmount = c.IsTemporaryRegistration ? 0 : c.Price + c.SalePartnerPrice,
                 DiscountAmount = c.DiscountAmount,
+                IsActive = c.IsActive,
+                IsActiveName = c.IsActive ? "فعال" : "انصرافی"
+
             }).ToList();
             return new SysResult() { IsSuccess = true, Message = SystemCommonMessage.InformationFetchedSuccessfully, Value = result };
         }

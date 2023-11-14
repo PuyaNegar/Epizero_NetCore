@@ -27,7 +27,7 @@ namespace PanelBusinessLogicLayer.BusinessComponents.TrainingManagementComponent
         //============================================================
         public IQueryable<CourseMeetingStudentsModel> Read(int CourseId)
         {
-            var result = courseMeetingStudentsRepository.Where(c => c.IsActive && c.CourseId == CourseId && c.CourseMeetingStudentTypeId == (int)CourseMeetingStudentType.Course, c => c.StudentUsers ,c=> c.StudentUsers.StudentUserProfile.Field, c => c.ModUser);
+            var result = courseMeetingStudentsRepository.Where(c => c.CourseId == CourseId && c.CourseMeetingStudentTypeId == (int)CourseMeetingStudentType.Course, c => c.StudentUsers ,c=> c.StudentUsers.StudentUserProfile.Field, c => c.ModUser);
             return result;
         }
         //============================================================

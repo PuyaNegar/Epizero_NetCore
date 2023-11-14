@@ -120,7 +120,18 @@
             }
         });
 
-      
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        TableOnDraw = function () {
+            for (i = 0; i < $('#modelList > tbody > tr').length; i++) {
+
+                var data = $('#modelList').DataTable().row($('#modelList > tbody > tr').eq(i)).data().IsActiveName;
+                
+                if (data != "فعال") {
+                    $('#modelList > tbody > tr').eq(i).css("background-color", "#ff837a");
+                    $('.delete-student')[i].remove();
+                }
+            }
+        }
        
         //---
         $('body').on('click', '#submitstudentCourseBtn', function (e) {
@@ -279,6 +290,7 @@
                                     <th data-viewModel="PaidAmount" data-thousandSeparator="true">مبلغ پرداختی (تومان)</th>
                                     <th data-viewModel="DiscountAmount" data-thousandSeparator="true">مبلغ تخفیف (تومان)</th>
                                     <th data-viewModel="UserEditor">مسئول ثبت نام</th>
+                                    <th data-viewModel="IsActiveName">فعال یا انصرافی</th>
                                     <th style="width: 140px;">عملیات</th>
                                 </tr>
                             </thead>

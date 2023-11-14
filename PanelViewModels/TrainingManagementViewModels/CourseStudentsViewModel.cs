@@ -82,5 +82,14 @@ namespace PanelViewModels.TrainingManagementViewModels
         /// مسئول ثبت نام
         /// </summary>
         public string UserEditor { get; set; }
+        
+        /// <summary>
+        /// فعال یا انصرافی
+        /// </summary>
+        public bool IsActive { get; set; }
+        /// <summary>
+        /// فعال یا انصرافی
+        /// </summary>
+        public string IsActiveName { get; set; }
     }
 }

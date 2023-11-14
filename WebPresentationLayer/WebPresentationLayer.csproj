@@ -56,4 +56,6 @@
     <Folder Include="Connected Services\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appconfig_1json__JsonSchema="https://appsemble.app/api.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
