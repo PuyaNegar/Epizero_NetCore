@@ -1,0 +1,247 @@
+﻿@using Common.Extentions
+
+<script type="text/javascript">
+    $(function () {
+        $('.box-right .box').each(function () {
+            var href = $(this).attr("href").trim();
+            if (href == window.location.pathname) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+            }
+        });
+        //=-=-=-=-=-=--=-=-=-=-=---=-=--=-==-=-=-=-=-=-=-=-=
+        
+                function ReadNotificationStudent () {
+                    DataTransfer('/api/Contents/CourseNotifications/Read/' , 'Get', '', '',
+                function (f) {
+                    toastr.remove();
+                    mainViewModel.notificationStudent(f.Value);
+                    $('.course_notification').show();
+                },
+                function (e) {
+                    toastr.remove();
+                    $('.course_notification').hide();
+                    toastr.error(e.responseJSON.Message);
+                }
+            );
+        }
+        ReadNotificationStudent();
+        //=-=-=-=-=-=--=-=-=-=-=---=-=--=-==-=-=-=-=-=-=-=-=
+        $('body').on('click', '.closebtn', function () {
+
+            $(this).parent().parent().parent().css('display', 'none');
+ 
+        });
+        
+    });
+</script>
+<style type="text/css">
+   
+    .box-right .box {
+        position: relative;
+    }
+
+    .box-right .active:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        border: 2px solid #cca2a2;
+        border-radius: 15px;
+        height: 100px;
+        transition: all .3s;
+    }
+
+    .box-right .active:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        bottom: -10px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #cca2a2;
+        transition: all .3s;
+    }
+
+    .box-menu .alert {
+        padding: 0;
+        border:0;
+       
+ 
+        opacity: 1;
+        transition: opacity 0.6s;
+        margin-bottom: 15px;
+    }
+
+        
+
+    .box-menu .closebtn {
+        margin-left: 15px;
+        color: #555;
+        font-weight: bold;
+        float: left;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .box-notification img {
+        max-width: 100%;
+        height: auto;
+    }
+        a:hover {
+            color: black;
+        }
+    .box-menu .tlt-alarm {
+        font-size: 15px;
+        color: #393535;
+        font-weight:bold;
+    }
+    .box-notification .header-notif {
+        padding:9px;
+        background-color: #c3e1c2;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        overflow: hidden;
+    }
+    .box-notification .notification-content {
+        padding: 15px;
+        border-top: 0;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+    }
+</style>
+
+<!-- ko if: mainViewModel.liveOnlineClasses() != null && mainViewModel.liveOnlineClasses().length > 0 -->
+<section class="live-section" style="display:none;">
+    <div class="container">
+        <div class="row" data-bind="foreach: mainViewModel.liveOnlineClasses() ">
+            <div class="col-md-3 pull-right">
+                <a data-bind="attr: { 'data-courseMeetingId': CourseMeetingId  }" class="content-live enterClassLink">
+                    <div class="livebox">
+                        <img data-bind="attr: {alt: TeacherFullName , src: TeacherPersonalPicPath == '' || TeacherPersonalPicPath == null ? '/assets/img/profile_image_man.png' : TeacherPersonalPicPath }" />
+                        <span class="title-l">زنده</span>
+                    </div>
+                    <div class="text-f-o">
+                        <span class="title" data-bind="text: TeacherFullName"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr />
+</section>
+<!-- /ko -->
+
+<section class="box-menu">
+    <!-- ko if: mainViewModel.notificationStudent() != null && mainViewModel.notificationStudent().length > 0 -->
+    <div class="container course_notification"  style="display:none;">
+        <div class="row box-notification" data-bind="foreach: mainViewModel.notificationStudent()">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="alert success">
+                    <div class="header-notif">
+                        <span class="closebtn">&times;</span>
+                        <div><strong class="tlt-alarm" data-bind="html: Title"></strong></div>
+                    </div>
+                    <div class="notification-content">
+                        <span class="f-size-13" data-bind="html: Description"></span>
+                    </div>
+                   
+                </div>
+            </div>
+         
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="items-box">
+                <!--    <div class="col-lg-12 col-md-12 col-xs-12 hr-line"><hr> </div> -->
+                <div class="box-left col-lg-2 col-md-2 col-xs-12">
+                    <div class="box box-f-left box-yellow">
+                        <a href="/" class="btn">صفحه اصلی</a>
+                        <div class="info">
+                            <span class="text"> امروز @DateTime.UtcNow.ToLocalDateTime().DayOfWeek.ToDayOfWeekNumber().ToWeekDay() </span>
+                            <span class="text"> @DateTime.UtcNow.ToLocalDateTime().ToDateShortFormatString() </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="box-right col-lg-10 col-md-10 col-xs-12">
+                    <a href="/Orders/FinalizedOrders " class="box box-blue-bold">
+                        <i class="fa fa-cog"></i>
+                        <span class="text" style="font-size:12px">سفارشات من</span>
+                    </a>
+                    <a href="/Trainings/WeekSchedules" class="box box-blue-strong">
+                        <i class="fa fa-calendar"></i>
+                        <span class="text">برنامه هفتگی</span>
+                    </a>
+                    <a href="/Trainings/Homeworks" class="box box-red">
+                        @*<span class="count">10</span>*@
+                        <i class="fa fa-wpforms"></i>
+                        <span class="text"> تکالیف من</span>
+                    </a>
+                    <a href="/OnlineExams/OnlineExams" class="box box-red-light">
+                        <i class="fa fa-list"></i>
+                        <span class="text">آزمون های من</span>
+                    </a>
+                    <a href="/Trainings/StudentCourses" class="box box-green-bold">
+                        <i class="fa fa-list-alt "></i>
+                        <span class="text">دوره های من</span>
+                    </a>
+                   @* <a href="/Identities/StudentUserMessages" class="box box-blue">
+                        <i class="fa fa-question"></i>
+                        <span class="text">  سوالات من</span>
+                    </a>*@
+                    <a href="/Trainings/MyQuestions" class="box box box-blue">
+                        <i class="fa fa-question"></i>
+                        <span class="font-s-12 text">سوالات من</span>
+                    </a>
+                    <a href="/Trainings/CourseStudentQuestions" class="box box-light-green">
+                        <i class="fa fa-comment-o"></i>
+                        <span class="font-s-12 text">پرسش و پاسخ</span>
+                    </a>
+                    <a href="/Trainings/OnlineClasses" class="box box-red-strong">
+                        <i class="fa fa-desktop"></i>
+                        <span class="font-s-12 text"> کلاس آنلاین</span>
+                    </a>
+                    <a href="/Trainings/CourseMeetingBooklets" class="box box-blue">
+                        <i class="fa fa-window-restore"></i>
+                        <span class="text"> جزوات من</span>
+                    </a>
+
+                    <a href="/Identities/UserMessageReceiver" class="box box-green">
+                        <span class="count count-t"> </span>
+                        <i class="fa fa-envelope"></i>
+                        <span class="text"> صندوق پیام</span>
+                    </a>
+
+                    <a href="/Financials/Transactions/Index" class="box box-red-light">
+                        <i class="fa fa-money"></i>
+                        <span class="text">امور مالی </span>
+                    </a>
+
+                    <a href="/Identities/UserProfiles/Index" class="box box-orange">
+                        <i class="fa fa-user"></i>
+                        <span class="text">پروفایل من</span>
+                    </a>
+
+                    <a href="/Identities/StudentUserSms" class="box box-blue-bold">
+                        <i class="fa fa-gears"></i>
+                        <span class="text" style="font-size:12px">تنظیمات پیامکی</span>
+                    </a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</section>

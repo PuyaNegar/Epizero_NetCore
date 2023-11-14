@@ -1,0 +1,61 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.ContentsViewModels.HomePageNotificationsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Edit.Description"></label>
+                        <textarea rows="2" asp-for="Edit.Description" class="form-control" data-bind="value: e().Description"></textarea>
+                        <span asp-validation-for="Edit.Description" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.Link"></label>
+                        <textarea rows="2" asp-for="Edit.Link" class="form-control" data-bind="value: e().Link"></textarea>
+                        <span asp-validation-for="Edit.Link" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.IsActive"></label>
+                        <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                            <option value="1">فعال</option>
+                            <option value="0">غيرفعال</option>
+                        </select>
+                        <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.PicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                    new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                         {
+                                             ButtonFarsiName = "آپلود عکس",
+                                        DefualuNullImagePath = "/images/DefaultFlag.png",
+                                        Name = "EditNotifsPicPath",
+                                        KnockoutExpressionString = "MainViewModel.e().PicPath",
+                                        MaxImageHeight = 600,
+                                        MaxImageWidth = 600,
+                                        MinImageHeight = 100,
+                                        MinImageWidth = 100,
+                                        MaxImageSize = 1024,
+                                        HasDeleteBtn = false,
+                                        Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 2000 در 2000 پیکسل \r\n حداکثر حجم مجاز تصویر : 1024 کیلوبایت"
+                                    })
+                            </div>
+                            <span asp-validation-for="Edit.PicPath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

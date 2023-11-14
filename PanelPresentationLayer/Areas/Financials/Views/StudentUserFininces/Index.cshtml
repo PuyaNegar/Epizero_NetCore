@@ -1,0 +1,102 @@
+﻿@model IEnumerable<PanelViewModels.FinancialsViewModels.StudentUserFinancialTransactionsViewModel>
+@{
+    ViewData["Title"] = "تراکنش‌های مالی دانش آموزان";
+    ViewData["PageFarsiName"] = "تراکنش‌های مالی دانش آموزان";
+    string Area = "Financials";
+    string Controller = "StudentUserFininces";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('',
+        '/@Area/@Controller/Read/',
+        '',
+        '/@Area/@Controller/ChangeCredit/',
+        '', '' ,  false);
+    $(function () {
+        $('#create, #delete').remove();
+        $('.spinner').hide();
+        //==================================================================
+        $('#changeCreditBtn').click(function () {
+            $('#applyFilter').click();
+            DataTransfer('/Financials/StudentUserFininces/GetBalance/' + $('#UserTelNo').val(), '', '',
+                function (e) {
+                    toastr.remove();
+                    var f = e;
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.e(f.Value);
+                        $('#EditBox').modal({ backdrop: 'static', keyboard: false });
+                        $('#EditBox').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //==================================================================
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label for="UserTelNo">شماره موبایل مشتری: </label>
+                                    <input type="text" id="UserTelNo" class="form-control" data-bind="value : fe().UserTelNo" placeholder="شماره موبایل را وارد کنید" />
+                                </div>
+                            </div>
+                            <div class="col-xs-9" style="margin-top:25px;">
+                                <div class="form-group">
+                                    <input id="applyFilter" style="width:100px;margin-top:1px;" class="btn btn-success btn-sm" value="نمایش تراکنش ها" type="button" />
+                                    <input id="changeCreditBtn" style="width:100px;margin-top:1px;" class="btn btn-success btn-sm" value="تغییر موجودی" type="button" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead data-checkboxColumn="false" data-actionColumn="false" class="bordered-darkorange">
+                                <tr>
+                                    <th data-viewModel="RegDateTime">تاریخ ثبت</th>
+                                    <th data-viewModel="PreviousBalance" data-thousandSeparator="true">موجودی قبلی</th>
+                                    <th data-viewModel="Deposit" data-thousandSeparator="true">واریز (@AppConfigProvider.GetCurrencyType())</th>
+                                    <th data-viewModel="Withdraw" data-thousandSeparator="true">برداشت (@AppConfigProvider.GetCurrencyType())</th>
+                                    <th data-viewModel="Balance" data-thousandSeparator="true">موجودی</th>
+                                    <th data-viewModel="FinancialTransactionTypeName">نوع تراکنش</th>
+                                    <th data-viewModel="InvoiceNo">شماره صورتحساب</th>
+                                    <th data-viewModel="ModUserFullName">کاربر ثبت کننده</th>
+                                    <th data-viewModel="Comment" style="min-width:80px;">شرح</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("ChangeCredit.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

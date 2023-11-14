@@ -1,0 +1,100 @@
+﻿@model WebViewModels.TrainingsViewModels.AddNewCommetsViewModel
+
+
+
+<div class="modal fade" id="addNewCommentModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">افزودن نظر جدید</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addNewCommentForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Comment"></label>
+                                <textarea asp-for="Comment" class="form-control" data-bind="value: newComment().Comment"></textarea>
+                                <span asp-validation-for="Comment" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @*<label asp-for="Rate"></label>*@
+                                <div class="star-div">
+                                    <div id="half-stars-example">
+                                        <div class="rating-group">
+                                            <label style="display:none" aria-label="0 stars" class="rating__label rating__label--half" for="rating2-9">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input style="display:none" class="rating__input" name="rating2" id="rating2-9" value="0" checked type="radio">
+
+                                            <label aria-label=".5 stars" class="rating__label" for="rating2-10">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-10" value=".5" type="radio">
+
+                                            <label aria-label="1 stars" class="rating__label rating__label--half" for="rating2-15">
+                                                <i class="rating__icon rating__icon--star fa fa-star-half"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-15" value="" type="radio">
+
+                                            <label aria-label="1.5 stars" class="rating__label" for="rating2-20">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-20" value="1.5" type="radio">
+
+                                            <label aria-label="2 stars" class="rating__label rating__label--half" for="rating2-25">
+                                                <i class="rating__icon rating__icon--star fa fa-star-half"></i></label>
+                                            <input class="rating__input" name="rating2" id="rating2-25" value="2" type="radio">
+
+                                            <label aria-label="2.5 stars" class="rating__label" for="rating2-30">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-30" value="2.5" type="radio">
+
+                                            <label aria-label="3 stars" class="rating__label rating__label--half" for="rating2-35">
+                                                <i class="rating__icon rating__icon--star fa fa-star-half"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-35" value="3" type="radio">
+
+                                            <label aria-label="3.5 stars" class="rating__label" for="rating2-40">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-40" value="3.5" type="radio">
+
+                                            <label aria-label="4 stars" class="rating__label rating__label--half" for="rating2-45">
+                                                <i class="rating__icon rating__icon--star fa fa-star-half"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-45" value="4" type="radio">
+
+                                            <label aria-label="4.5 stars" class="rating__label" for="rating2-50">
+                                                <i class="rating__icon rating__icon--star fa fa-star"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-50" value="4.5" type="radio">
+
+                                            <label aria-label="5 stars" class="rating__label rating__label--half" for="rating2-55">
+                                                <i class="rating__icon rating__icon--star fa fa-star-half"></i>
+                                            </label>
+                                            <input class="rating__input" name="rating2" id="rating2-55" value="5" type="radio">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+                                <button type="submit" id="btnAddComment" class="btn btn-warning btn-sm">ثبت</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

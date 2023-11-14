@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewData["Title"] = "نتایج آزمون";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AllResult = (List<PanelViewModels.OnlineExamViewModels.StudentOnlineExamResultGroupsViewModel>)ViewBag.AllResult;
+}
+
+<style type="text/css">
+    .name-stu {
+        font-weight: bold !important;
+        color: #333;
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #444;
+    }
+
+    .title-all {
+        font-size: 16px;
+    }
+
+    .text {
+        font-size: 13px;
+        font-weight: 400;
+        color: #555;
+    }
+
+    .widget-body {
+        min-height: unset !important;
+    }
+
+    .text-all {
+        font-size: 15px;
+    }
+
+    .rotbe-all {
+        margin-top: 10px;
+        float: left;
+        padding-left: 30px;
+        font-size: 18px;
+    }
+
+    .m-t-20 {
+        padding-right: 20px;
+        margin-top: 20px;
+    }
+
+    .row-title {
+        margin: 0 23px !important;
+    }
+
+    .exam-rotbe :last-child {
+        border-bottom: none;
+    }
+
+    .k-hr {
+        padding-bottom: 10px;
+    }
+
+    h5.row-title::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -4px;
+        width: 4px;
+        max-width: 4px;
+        overflow: hidden;
+        background-color: #8cc474 !important;
+    }
+
+    h5.row-title, h6.row-title {
+        line-height: 17px;
+        margin: 10px 0;
+        padding: 9px 8px 9px 10px;
+        display: inline-block;
+        color: #646464;
+        font-weight: 400;
+        background-color: #fff;
+        position: relative;
+        border-radius: 2px 0 0 2px;
+        background-clip: padding-box;
+        box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+    }
+
+    .border-widget {
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        padding: 8px;
+        background-color: #f4f4f4;
+    }
+
+    hr {
+        border-top: 2px solid #eee;
+    }
+
+    .k-hr {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        border-bottom: 2px dashed #ddd;
+    }
+
+    .k-hr-main:last-child {
+        border-bottom: none;
+    }
+</style>
+
+
+ 
+
+<section class="transaction" id="mainArea">
+    <div class="row">
+        <div class="col-md-12  tab-main-product-show">
+            <ul class="nav nav-tabs">
+                <li class="centered active"><a data-toggle="tab" href="#menu3" aria-expanded="false">نتایج آزمون حاضرین</a></li>
+                <li class="centered "><a data-toggle="tab" href="#menu0" aria-expanded="false">نتایج آزمون غایبین </a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="menu3" class="tab-pane fade active in">
+                    @{ await Html.RenderPartialAsync("_Present.cshtml", AllResult); }
+                </div>
+                <div id="menu0" class="tab-pane fade">
+                    @{ await Html.RenderPartialAsync("_Absent.cshtml", AllResult); }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+

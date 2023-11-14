@@ -1,0 +1,55 @@
+﻿@{
+    var WeekSchedules = (List<WebViewModels.TrainingsViewModels.WeekSchedulesViewModel>)ViewBag.Data;
+    ViewData["Title"] = "برنامه هفتگی من";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+ 
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> برنامه هفتگی من </span>
+        </div>
+    </div>
+</div>
+<section class="box-calendar ">
+    <div class="container">
+        @if (WeekSchedules.Select(c => c.WeekScheduleDetails).Any())
+        {
+            <div class="legend p-35 col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                <div class="title-o">
+                    <i class="fa fa-calendar "></i>
+                    <span> برنامه این هفته </span>
+                </div>
+                @foreach (var item in WeekSchedules)
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                        <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+                            <div class=" float-r width-d-15  text-align-r">
+                                @item.WeekDayName
+                            </div>
+                            @foreach (var courseMeetingDetails in item.WeekScheduleDetails)
+                            {
+                                <div class="div-btn float-r text-align-c min-height-1">
+                                    <a class="bg-color bg-round" href="/Trainings/Courses/Index?CoursesId=@courseMeetingDetails.CourseId">
+                                        @courseMeetingDetails.Description
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                }
+            </div>
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="برنامه های شما در مدرسه آنلاین اپیزرو"/>
+                    <p>برنامه ی برای این هفته ثبت نشده است .</p>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>

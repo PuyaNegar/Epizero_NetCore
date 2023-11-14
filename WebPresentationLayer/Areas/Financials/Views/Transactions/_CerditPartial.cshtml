@@ -1,0 +1,123 @@
+﻿@model WebViewModels.FinancialsViewModels.CreditPaymentMethodViewModel
+<style>
+    .img-logo-d {
+        text-align: center;
+        margin-top: 55px;
+        margin-bottom: 30px;
+    }
+ 
+    .img-logo-d img{
+       width:200px;
+    }
+    .credit-title {
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #83c2eb;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        padding: 10px;
+    }
+        .credit-title span {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+    .account-box-content{
+        overflow:hidden;
+        position:relative;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#creditForm').submit(function () {
+            toastr.remove();
+            if ($(this).valid()) {
+                DataTransfer('/Financials/PayPingCreditPayment/GetBankPaymentUrl' , 'post', ko.toJSON({ TotalAmount: $('#TotalAmount').val()}), '.loader', function (e) {
+                    /*toastr.success(e.Message);*/
+                    window.location.href = e.Value.PaymentUrl;
+                }, function (e) {
+                    toastr.error(e.responseJSON.Message);
+                });
+            }
+            return false;
+        });
+    });
+</script>
+
+
+<div class="credit-main">
+    <div class="split-c">
+        <hr class="hr">
+        <span class="pad-line-s split-liner bg-color-blue">
+            موجودی کیف پول شما :  @(string.Format("{0:N0}", ViewBag.Balance))  تومان
+        </span>
+    </div>
+    <div class="main-content">
+        <div class="account-box">
+            <div class="account-box-content">
+                <div class="credit-title">
+                    <span>شارژ کیف پول</span>
+                </div>
+                <div class="img-logo-d">
+                    <img src="~/assets/img/Payping.png"  alt="شارژ کیف پول با پی پینگ"/>
+                </div>
+                <form id="creditForm" class="form-account">
+
+                    <div class="form-account-title">مبلغ مورد نظر برای افزایش موجودی ( تومان ) </div>
+                    <div class="form-account-row">
+                        <label class="input-label">
+                            <i class="fa fa-credit-card"></i>
+                        </label>
+                        <input asp-for="TotalAmount" type="text" placeholder="مبلغ را به تومان وارد کنید" class="input-field pristine touched currency" aria-required="true" aria-invalid="false">
+                        <span style="font-size: 12px; color: red" class="validation" asp-validation-for="TotalAmount"></span>
+                    </div>
+                    @*<div class="form-account-agree">
+                <label class="checkbox-form checkbox-primary">
+                    <input type="checkbox">
+                    <span class="checkbox-check"></span>
+                </label>
+                <label for="agree">
+                    <a href="/rules" class="btn-link-border" target="_blank">قوانین و شرایط</a> را می پذیرم.
+                </label>
+            </div>*@
+                    <!--<div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="row main-dargah">
+                <div class="col-xl-4 col-lg-4 col-md-4 pull-right">-->
+                    @*<div data-v-0280ee94="" class="dargah">
+
+                <img src="~/assets/img/mellat.png" />
+                <div>
+                    <input id="mellatBank" name="gatway" type="radio" value="3">
+                    <label for="mellatBank" class="lbl-dargah">بانک‌ملت</label>
+                </div>
+            </div>*@
+                    <!--</div>-->
+                    @*<div class="col-xl-4 col-lg-4 col-md-4 pull-right">
+                <div class="dargah">
+                    <img src="/assets/img/ZarinPal.jpg">
+                    <div>
+                        <input id="zarinpal" name="gatway" type="radio" value="2">
+                        <label for="zarinpal" class="lbl-dargah">زرین‌پال</label>
+                    </div>
+                </div>
+            </div>*@
+                    <!--</div>
+        </div>-->
+                    <div class="center">
+                        <div class="loaderBox">
+                            <div class="loader">
+                                <div class="icon-loader"><img src="~/assets/img/loader.svg" alt="پرداخت آنلاین" title="پرداخت آنلاین"/></div>
+                            </div>
+                            <input type="submit" name="login" class="btn btn-warning" value="پرداخت آنلاین">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

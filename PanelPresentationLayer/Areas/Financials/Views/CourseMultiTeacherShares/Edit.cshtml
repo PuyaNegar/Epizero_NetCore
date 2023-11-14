@@ -1,0 +1,54 @@
+﻿@model  PanelViewModels.EditPrefix<PanelViewModels.FinancialsViewModels.CourseMultiTeacherSharesViewModel>
+
+    <div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                <form id="EditForm" role="form">
+                      <div class="modal-header edit-modal">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                        </div>
+                      <div class="modal-body">
+
+
+                          <div class="form-group">
+                              <label asp-for="Edit.CourseName"></label>
+                              <input readonly asp-for="Edit.CourseName" class="form-control" value="@ViewBag.CourseName">
+
+                          </div>
+                          <div class="form-group">
+                              <label asp-for="Edit.TeacherUserId"></label>
+                              <input readonly asp-for="Edit.TeacherUserName" class="form-control" data-bind="value: e().TeacherUserName">
+                          </div>
+                          <div class="form-group">
+                              <label asp-for="Edit.IsIndexTeacher"></label>
+                              <select asp-for="Edit.IsIndexTeacher" class="form-control" data-bind="value: e().IsIndexTeacher"> 
+                                  <option value="1">بلی</option>
+                                  <option value="0">خیر</option>
+                              </select>
+                              <span asp-validation-for="Edit.IsIndexTeacher" class="danger"></span>
+                          </div>
+                          <div class="form-group">
+                              <label asp-for="Edit.CourseMultiTeacherShareTypeId"></label>
+                              <select asp-for="Edit.CourseMultiTeacherShareTypeId" class="form-control" data-bind="value: e().CourseMultiTeacherShareTypeId">
+                                  <option value="">لطفا انتخاب کنید</option>
+                                  <option value="1">به ازای هر جلسه</option>
+                                  <option value="2">درصدی</option>
+                              </select>
+                              <span asp-validation-for="Edit.CourseMultiTeacherShareTypeId" class="danger"></span>
+                          </div>
+
+                          <div class="form-group">
+                              <label asp-for="Edit.AmountOrPercent"></label>
+                              <input asp-for="Edit.AmountOrPercent" type="text" class="form-control currency" data-bind="value: e().AmountOrPercent">
+                              <span asp-validation-for="Edit.AmountOrPercent" class="danger"></span>
+                          </div>
+                      </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                  <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+             </div>
+            </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

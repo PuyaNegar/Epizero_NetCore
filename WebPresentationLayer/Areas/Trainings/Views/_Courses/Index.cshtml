@@ -1,0 +1,792 @@
+﻿@using WebViewModels.TrainingsViewModels
+@using Common.Enums
+@{
+    var isShowQuestuin = ViewBag.IsQuestionShow;
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+    ViewData["Title"] = "دوره" + " " + Courses.Name;
+    string style = string.IsNullOrEmpty(Courses.BannerPicPath) ? "background-image:url('/assets/img/2020-11-08-09-01-37pm-7.png')" : "background-image : url(#)".Replace("#", Courses.BannerPicPath);
+    int j = 0;
+    int o = 2;
+}
+
+@section MetaTag{
+    <meta name="description" content="@Html.Raw(Courses.MetaDescription)">
+}
+
+@section Styles{
+
+    @if (!Courses.IsVisibleOnSite)
+    {
+        <style>
+            .cart-btn {
+                display: none !important;
+            }
+        </style>
+
+    }
+    <style type="text/css">
+        .carousel-inner .item video {
+            height: 300px;
+        }
+
+        .singleCourse-q .split-c {
+            width: 100%;
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .singleCourse-q .pageall a:hover, .singleCourse-q .productshow a:hover {
+            color: #233591;
+        }
+
+        .singleCourse-q .split-c .hr {
+            border-top: 2px solid #eee;
+            width: 100%;
+            position: absolute;
+            top: 1px;
+            z-index: -1;
+        }
+
+        .singleCourse-q .pad-line-s {
+            padding: 5px 10px 7px 10px;
+        }
+
+        .singleCourse-q .split-liner {
+            height: 40px;
+            font-weight: bold;
+            color: #fff;
+            line-height: 40px;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 0px;
+            border-radius: 20px;
+        }
+
+        .singleCourse-q .productshow .header-main .main .row {
+            display: block;
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .singleCourse .dis-tbl-row .price .discount-price span::after {
+            top: 20px !important;
+        }
+
+        .singleCourse .price {
+            /*  position: relative;*/
+            padding-top: 5px;
+            width: 100%;
+        }
+
+        .productshow .header-main .main .content-text .left .div-main .more .btn-co {
+            position: relative;
+        }
+
+        .singleCourse .price .discount-price {
+            position: absolute;
+            top: -7px;
+            text-align: center;
+            color: #888;
+            display: block;
+            width: 100%;
+            left: 0;
+        }
+
+            .singleCourse .price .discount-price span {
+                display: inline-block;
+                position: relative;
+            }
+
+                .singleCourse .price .discount-price span::after {
+                    content: '';
+                    display: block;
+                    width: 100%;
+                    position: absolute;
+                    border: 1px solid red;
+                    transform: rotate(-7deg);
+                    top: 14px;
+                }
+
+        .box-answer-s {
+            display: none;
+        }
+
+        .singleCourse .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #dddd;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+        }
+
+        .singleCourse .close {
+            float: left;
+        }
+
+        .singleCourse .modal-title {
+            float: right;
+        }
+
+
+        .singleCourse .btn-txt-j {
+            position: relative;
+        }
+
+            .singleCourse .btn-txt-j .btn-j-j {
+                /*  position: absolute;
+                                left: 15px;
+                                bottom: 4px;*/
+                border-top-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                padding: 4px 15px 5px 15px;
+            }
+
+                .singleCourse .btn-txt-j .btn-j-j i {
+                    vertical-align: middle;
+                }
+
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            bottom: unset;
+        }
+
+            .carousel-control.left {
+                background-image: unset !important;
+            }
+
+            .carousel-control.right {
+                background-image: unset !important;
+            }
+
+        .btn-dore-lg a {
+            display: inline-flex;
+        }
+
+        .btn-dore-lg .cover {
+            padding-left: 15px;
+            height: 32px;
+            padding-right: 10px;
+        }
+
+        .btn-dore-lg {
+            float: left;
+            width: 15%;
+            text-align: right;
+        }
+
+        .content-tbl-f {
+            overflow: hidden;
+        }
+
+        .r-btn {
+            border-radius: 15px;
+            background-color: #e83674;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #fff;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .h1-title {
+            margin: 12px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+
+            if ('@isShowQuestuin' != 'False') {
+                $('.nav-tabs li.li-q-u a').click();
+                $('html, body').animate({
+                    scrollTop: $(".li-q-u").offset().top
+                }, 2000);
+            }
+
+
+            $('body').on('click', '.btn-answer', function () {
+                $(this).parent().find('.box-answer-s').toggle("slow");
+            });
+
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.btn-Update_Field', function () {
+
+                var data = {
+                    FieldId: $('#FieldId').val()
+                }
+                DataTransfer('/api/Identities/UserProfiles/UpdateField/', 'Post', ko.toJSON(data), '.loader',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 500);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+
+
+
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        @if (User.Identity.IsAuthenticated && Courses.CourseMeetings.Where(c => c.IsAvailableForSpecificFields).Any() && (Courses.StudentFieldId == 0 || Courses.StudentFieldId == 1))
+        {
+            <text>
+                    $('#SelectedFieldModal').modal({ backdrop: 'static', keyboard: false });
+                $('#SelectedFieldModal').modal('show');
+            </text>
+        }
+
+                //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                function ReadCourseStudentQuestions() {
+                    DataTransfer('/api/Trainings/CourseStudentQuestions/ReadAll/' + @Courses.Id, 'Get', '', '',
+                        function (f) {
+                            toastr.remove();
+                            mainViewModel.allCourseStudentQuestions(f.Value);
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+            ReadCourseStudentQuestions();
+
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.showBtnPic', function () {
+                var url = $(this).attr('data-url');
+                $('#img-question').attr('src', url);
+                $('#btnDownloadPic-q').attr('attr-u', url);
+                $('#showQuestionPicPathModal').modal({ backdrop: 'static', keyboard: false });
+                $('#showQuestionPicPathModal').modal('show');
+            });
+
+            $('body').on('click', '#btnDownloadPic-q', function () {
+                window.open($(this).attr('attr-u'), '_blank');
+            });
+            $('body').on('click', '.showBtnFile', function () {
+                window.open($(this).attr('data-url'), '_blank');
+            });
+            $('body').on('click', '.add-a-q', function () {
+                $('#addQuestionModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addQuestionModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.add-answer', function () {
+                mainViewModel.questionAnswerAdd().StudentQuestionId = $(this).attr('data-Id');
+                $('#addAnswerModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addAnswerModal').modal('show');
+            });
+            $('#addQuestionModal').on("hidden.bs.modal", function (event) {
+                $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#question_stopButton').prop('disabled', false);
+                $('#question_recordButton').prop('disabled', false);
+                $('#question_audioplayback').addClass("hidden");
+                $('#question_removeButton').hide();
+            });
+            $('#addAnswerModal').on("hidden.bs.modal", function (event) {
+                $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $('#answer_removeButton').hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '#question_removeButton', function () {
+                mainViewModel.questionAdd().AudioPath = null;
+                $('#question_stopButton').prop('disabled', false);
+                $('#question_recordButton').prop('disabled', false);
+                $('#question_audioplayback').addClass("hidden");
+                $(this).hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '#answer_removeButton', function () {
+                mainViewModel.questionAdd().AudioPath = null;
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $(this).hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addQuestionForm').submit(function () {
+                if ($(this).valid()) {
+                    mainViewModel.questionAdd().CourseId = @Courses.Id;
+                    DataTransfer('/Trainings/CourseStudentQuestions/AddQuestion', 'post', ko.toJSON(mainViewModel.questionAdd()), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                            $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                            mainViewModel.questionAdd({});
+                            $('#addQuestionModal').modal('hide');
+                            $('#question_stopButton').prop('disabled', false);
+                            $('#question_recordButton').prop('disabled', false);
+                            $('#question_audioplayback').addClass("hidden");
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addAnswerModal').on("hidden.bs.modal", function (event) {
+                $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $('#answer_removeButton').hide();
+            });
+            $('#addAnswerForm').submit(function () {
+                if ($(this).valid()) {
+
+                    DataTransfer('/Trainings/CourseStudentQuestions/AddAnswer', 'post', ko.toJSON(mainViewModel.questionAnswerAdd()), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.questionAnswerAdd({});
+                            $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                            $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                            $('#addAnswerModal').modal('hide');
+                            $('#answer_stopButton').prop('disabled', false);
+                            $('#answer_recordButton').prop('disabled', false);
+                            $('#answer_audioplayback').addClass("hidden");
+                            $('#answer_removeButton').hide();
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+
+            $('.showOnlineExamResultBtn').click(function () {
+                //$('#continuesToShowOnlineExamResultBtn').attr('href', '/OnlineExams/StudentOnlineExamResults?OnlineExamId=' + $(this).attr('data-onlineExamId'));
+                $('#continuesToShowOnlineExamResultBtn').attr('href', '/OnlineExams/StudentOnlineExamResults?OnlineExamId=' + $(this).attr('data-onlineExamId') + '&CourseId=' + @Courses.Id);
+                $('#continuesToShowOnlineExamResultModal').modal({ backdrop: 'static', keyboard: false });
+                $("#continuesToShowOnlineExamResultModal").modal("show");
+            });
+            //==========================================================
+            $('.enterExamBtn').click(function () {
+                var el = $(this);
+                DataTransfer('/OnlineExams/StudentOnlineExamValidations/Operation?OnlineExamId=' + $(this).attr('data-onlineExamId'), 'post', '', '.loader', function (e) {
+                    window.location.href = el.attr('data-redirectUrl');
+                }, function (e) {
+
+
+                    $('#alertModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#alertModal').modal("show");
+                    $('#txtalert').html(e.responseJSON.Message)
+                    /*toastr.remove();*/
+                    /*toastr.error(e.responseJSON.Message);*/
+                });
+            });
+            //============================================================
+            $('.bt-c-c').click(function () {
+
+                window.location.href = "/Identities/UserProfiles/Index";
+                $('#alertModal').modal("hide");
+
+            });
+            //============================================================
+            $('body').on('click', '.showTeachersBtn', function () {
+
+
+
+
+                $('#teachersModal').modal('show');
+
+            });
+        });
+    </script>
+}
+<style type="text/css">
+    .w-25 {
+        width: 25% !important;
+    }
+
+        .w-25 .cover {
+            display: inline-block !important;
+            padding: 0px 15px 0px 15px !important;
+            width: unset !important;
+        }
+</style>
+<section class="singleCourse singleCourse-q">
+    <div class="container-fluid">
+        <div class="productshow">
+
+
+            <div data-aos="fade-right" class="col-md-12 col-xs-12 header-main m-b-25">
+                <div class="col-md-12 col-xs-12 main  @(Courses.Id == 4230 ? "h-400" : "")" style="@style">
+
+                    <div class="row pos-d-r">
+
+                        <div class="col-md-12 col-xs-12 content-text">
+
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 ">
+                                <div class="col-md-6 col-xs-12 col-sm-12 right m-t-90 p-b-10">
+
+                                    @if (Courses.CourseSampleVideos.Any())
+                                    {
+                                        <div id="Carousel" class="carousel slide">
+                                            <ol class="carousel-indicators">
+                                                @for (int i = 0; i < Courses.CourseSampleVideos.Count(); i++)
+                                                {
+                                                    <li data-target="Carousel" data-slide-to="@i" class="@(i==0 ? "active" : "")"></li>
+                                                }
+                                            </ol>
+                                            <div class="carousel-inner">
+                                                @foreach (var courseSampleVideo in Courses.CourseSampleVideos)
+                                                {
+                                                    <div class="item @(j== 0 ? "active" : "")">
+                                                        @Html.Raw(courseSampleVideo.Link)
+                                                    </div>
+                                                    <span style="display:none">
+                                                        @(j++)
+                                                    </span>
+                                                }
+                                            </div>
+                                            <a class="left carousel-control" href="#Carousel" data-slide="prev">
+                                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                            </a>
+                                            <a class="right carousel-control" href="#Carousel" data-slide="next">
+                                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                            </a>
+                                        </div>
+                                    }
+
+
+                                </div>
+                                <div class="col-md-6 col-xs-12 left sti-mo">
+
+                                    <div class="col-md-12 col-xs-12 div-main @(Courses.IsShowDetailsInWeb ? "" : "m-r-100-c")">
+                                        <div class="content">
+                                            <div class="  title">
+                                                <h1 class="h1-title">
+                                                    @Courses.Name
+                                                </h1>
+                                            </div>
+                                            <div class="img-round">
+                                                @if (string.IsNullOrEmpty(Courses.TeacherPicPath))
+                                                {
+                                                    if (Courses.IsMultiTeacher)
+                                                    {
+                                                        @foreach (var indexTeacher in Courses.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                                                        {
+                                                            <img class="img-1 showTeachersBtn" src="~/assets/img/logo.png" alt="@indexTeacher.TeacherFullName" title="@indexTeacher.TeacherFullName" />
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"> <img src="~/assets/img/logo.png" alt="Courses.TeacherFullName" title="@Courses.TeacherFullName" /></a>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Courses.IsMultiTeacher)
+                                                    {
+                                                        @foreach (var indexTeacher in Courses.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                                                        {
+                                                            <img class="img-1 showTeachersBtn" src="@indexTeacher.PersonalPicPath" alt="@indexTeacher.TeacherFullName" title="@indexTeacher.TeacherFullName" />
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"> <img src="@Courses.TeacherPicPath" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" /></a>
+                                                    }
+                                                }
+                                                @foreach (var teacher in Courses.CourseDedicatedTeachers.Where(c => !c.IsIndexTeacher).Take(3))
+                                                {
+                                                    @if (string.IsNullOrEmpty(teacher.PersonalPicPath))
+                                                    {
+                                                        <img class="img-@(o) showTeachersBtn" src="~/assets/img/logo.png" alt="@Courses.TeacherFullName" title="@teacher.TeacherFullName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-@(o) showTeachersBtn" src="@teacher.PersonalPicPath" alt="@Courses.TeacherFullName" title="@teacher.TeacherFullName" />
+                                                    }
+
+                                                    <span class="none"> @(o++)</span>
+
+                                                }
+                                                @if (Courses.CourseDedicatedTeachers.Count() > 3)
+                                                {
+                                                    <img class="img-5" src="~/assets/img/more.png" alt="دوره مدرسه آنلاین اپیزرو " />
+                                                }
+                                            </div>
+
+                                        </div>
+                                        @if (Courses.IsShowDetailsInWeb)
+                                        {
+
+                                            <div class="col-md-12 col-xs-12 course-type">
+                                                <img src="/assets/img/icondars/_x33_7.png" title=" @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "نوع دوره :" : "نوع ازمون :")" alt=" @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "نوع دوره :" : "نوع ازمون :")" />
+
+                                                @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "نوع دوره  " : "نوع ازمون  ")
+
+                                                @Courses.CourseTypeName
+                                            </div>
+                                            <div class="col-md-12 col-xs-12 language">
+                                                <img src="/assets/img/icondars/_x31_.png" alt="  زبان آموزشی  @Courses.LanguageName" title="  زبان آموزشی  @Courses.LanguageName" />
+                                                زبان :
+                                                @Courses.LanguageName
+                                            </div>
+                                            <div class="col-md-12 col-xs-12 session-count">
+                                                <img src="/assets/img/icondars/_x31_9.png" alt=" @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "تعداد جلسه :" : "تعداد زیر ازمون : ")" title=" @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "تعداد جلسه :" : "تعداد زیر ازمون : ")" />
+                                                @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "تعداد جلسه  " : "تعداد زیر ازمون   ")
+                                                <span>
+                                                    @Courses.CourseMeetings.Count
+                                                </span>
+
+                                            </div>
+                                            @if (Courses.CourseTypeId != (int)CourseType.Offline)
+                                            {
+                                                <div class="col-md-12 col-xs-12 time">
+                                                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                    زمان برگزاری : @Courses.StartDate
+                                                </div>
+                                            }
+
+
+                                        }
+                                    </div>
+                                    <div class="col-md-12 col-xs-12 div-main">
+                                        <div class="more">
+                                            @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && Courses.IsVisibleOnSite)
+                                            {
+                                                <div class="btn-co btn-co-m" style="line-height: 34px;">
+                                                    @if (Courses.DiscountPrice < Courses.Price)
+                                                    {
+                                                        <div class="center price">
+                                                            <div class="discount-price">
+                                                                <i class="fa fa-money"></i>
+                                                                قیمت
+                                                                <span>
+                                                                    @(string.Format("{0:N0}", Courses.Price)) تومان
+                                                                </span>
+                                                            </div>
+                                                            <div style="padding-left:3px;padding-right:0px;">
+                                                                <i class="fa fa-money"></i>
+                                                                قیمت
+                                                                <span>
+                                                                    @(string.Format("{0:N0}", Courses.DiscountPrice)) تومان
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="center">
+                                                            <i class="fa fa-money"></i>
+                                                            قیمت
+                                                            <span>
+                                                                @(Courses.Price == 0 ? "رایگان" : string.Format("{0:N0}  ", Courses.Price))
+                                                                @(Courses.Price == 0 ? " " : "تومان")
+                                                            </span>
+
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                        @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                        {
+                                            <div class="more">
+                                                <a class="cart-btn" data-academyProductTypeId="1" data-academyProductId="@Courses.Id">
+                                                    <div class="div-more">
+                                                        <img src="/assets/img/icondars/_x31_27@2x.png" alt="@(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "خرید کل دوره" : "خرید کل آزمون ها") @Courses.Name" title="@(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "خرید کل دوره" : "خرید کل آزمون ها") @Courses.Name" />
+                                                        @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                                                        {
+                                                            <span>خرید جزوه</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "خرید کل دوره" : "خرید کل آزمون ها")
+
+                                                        }
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        }
+                                        @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                        {
+                                            <div class="more">
+                                                <div class="btn">
+                                                    <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id">
+                                                        جزوات دوره
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="more">
+                                            @if (Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training && Courses.CourseTypeId != (int)CourseType.Offline)
+                                            {
+                                                <div class="btn hbhb">
+                                                    <a target="_blank" href="/Trainings/OnlineClasses">
+                                                        <img src="/assets/img/elemans/paly@2x.png" alt="  ورود به کلاس اپیزرو" title="  ورود به کلاس اپیزرو" />
+                                                        ورود به کلاس
+                                                    </a>
+                                                </div>
+                                            }
+                                            <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId" class="btn hbhb">
+                                                <img style="margin-top:0" src="/assets/img/icondars/_x33_2@2x.png" alt=" درباره استاد @Courses.TeacherFullName" title=" درباره استاد @Courses.TeacherFullName" />
+                                                درباره استاد
+                                            </a>
+                                            <a href="#menu0" class="btn hbhb more-de-d">
+                                                <i style="margin-left:5px" class="fa fa-comment-o"></i>
+                                                توضیحات  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "دوره" : "آزمون ")
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                    @if (Courses.Id == 4230)
+                                    {
+                                        <div class="col-md-12 col-xs-12 right">
+                                            <div class="btn-custom-whatsapp ">
+                                                <a target="_blank" href="https://wa.me/message/3GVH2RG7PXJLC1">
+                                                    <img src="~/assets/img/whatsap.svg" alt="ارتباط از طریق واتساپ" title="ارتباط از طریق واتساپ" />  ارتباط از طریق واتساپ
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="clear:both;"></div>
+
+
+            @if (Courses.CourseMeetings.Any() && Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training)
+            {
+                { await Html.RenderPartialAsync("_CourseMeetingPartial.cshtml"); }
+            }
+            <div style="clear:both;"></div>
+            @if (Courses.CourseMeetings.Any() && Courses.CourseCategoryType == Common.Enums.CourseCategoryType.OnlineExam)
+            {
+                { await Html.RenderPartialAsync("_OnlineExamPartial.cshtml"); }
+            }
+            <div style="clear:both;"></div>
+
+            <div class="col-md-12   tab-main-product-show">
+
+
+                <ul class="nav nav-tabs">
+
+                    <li class="centered active">
+                        <a data-toggle="tab" href="ProductShow.htm#menu0">
+                            @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                            {
+                                <span>اطلاعات بیشتر جزوه</span>
+                            }
+                            else
+                            {
+                                @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "اطلاعات بیشتر دوره" : "اطلاعات بیشتر آزمون")
+
+                            }
+                        </a>
+                    </li>
+                    <li class="centered">
+                        <a data-toggle="tab" href="ProductShow.htm#menu4">
+                            @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                            {
+                                <span>موارد دیگر</span>
+                            }
+                            else
+                            {
+                                @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "دوره های دیگر" : "آزمون های دیگر")
+                            }
+                        </a>
+                    </li>
+                    <li class="centered li-q-u"><a data-toggle="tab" href="ProductShow.htm#menu3">پرسش و پاسخ</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    @{
+                        await Html.RenderPartialAsync("MoreInfo.cshtml");
+                    }
+                    @{
+                        await Html.RenderPartialAsync("Reviews.cshtml");
+                    }
+                    @{
+                        await Html.RenderPartialAsync("Questions.cshtml");
+                    }
+                    @{
+                        await Html.RenderPartialAsync("MoreCourses.cshtml");
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @{
+        await Html.RenderPartialAsync("AddAnswerModal.cshtml");
+    }
+    @{
+        await Html.RenderPartialAsync("~/Views/Component/AddQuestionModal.cshtml");
+    }
+    @{
+        await Html.RenderPartialAsync("_AlertModal.cshtml");
+    }
+    @{
+        await Html.RenderPartialAsync("_SelectedFieldModal.cshtml");
+    }
+    @{
+        await Html.RenderPartialAsync("_TeachersModel.cshtml");
+    }
+    @{
+        await Html.RenderPartialAsync("_ShowQuestionPicPathModal.cshtml");
+    }
+    <div id="continuesToShowOnlineExamResultModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div>
+                    <div class="modal-header create-modal">
+                        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"> <strong>پیام سیستم</strong>   </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>هشدار</p>
+                        <p>
+                            در صورت مشاهده نتایج آزمون، آزمون شما پایان یافته و امکان ورود مجدد به آزمون را نخواهید داشت. آیا آدامه می دهید ؟
+                        </p>
+                        <p> </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default btn-sm" style="width:100px;" data-dismiss="modal">انصراف</a>
+                        <a id="continuesToShowOnlineExamResultBtn" style="width:100px;" class="btn btn-default btn-sm pull-left">ادامه</a>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</section> 

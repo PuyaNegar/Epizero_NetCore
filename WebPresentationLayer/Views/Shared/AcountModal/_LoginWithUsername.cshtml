@@ -1,0 +1,23 @@
+﻿@model WebViewModels.LoginWithUsernamePrefix<WebViewModels.IdentitiesViewModels.LoginViewModel>
+<div id="email" class="tab-pane fade active in">
+    <form id="loginWithUsernameForm" method="post">
+
+        <div class="form-group">
+            <input asp-for="LoginWithUsername.UserName" type="text" placeholder="موبایل" class="form-control" data-bind="value: loginWithUser().UserName">
+            <span class="validation" asp-validation-for="LoginWithUsername.UserName"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="LoginWithUsername.Password" type="password" autocomplete="off" placeholder="کلمه عبور" required="" class="form-control" data-bind="value: loginWithUser().Password">
+            <span class="validation" asp-validation-for="LoginWithUsername.Password"></span>
+        </div>
+
+        <div class="loaderBox">
+            <div class="loader"><div class="icon-loader"><img alt="ورود به سایت اپیزرو" src="~/assets/img/loader.svg" /></div></div>
+            <input type="submit" name="login" class="login loginmodal-submit" value="وارد شوید">
+        </div>
+
+
+
+    </form>
+</div>
+ 

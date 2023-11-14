@@ -1,0 +1,115 @@
+﻿@using Common.Functions;
+@using Common.Extentions;
+@{
+    var StudentOnlineExam = (List<WebViewModels.OnlineExamsViewModels.StudentOnlineExamViewModel>)ViewBag.DependentOnlineExam;
+    int i = 1;
+  
+}
+@functions{
+    string EncriptRefId(int onlineExamId, int UserId)
+    {
+        return (onlineExamId.ToString() + "-" + UserId.ToString()).ToString().EncriptWithDESAlgoritm();
+    }
+}
+<style type="text/css">
+    td a {
+        display: inline-block;
+    }
+
+    .bg-round-a {
+        margin-bottom: 3px;
+        margin-left: 5px;
+        border-radius: 15px;
+        padding: 0px 10px 3px 10px;
+        height: 30px;
+        line-height: 30px;
+        font-weight: 500;
+        color: #fff;
+        transition: all .3s;
+    }
+</style>
+@if (StudentOnlineExam.Any())
+{
+    <div class="container">
+        <div class="row">
+            <div class="cl-md-12">
+                <div class="table-responsive">
+                    <table  class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="center">#</th>
+                                <th class="right">عنوان</th>
+                                <th class="right">مدت زمان آزمون</th>
+                                <th class="right">نوع آزمون</th>
+                                <th class="right">تاریخ شروع</th>
+
+                                <th class="right">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in StudentOnlineExam)
+                            {
+                               
+                                <tr >
+                                    <th class="center">@i</th>
+                                    <td>@item.Name</td>
+                                    <td>@item.Duration دقیقه</td>
+                                    <td>@item.OnlineExamTypeName</td>
+                                    <td>@item.StartDateTime</td>
+
+                                    <td style="width:500px">
+                                        @if (item.IsFinalized)
+                                        {
+                                            <a class="bg-color-red ffff bg-round-a" href="/OnlineExams/StudentOnlineExamResults?OnlineExamId=@item.OnlineExamId">
+                                                مشاهده نتایج
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="bg-color-blue ffff bg-round-a enterExamBtn" data-redirectUrl="@(AppConfigProvider.GetOnlineExamUrl() + "?RefId=" + EncriptRefId(item.OnlineExamId,ViewBag.UserId))" data-onlineExamId="@item.OnlineExamId">
+                                                ورود به آزمون
+                                            </a>
+                                        }
+                                        @if (item.IsShowQuestionAnswer)
+                                        {
+                                            @if (!string.IsNullOrEmpty(item.AnalysisVideoLink))
+                                            {
+                                                <a href="/OnlineExams/OnlineExamAnalysisVideo?OnlineExamId=@item.OnlineExamId">
+                                                    <div class="cover center btn-back-color-green bg-round-a">
+                                                        <i class="fa fa-eye download"></i>
+                                                        <span class="date">فیلم تحلیل آزمون</span>
+                                                    </div>
+                                                </a>
+                                            }
+                                            <a href="/OnlineExams/OnlineExamQuestions?OnlineExamId=@item.OnlineExamId">
+                                                <div class="r-btn center bg-color-red bg-round-a">
+                                                    <i class="fa fa-eye download"></i>
+                                                    <span class="date">مشاهده پاسخنامه</span>
+                                                </div>
+                                            </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                                { i++;  }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="/assets/img/box-empty.svg" alt="آزمون آنلاین اپیزرو">
+                    <p>آزمون وابسته ای برای شما ثبت نشده است.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

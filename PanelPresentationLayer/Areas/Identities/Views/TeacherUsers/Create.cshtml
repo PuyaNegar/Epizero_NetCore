@@ -1,0 +1,228 @@
+﻿@model PanelViewModels.IdentitiesViewModels.TeacherUsersViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="CityId"></label>
+                                <div class="input-group">
+                                    <input readonly="readonly" asp-for="CityId" type="hidden" class="form-control" data-bind="value: c().CityId" />
+                                    <input readonly="readonly" asp-for="CityName" type="text" class="form-control" data-bind="value: c().CityName" />
+                                    <span class="input-group-btn">
+                                        <button id="CitySelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="CityId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="UserName"></label>
+                                <input asp-for="UserName" class="form-control" data-bind="value: c().UserName">
+                                <span asp-validation-for="UserName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="FirstName"></label>
+                                <input asp-for="FirstName" class="form-control" data-bind="value: c().FirstName">
+                                <span asp-validation-for="FirstName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="LastName"></label>
+                                <input asp-for="LastName" class="form-control" data-bind="value: c().LastName">
+                                <span asp-validation-for="LastName" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="NationalCode"></label>
+                                <input asp-for="NationalCode" class="form-control" data-bind="value: c().NationalCode">
+                                <span asp-validation-for="NationalCode" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input asp-for="Email" class="form-control" data-bind="value: c().Email">
+                                <span asp-validation-for="Email" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <label asp-for="Gender"></label>
+                            <select asp-for="Gender" class="form-control" data-bind="value: c().Gender">
+                                <option value="">لطفاً انتخاب کنید ...</option>
+                                <option value="1">مرد</option>
+                                <option value="0">زن</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select disabled="disabled" asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option selected="selected" value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="TeacherPrefixId"></label>
+                                <select asp-for="TeacherPrefixId" class="form-control" data-bind="value: c().TeacherPrefixId">
+                                    <option value="">لطفاً انتخاب کنید ...</option>
+                                    <option value="5">بدون پیشوند</option>
+                                    <option value="1">استاد</option>
+                                    <option value="2">دکتر</option>
+                                    <option value="3">مهندس</option>
+                                    <option value="4">سرکار خانم</option>
+                                </select>
+                                <span asp-validation-for="TeacherPrefixId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Skill"></label>
+                                <input asp-for="Skill" class="form-control" data-bind="value: c().Skill">
+                                <span asp-validation-for="Skill" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="BirthDay"></label>
+                                <input data-mask="9999/99/99" asp-for="BirthDay" class="form-control" data-bind="value: c().BirthDay">
+                                <span asp-validation-for="BirthDay" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsEnabledSms"></label>
+                                <select asp-for="IsEnabledSms" class="form-control" data-bind="value: c().IsEnabledSms">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="IsEnabledSms" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsShowFinancial"></label>
+                                <select asp-for="IsShowFinancial" class="form-control" data-bind="value: c().IsShowFinancial">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="IsShowFinancial" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="TeacherUserTypeId"></label>
+                                <select asp-for="TeacherUserTypeId" class="form-control" data-bind="value: c().TeacherUserTypeId">
+                                    <option value="1">دبیر</option>
+                                    <option value="2">مشاور</option>
+                                </select>
+                                <span asp-validation-for="TeacherUserTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea rows="3" asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                                <span asp-validation-for="Description" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="MetaDescription"></label>
+                                <textarea rows="2" asp-for="MetaDescription" class="form-control" data-bind="value: c().MetaDescription"></textarea>
+                                <span asp-validation-for="MetaDescription" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="PersonalPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "PersonalPicPath",
+                                   KnockoutExpressionString = "MainViewModel.c().PersonalPicPath",
+                                   MaxImageHeight = 400,
+                                   MaxImageWidth = 400,
+                                   MinImageHeight = 400,
+                                   MinImageWidth = 400,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="PersonalPicPath" class="danger"></span>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="BannerPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "BannerPicPath",
+                                   KnockoutExpressionString = "MainViewModel.c().BannerPicPath",
+                                   MaxImageHeight = 2000,
+                                   MaxImageWidth = 2000,
+                                   MinImageHeight = 1,
+                                   MinImageWidth = 1,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 2000 در 2000 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="BannerPicPath" class="danger"></span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                        <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

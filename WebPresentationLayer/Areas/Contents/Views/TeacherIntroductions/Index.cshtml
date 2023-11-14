@@ -1,0 +1,243 @@
+﻿@using WebViewModels.ContentsViewModels
+@{
+    var TeacherIntroductions = (TeacherIntroductionsViewModel)ViewBag.TeacherIntroductions;
+    ViewData["Title"] = "درباره" + " " + TeacherIntroductions.TeacherPrefix + " " + TeacherIntroductions.FullName;
+}
+<style type="text/css">
+    .name-ostad {
+        display: inline-block;
+        font-size: 14px;
+        margin-top: 0;
+    }
+</style>
+@section MetaTag{
+    <meta name="description" content="@Html.Raw(TeacherIntroductions.MetaDescription)">
+}
+
+<section class="main-teacher">
+    <div class="container">
+        <div class="col-md-12 col-xs-12 content">
+
+            @if (string.IsNullOrEmpty(TeacherIntroductions.BannerPicPath))
+            {
+                <img title="@TeacherIntroductions.FullName" alt="@TeacherIntroductions.FullName" src="~/assets/img/2020-11-08-09-01-37pm-7.png" class="pic-teacher-banner" />
+            }
+            else
+            {
+                <img src="@TeacherIntroductions.BannerPicPath" title="@TeacherIntroductions.FullName" alt="@TeacherIntroductions.FullName" class="pic-teacher-banner">
+            }
+
+
+            <div class="col-md-12 col-xs-12 main-pic-teacher">
+                <div class="pic">
+                    @if (string.IsNullOrEmpty(TeacherIntroductions.PersonalPicPath))
+                    {
+                        <img src="~/assets/img/logo.png" title="@TeacherIntroductions.FullName" alt="@TeacherIntroductions.FullName">
+                    }
+                    else
+                    {
+                        <img src="@TeacherIntroductions.PersonalPicPath" title="@TeacherIntroductions.FullName" alt="@TeacherIntroductions.FullName">
+
+                    }
+                </div>
+
+                <div class="hidden-xs fullname">
+
+                    اساتید / <h1 class="name-ostad">@TeacherIntroductions.TeacherPrefix   @TeacherIntroductions.FullName</h1>
+                </div>
+
+                <br>
+                <br>
+                @if (TeacherIntroductions.TeacherResumes.Any())
+                {
+                    <span class="ul-span">
+                        <ul>
+                            @foreach (var teacherResume in TeacherIntroductions.TeacherResumes)
+                            {
+                                <li> @teacherResume.Title</li>
+                            }
+                        </ul>
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+@if (!string.IsNullOrEmpty(TeacherIntroductions.Description))
+{
+    <section class="title-color">
+        <div class="container SearchPAll">
+            <div class="split-c">
+                <hr class="hr" />
+                <span class="pad-line-s split-liner">
+                    درباره @TeacherIntroductions.TeacherPrefix  @TeacherIntroductions.FullName
+                </span>
+            </div>
+        </div>
+        <div class="container new-course">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="p-intro">
+                        @Html.Raw(TeacherIntroductions.Description)
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+}
+
+@{ await Html.RenderPartialAsync("_AcceptedStudentInEntranceExams.cshtml"); }
+
+@if (TeacherIntroductions.TeachersCourse.Any())
+{
+    <section class="title-color">
+        <div class="container SearchPAll">
+            <div class="split-c">
+                <hr class="hr" />
+                <span class="pad-line-s split-liner">
+                    دوره های دیگر   @TeacherIntroductions.TeacherPrefix  @TeacherIntroductions.FullName
+                </span>
+            </div>
+        </div>
+        <div class="container new-course">
+            <div class="row">
+
+                <div class="swiper-container teachersCourse">
+                    <div class="swiper-wrapper">
+                        @foreach (var teachersCourse in (List<TeachersCourseViewModel>)TeacherIntroductions.TeachersCourse)
+                        {
+                            <div class="swiper-slide">
+                                <a>
+                                    <div data-aos="fade-right" class="col-md-12 col-sm-12 col-xs-12 main-new-course">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                            <div class="div-main-img">
+                                                @if (string.IsNullOrEmpty(teachersCourse.BannerPicPath))
+                                                {
+                                                    <a href="/Trainings/Courses?CoursesId=@teachersCourse.Id">
+                                                        <img title="@teachersCourse.Name" alt="@teachersCourse.Name" src="~/assets/img/2020-10-10-03-44-15pm-adabiat6.png" />
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Trainings/Courses?CoursesId=@teachersCourse.Id">
+                                                        <img title="@teachersCourse.Name" alt="@teachersCourse.Name" src="@teachersCourse.BannerPicPath">
+                                                    </a>
+                                                }
+                                            </div>
+
+                                            <div class="div-title-content">
+                                                <a href="/Trainings/Courses?CoursesId=@teachersCourse.Id">
+                                                    @teachersCourse.Name
+                                                </a>
+                                                <br />
+                                                <span>
+                                                    @teachersCourse.TeacherFullName
+                                                </span>
+                                            </div>
+                                            <div class="div-img-small">
+                                                @if (string.IsNullOrEmpty(teachersCourse.TeacherPersonalPicPath))
+                                                {
+                                                    <img src="~/assets/img/logo.png" alt="@teachersCourse.TeacherFullName" title="@teachersCourse.TeacherFullName" />
+                                                }
+                                                else
+                                                {
+                                                    <img title="@teachersCourse.TeacherFullName" alt="@teachersCourse.TeacherFullName" src="@teachersCourse.TeacherPersonalPicPath" />
+                                                }
+                                            </div>
+                                            <div data-toggle="tooltip" data-placement="bottom" title="افزودن به سبد" data-academyProductTypeId="1" data-academyProductId="@teachersCourse.Id" class="cart-btn div-cart-main">
+                                                <img src="/assets/img/sabab1.png" alt="مدرسه آنلاین اپیزرو" />
+                                                <div class="box"></div>
+                                            </div>
+
+                                            @if (teachersCourse.DiscountPercent != 0)
+                                            {
+                                                <div class="discount">
+                                                    %@string.Format("{0:N0}", teachersCourse.DiscountPercent)
+                                                </div>
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination-teach"></div>
+                    <!-- Add Arrows -->
+                    @*<div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>*@
+                </div>
+            </div>
+        </div>
+    </section>
+}
+@*@{ await Html.RenderPartialAsync("_AcceptedStudentInEntranceExams.cshtml"); }*@
+
+@if (TeacherIntroductions.TeacherSampleVideos.Any())
+{
+    <section class="title-color">
+        <div class="container SearchPAll">
+            <div class="split-c">
+                <hr class="hr" />
+                <span class="pad-line-s split-liner bg-color-blue">
+                    توصیه رتبه های برتر
+                </span>
+            </div>
+        </div>
+        <div class="container new-course">
+            <div class="row">
+                @foreach (var teachersSampleVideos in (List<TeacherSampleVideosViewModel>)TeacherIntroductions.TeacherSampleVideos)
+                {
+                    <div class="col-md-4 col-sm-4 col-xs-12 m-b-20">
+                        <div class="div-main-img">
+                            @Html.Raw(teachersSampleVideos.Link)
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+
+<section class="title-color">
+    <div class="container SearchPAll">
+        <div class="split-c">
+            <hr class="hr" />
+            <span class="pad-line-s split-liner bg-color-blue">
+                نظرات
+            </span>
+        </div>
+    </div>
+    <div class="container new-course">
+        <div class="row commentspat">
+        </div>
+        @{ await Html.RenderPartialAsync("_CommentAddPartial.cshtml"); }
+
+    </div>
+</section>
+
+<script>
+    $.get(`/Contents/TeacherComments/_TeacherComments/${@Context.Request.Query["teacherId"].ToString()}`, function (res) {
+        $(".commentspat").html(res);
+    });
+    function Page(i) {
+        $.get("/Contents/TeacherComments/_TeacherComments?pageid=" + i + "&id=" + $("#TeacherId").val(), function (result) {
+            $(".commentspat").html(result);
+        });
+    }
+    function pageup(i) {
+        $.get("/Contents/TeacherComments/_TeacherComments?pageid=" + i + "&id=" + $("#TeacherId").val(), function (result) {
+            $(".commentspat").html(result);
+        });
+    }
+    function pagedown(i) {
+        $.get("/Contents/TeacherComments/_TeacherComments?pageid=" + i + "&id=" + $("#TeacherId").val(), function (result) {
+            $(".commentspat").html(result);
+        });
+    }
+</script>

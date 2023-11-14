@@ -1,0 +1,344 @@
+﻿@using PanelViewModels.OnlineExamsViewModels
+@model IEnumerable<PanelViewModels.OnlineExamViewModels.OnlineExamQuestionsViewModel>
+@{
+    ViewData["Title"] = "سوالات آزمون";
+    ViewData["PageFarsiName"] = "سوالات آزمون";
+    string Area = "OnlineExams";
+    string Controller = "OnlineExamQuestions";
+}
+<style type="text/css">
+    #modelList > tbody > tr > td:first-child:not(.dataTables_empty) {
+        display: none;
+    }
+
+    #modelList > thead > tr > th:first-child {
+        display: none;
+    }
+
+    .title-lesson {
+        margin-bottom: 35px;
+        margin-left: 25px;
+    }
+
+        .title-lesson .row-title {
+            margin: 10px 20px;
+        }
+
+    .before-darkorange::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -4px;
+        width: 4px;
+        max-width: 4px;
+        overflow: hidden;
+        background-color: #a1ce74 !important;
+    }
+
+    .before-darkorange {
+        width: 200px;
+    }
+
+        .img-auto img,
+        .tbl-auto tbody tr td p img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto !important;
+            height: auto !important;
+        }
+    .dataTables_empty {
+        display:block;
+        width:100%;
+    }
+</style>
+<script id="operands" type="text/html">
+    <div class="btn-ck">
+        <a class="btn btn-success btn-sm addBtn">افزودن سوال به آزمون</a>
+    </div>
+</script>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.questionSelected = ko.observable({});
+    MainViewModel.questionAnswerSelected = ko.observable({});
+    DataBind('/@Area/@Controller/Add/',
+        '/OnlineExams/Questions/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+
+        //***************************************************************************
+        $('#ChangeExamAnswerForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/OnlineExams/OnlineExamQuestions/UpdateQuestionCorrectOption/', ko.toJSON(MainViewModel.questionAnswerSelected()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#ChangeExamAnswerModal').modal('hide');
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //***************************************************************************
+        $('body').on('click', '.edit-question-correctOption', function () {
+            
+            var id = $(this).attr('data-Id');
+            DataTransfer('/OnlineExams/OnlineExamQuestions/FindOnlineExamQuestion/' + id, '', '.spinner',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.questionAnswerSelected(f.Value);
+                        $('#ChangeExamAnswerModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#ChangeExamAnswerModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+
+        });
+
+
+        //***************************************************************************
+        $('#LessonSelectBtn').click(function () {
+            openLessonSelectorModal('', 'LessonId', 'LessonName');
+        });
+        //******************************************************************
+        $('#LessonId').change(function () {
+            $('#applyFilter').click();
+        });
+       //******************************************************************
+        function ReadQuestionSelected() {
+             DataTransfer('/OnlineExams/OnlineExamQuestions/Read/' + @ViewBag.OnlineExamId, '', '.spinner',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        var questionCount = 0;
+                        for (i = 0; i < f.Value.length; i++) {
+                            questionCount += f.Value[i].OnlineExamQuestions == null ? 0 : f.Value[i].OnlineExamQuestions.length;
+                        }
+                        $('#questionCount').html(questionCount);
+                        MainViewModel.questionSelected(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        //$('body').on('click', '.tab-selected-q', function ()
+        //{
+        //    ReadQuestionSelected();
+        //});
+
+
+        $('body').on('click', '.edit-question-editQuestion', function () {
+             var id = $(this).attr('data-Id') ;
+            window.location.href = '/OnlineExams/OnlineExamMultipleChoiceQuestions/QuestionEditPage/' + id ;
+        });
+
+        //******************************************************************
+        $('body').on('click', '.delete-question', function () {
+            if (confirm("آیا از حذف سوال اطمینان دارید ؟ ")) {
+            var Id = $(this).attr('data-Id');
+                var data =
+                {
+                    Id: Id,
+                    OnlineExamId: @ViewBag.OnlineExamId,
+                };
+                DataTransfer('/OnlineExams/OnlineExamQuestions/Delete/', JSON.stringify(data), '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.success(f.Message);
+                        ReadQuestionSelected();
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        });
+        //******************************************************************
+        $('body').on('click', '.addBtn', function ()
+        {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            var data = {
+                QuestionId: id,
+                OnlineExamId: @ViewBag.OnlineExamId
+            };
+            DataTransfer('/OnlineExams/OnlineExamQuestions/Add/', JSON.stringify(data), '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.success(f.Message);
+                        ReadQuestionSelected();
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //******************************************************************
+        ReadQuestionSelected(); 
+        //****************************************************************** 
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div id="mainArea">
+            <div class="alert alert-info" role="alert">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="margin-bottom: 0; color: #a86363; font-size: 14px !important; padding: 7px;" class="form-group">
+                            <span class="glyphicon glyphicon-list alert-info-icon"></span> سوالات مربوط به آزمون  <span class="alert-info-text"> @(ViewBag.OnlineExamName)   </span> نوع سوالات <span class="alert-info-text">@(ViewBag.QuestionTypeName)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+
+
+                <div class="tabbable">
+                    <ul class="nav nav-tabs nav-justified" id="myTab10">
+                        <li class="selectedquestion active">
+                            <a class="tab-selected-q" data-toggle="tab" href="#dropdown10" aria-expanded="true">
+                                <div class="display-inline">سوالات انتخاب شده </div>
+                                <div class="display-inline">
+
+                                    <span id="questionCount" class="count"></span>
+
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="tab-red ">
+                            <a data-toggle="tab" href="#dropdown20" aria-expanded="true">
+                                انتخاب سوال
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="dropdown10" class="tab-pane active ">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- ko if:  questionSelected().length > 0 -->
+                                    <div data-bind="foreach: questionSelected">
+                                        <div class="title-lesson col-md-12 col-xs-12 col-sm-12"> <h5 class="row-title before-darkorange" data-bind="text :' سوالات درس ' +  '(' +LessonName +')'"></h5></div>
+                                        <ul class="question-ul" data-bind="foreach:  OnlineExamQuestions">
+                                            <li>
+                                                <div class="question-text">
+                                                    <div class="row">
+                                                        <div class="col-md-9 img-auto">
+                                                            <div><span data-bind="text:($index() + 1)+ ')'"></span> <p style="display:inline-block" data-bind="html : QuestionContext" class="text"> </p></div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div>
+                                                                <button data-bind="attr: { 'data-Id': Id }" type="button" class="delete-question btn btn-danger btn-sm btn-q">حذف سوال از آزمون</button>
+                                                                <button data-bind="attr: { 'data-Id': Id }" type="button" class="edit-question-correctOption btn btn-info btn-sm btn-q">ویرایش گزینه صحیح</button>
+                                                                <button data-bind="attr: { 'data-Id': Id }" type="button" class="edit-question-editQuestion btn btn-success btn-sm btn-q">ویرایش سوال</button>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /ko -->
+                                    <!-- ko ifnot:  questionSelected().length > 0 -->
+                                    <div style="border:1px solid #ddd;border-radius:5px;padding:35px;" class="box-empty">
+                                        <p style="text-align:center" class="center">هیچ سوالی  برای این آزمون ثبت نشده است.</p>
+                                    </div>
+                                    <!-- /ko -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dropdown20" class="tab-pane ">
+                            <div class="row">
+                                @await Html.PartialAsync("_SelectedLessonPartial.cshtml")
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label for="QuestionType">نوع سوال</label>
+                                        <select disabled="disabled" id="QuestionType" class="form-control" data-bind="value: fe().QuestionType">
+                                            @*<option value="Descriptive_MultipleChoiceQuestions">همه</option>*@
+                                            <option selected="selected" value="MultipleChoiceQuestions">تستی</option>
+                                            @*<option value="DescriptiveQuestions">تشریحی</option>*@
+                                        </select>
+                                        <input id="applyFilter" type="button" style="display:none;" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <hr class="col-md-12 col-xs-12" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                                        <div id="mainArea">
+                                            @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                                            <div class="table-responsive">
+                                                @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                                                <table id="modelList" class="tbl-auto table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                                                    <thead class="bordered-darkorange" data-actionColumn="custom">
+                                                        <tr>
+                                                            <th data-viewModel="Id" style="width: 30px;"></th>
+                                                            <th data-viewModel="QuestionContext"  >متن سوال</th>
+                                                            <th width="80px">عملیات</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Component/LessonSelectorComponent.cshtml");
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @{       await Html.RenderPartialAsync("_ChangeExamAnswerModal.cshtml");}
+        </div>
+    </div>
+</div>
+
+
+

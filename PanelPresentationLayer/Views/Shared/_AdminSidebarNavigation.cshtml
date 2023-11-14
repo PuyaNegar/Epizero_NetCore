@@ -1,0 +1,394 @@
+﻿@using Common.Objects
+<!-- Page Sidebar -->
+<div class="page-sidebar" id="sidebar">
+    <!-- Page Sidebar Header-->
+    <div class="sidebar-header-wrapper">
+        <input type="text" class="searchinput" />
+        <i class="searchicon fa fa-search"></i>
+        @*<div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>*@
+    </div>
+    <!-- /Page Sidebar Header -->
+    <!-- Sidebar Menu -->
+    <ul class="nav sidebar-menu">
+
+
+        <li>
+            <a href="/Home/Index/">
+                <i class="menu-icon fa fa-dashboard"></i>
+                <span class="menu-text">داشبورد</span>
+            </a>
+        </li>
+        @if (ViewBag.userInfo.UserGroupId == (int)Common.Enums.UserGroup.Admin)
+        {
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-cog"></i>
+                    <span class="menu-text">تعاریف پایه</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/BasicDefinitions/BaseInfos/Index">
+                            <span class="menu-text">اطلاعات پایه</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/Provinces/Index">
+                            <span class="menu-text">استان ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/Cities/Index">
+                            <span class="menu-text">شهرها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/IdentifierChargeSettings/Index">
+                            <span class="menu-text">تنظیمات کد معرف دانش آموز</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/SmsOptions/Index">
+                            <span class="menu-text">تعرفه پیامک ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/Tags/Index">
+                            <span class="menu-text">تگ ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/BasicDefinitions/ScoringTariffs/Index">
+                            <span class="menu-text"> تعرفه ها به اپیزرو کوین</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-user"></i>
+                    <span class="menu-text">مدیریت کاربران</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/Identities/AdminUsers/Index">
+                            <span class="menu-text">مدیران سیستم</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/TeacherUsers/Index">
+                            <span class="menu-text">اساتید و مشاوران</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/StudentUsers/Index">
+                            <span class="menu-text">دانش آموزان</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/Messages/Index">
+                            <span class="menu-text">پیام ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/SendSMSTargets/Index">
+                            <span class="menu-text">دریافت کنندگان پیامک</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/UserLoginLogs/Index">
+                            <span class="menu-text">اطلاعات ورود کاربران</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Identities/StudentUserMessages/Index">
+                            <span class="menu-text">سوالات دانش آموزان</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-stats"></i>
+                    <span class="menu-text">مدیریت آموزش</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/TrainingManagement/LevelGroups/Index">
+                            <span class="menu-text">مقطع تحصیلی</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/Lessons/Index">
+                            <span class="menu-text">دروس</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/Courses/Index">
+                            <span class="menu-text">دوره ها</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/TrainingManagement/TemporaryCourseStudents/Index">
+                            <span class="menu-text">ثبت نام های موقت</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/TrainingManagement/CourseStudentQuestions/Index">
+                            <span class="menu-text">پرسش و پاسخ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/Products/Index">
+                            <span class="menu-text"> محصول</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/OnlineClasses/Index">
+                            <span class="menu-text">کلاس های آنلاین</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/CourseAndCoursemeetingRegistrations/Index">
+                            <span class="menu-text">ثبت نام های دوره / جلسه</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/CourseStudentNewComments/Index">
+                            <span class="menu-text"> نظرات جدید دانش آموزان دوره</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-flash"></i>
+                    <span class="menu-text">سفارشات و خرید های آنلاین</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/Orders/FinalizedOrders/Index">
+                            <span class="menu-text">خرید های آنلاین دانش آموزان</span>
+                        </a>
+                    </li>
+                 
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-credit-card"></i>
+                    <span class="menu-text">مدیریت مالی</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/Financials/Banks/Index">
+                            <span class="menu-text">بانک ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/PaidCheques/Index">
+                            <span class="menu-text">   چک های پرداختی دانش آموز</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/BankPosDevices/Index">
+                            <span class="menu-text">کارتخوان ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/StudentUserFininces/Index">
+                            <span class="menu-text">تراکنش های آنلاین  </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/StudentFinancialSummary/Index">
+                            <span class="menu-text">وضعیت مالی دانش آموز</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/Financials/AddStudentFinancials/Index">
+                            <span class="menu-text">ثبت صورت مالی دانش آموز</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/DiscountCodes/Index">
+                            <span class="menu-text">کد های تخفیف</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/SalesPartnerUserOptions/Index">
+                            <span class="menu-text">تعیین سهم همکار فروش</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/SalesPartnerUserShares/Index">
+                            <span class="menu-text">سهم همکار فروش</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/StudentPaymentLinks/Index">
+                            <span class="menu-text"> لینک های پرداخت دانش آموز</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/CalculateCourseMultiTeacherShares/Index">
+                            <span class="menu-text" style="font-size:13px;">امور مالی دوره های چند دبیره</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/StudentUserScores/Index">
+                            <span class="menu-text" style="font-size:13px;">اپیزرو کوین دانش آموزان</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/OnlineRegistrationFinancialExport/Index">
+                            <span class="menu-text">خروجی اکسل از فروش آنلاین</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Financials/CourseRegistrationFinancialExport/Index">
+                            <span class="menu-text">خروجی اکسل از فروش دوره</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-cloud"></i>
+                    <span class="menu-text"> آزمون های آنلاین</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/OnlineExams/MultipleChoiceQuestions/Index">
+                            <span class="menu-text">بانک سوالات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/TrainingManagement/OnlineExamCourses/Index">
+                            <span class="menu-text"> آزمون های مستقل</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/OnlineExams/DependentOnlineExams/Index">
+                            <span class="menu-text">آزمون های وابسته</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon glyphicon-tasks"></i>
+                    <span class="menu-text">مدیریت محتوا</span>
+                    <i class="menu-expand"></i>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <a href="/Contents/AboutUs/Index">
+                            <span class="menu-text">درباره ما</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/BlogGroups/Index">
+                            <span class="menu-text">دسته بندی اخبار</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/Blogs/Index">
+                            <span class="menu-text">اخبار</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/Sliders/Index">
+                            <span class="menu-text">اسلایدر تصاویر </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/CoursePromoSections/Index">
+                            <span class="menu-text">گروه سکشن تبلیغاتی دوره</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/CoursePromos/Index">
+                            <span class="menu-text">سکشن تبلیغاتی دوره</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/OnlineExamPromoSections/Index">
+                            <span class="menu-text">گروه سکشن تبلیغاتی آزمون</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/OnlineExamPromos/Index">
+                            <span class="menu-text">سکشن تبلیغاتی آزمون</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/SuggestionTeachers/Index">
+                            <span class="menu-text">اساتید برتر</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/ContactUs/Index">
+                            <span class="menu-text">تماس با ما </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/TeacherComments/Index">
+                            <span class="menu-text">نظرات برای معلمان </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/HomePageNotifications/Index">
+                            <span class="menu-text">نوتفیکیشن صفحه اصلی</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/CourseNotifications/Index">
+                            <span class="menu-text">نوتفیکیشن دوره ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/FAQ/Index">
+                            <span class="menu-text">سوالات متداول</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Contents/OldStudentComments/Index">
+                            <span class="menu-text">نظرات دانش آموزان قبلی</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        }
+
+        <!-- خروج -->
+        <li>
+            <a class="signout" href="#" data-href="/Account/SignOut/">
+                <i class="menu-icon glyphicon glyphicon-log-out"></i>
+                <span class="menu-text"> خروج </span>
+            </a>
+        </li>
+        <!-- خروج -->
+
+    </ul>
+    <!-- /Sidebar Menu -->
+</div>
+
+<!-- /Page Sidebar -->

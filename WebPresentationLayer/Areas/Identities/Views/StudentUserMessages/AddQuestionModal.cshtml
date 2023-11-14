@@ -1,0 +1,35 @@
+﻿@model WebViewModels.TrainingsViewModels.AddCourseStudentQuestionsViewModel
+<div class="modal fade" id="addQuestionModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ارسال سوال</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="addQuestion" id="addQuestionForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Context"></label>
+                                <textarea asp-for="Context" rows="3" type="text" class="form-control" data-bind="value:questionAdd().Context"></textarea>
+                                <span class="validation" asp-validation-for="Context"></span>
+                            </div>
+                        </div>
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+                                    <button type="submit" style=" height: 25px; margin-top: 7px; padding-top: 3px;" class="btn btn-warning btn-sm">
+                                        ثبت سوال
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>
+

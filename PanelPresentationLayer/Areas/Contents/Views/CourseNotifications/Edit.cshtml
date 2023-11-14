@@ -1,0 +1,63 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.ContentsViewModels.CourseNotificationsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label asp-for="Edit.CourseNotificationIds"></label>
+                            <select asp-for="Edit.CourseNotificationIds" class="form-control" data-bind="e().CourseNotificationIds" data-placeholder="تگ‌ها را انتخاب کنید" multiple>
+
+                                @foreach (var item in ViewBag.Courses)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Edit.CourseNotificationIds" class="danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsActive"></label>
+                                <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                                    <option value="1">فعال</option>
+                                    <option value="0">غيرفعال</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.FromDate"></label>
+                                <input data-mask="9999/99/99" asp-for="Edit.FromDate" class="form-control" data-bind="value: e().FromDate">
+                                <span asp-validation-for="Edit.FromDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.ToDate"></label>
+                                <input data-mask="9999/99/99" asp-for="Edit.ToDate" class="form-control" data-bind="value: e().ToDate">
+                                <span asp-validation-for="Edit.ToDate" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

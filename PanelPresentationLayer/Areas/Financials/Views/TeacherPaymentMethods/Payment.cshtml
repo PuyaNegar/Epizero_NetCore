@@ -1,0 +1,33 @@
+﻿@model PanelViewModels.FinancialsViewModels.TeacherSattlementsViewModel
+
+
+<div id="PaymentModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">  پرداخت  و تسویه</h4>
+            </div>
+            <form id="paymentForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="date1">تاریخ پرداخت</label>
+                        <input readonly="readonly" type="text" class="form-control date" id="date1">
+                    </div>
+                    <div class="form-group">
+                        <label for="date2">تاریخ تسویه</label>
+                        <input type="text" data-bind="value: payment().Date" class="form-control " data-mask="9999/99/99" id="date2" placeholder="تاریخ تسویه">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">مبلغ را وارد کنید</label>
+                        <input type="text" data-bind="value: payment().SettledAmount" class="form-control price" id="price" placeholder="مبلغ به تومان">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>*@
+                    <button type="submit" class="btn btn-success">پرداخت</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,62 @@
+﻿@model PanelViewModels.FinancialsViewModels.CourseMultiTeacherSharesViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+                        <label asp-for="CourseName"></label>
+                        <input readonly asp-for="CourseName" class="form-control" value="@ViewBag.CourseName">
+                        <span asp-validation-for="CourseName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TeacherUserId"></label>
+                        <select asp-for="TeacherUserId" class="form-control" data-bind="value: c().TeacherUserId">
+                            <option value="">لطفا انتخاب کنید</option>
+                            @foreach (var item in ViewBag.Teachers)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TeacherUserId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IsIndexTeacher"></label>
+                        <select asp-for="IsIndexTeacher" class="form-control" data-bind="value: c().IsIndexTeacher">
+                            <option value="">لطفا انتخاب کنید</option>
+                            <option value="1">بلی</option>
+                            <option value="0">خیر</option>
+                        </select>
+                        <span asp-validation-for="IsIndexTeacher" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CourseMultiTeacherShareTypeId"></label>
+                        <select asp-for="CourseMultiTeacherShareTypeId" class="form-control" data-bind="value: c().CourseMultiTeacherShareTypeId">
+                            <option value="">لطفا انتخاب کنید</option>
+                            <option value="1">به ازای هر جلسه</option>
+                            <option value="2">درصدی</option>
+                        </select>
+                        <span asp-validation-for="CourseMultiTeacherShareTypeId" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AmountOrPercent"></label>
+                        <input type="text" asp-for="AmountOrPercent" class="form-control currency" data-bind="value: c().AmountOrPercent">
+                        <span asp-validation-for="AmountOrPercent" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

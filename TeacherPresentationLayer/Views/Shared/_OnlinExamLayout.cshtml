@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="fa">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="shortcut icon" href="/assets/img/webLogo.ico" type="image/x-icon">
+    <!--Styles Start-->
+    @{ await Html.RenderPartialAsync("_StylesOnlineExamPartial"); }
+    <!--Styles End-->
+    <script src="/assets/lib/knockout/knockout-3.4.2.js"></script>
+    <!-- Jquery JS -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <title>@ViewData["Title"]</title>
+</head>
+
+<body>
+
+    @{ await Html.RenderPartialAsync("_AjaxIconLoader.cshtml"); }
+    <!-- End Preloader -->
+    <!-- Start Header Area -->
+    @{ await Html.RenderPartialAsync("_HeaderOnlineExamPartial.cshtml"); }
+    <!-- End Header Area -->
+ 
+    <!-- body start -->
+    @RenderBody()
+    <!-- body end -->
+    <!-- Start Footer Area -->
+    @{ await Html.RenderPartialAsync("_FooterOnlineExamPartial.cshtml"); }
+    <!-- End Footer Area -->
+
+    <div class="go-top"><i class='bx bx-up-arrow-alt'></i></div>
+
+    <!--Scripts Start-->
+    @{ await Html.RenderPartialAsync("_ScriptsOnlineExamPartial");}
+    <!--Scripts End-->
+
+    @RenderSection("Scripts", required: false)
+    @RenderSection("ComponentScripts", required: false)
+</body>
+</html>

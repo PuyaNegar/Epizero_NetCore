@@ -1,0 +1,119 @@
+﻿@using Common.Enums
+@{
+    Layout = null;
+    var url = string.Empty;
+    url = "/TrainingManagement/Homeworks/UpdateContext/";
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Edit Text | @ViewBag.Title</title>
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="~/lib/knockout/knockout-3.4.2.js"></script>
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/assets/js/jquery-ui-1.10.4.custom.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript">
+       
+            function DataTransfer(url, jsonData, iconLoader, runOnSuccess, runOnError) {
+                $(iconLoader).show();
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: jsonData,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (e) {
+                        if (runOnSuccess != null) {
+                            runOnSuccess(e);
+                        }
+                        $(iconLoader).hide();
+                    },
+                    error: function (e) {
+                        if (runOnError != null) {
+                            runOnError(e);
+                        }
+                        $(iconLoader).hide();
+                    },
+                    complete: function (xhr, textStatus) {
+                        if (xhr.status == 401) {
+                            window.location.href = '/Account/Index/';
+                        }
+                    }
+                });
+            }
+     
+    </script>
+
+</head>
+<body>
+    <div class="row" style="margin-right: unset;margin-left: unset;">
+        <div class="col-xs-12 col-md-12">
+            <div class="su-cke">
+                <div class="title"> <span> ویرایش متن </span> <span class="title-inner">@(ViewBag.Title)</span></div>
+                <div class="btn"><input class="btn btn-success" id="saveBtn" type="button" value="ذخیره" /></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <form style="margin: 5px 20px 0 20px; ">
+                <textarea name="editor1" id="editor1" rows="10" cols="80">
+                @Html.Raw(ViewBag.Context) 
+        </textarea>
+                <script>
+                    var roxyFileman = '/FileManager/Index';
+                    CKEDITOR.replace('editor1', {
+                        filebrowserBrowseUrl: roxyFileman,
+
+                    });
+
+                    $(function () {
+                //=========================================================
+                        $('#saveBtn').click(function () {
+                    toastr.remove();
+                    var data = {
+                        Id: '@ViewBag.Id',
+                        Context: CKEDITOR.instances.editor1.getData()
+                    }
+                    DataTransfer('@url', JSON.stringify(data), '#resultLoader',
+                        function (f) {
+
+                            if (!f.IsSuccess) {
+                                toastr.error(f.Message);
+                            } else {
+                                toastr.success(f.Message);
+                                setTimeout(function () { window.close();}, 1500);
+                            }
+                        },
+                        function (e) {
+                            toastr.error('خطا در ارتباط با سرور ');
+
+                        }
+                    );
+                });
+                  //=========================================================
+
+            });
+                </script>
+            </form>
+        </div>
+        <div class="col-xs-12 col-md-12">
+                <div id="resultLoader" style="position:fixed;top:0px;right:0px;left:0px;bottom:0px;background-color:rgba(0,0,0,0.8);z-index:1000000;direction:rtl;display:none;">
+                    <div style="text-align:center;margin-top:70px;">
+                        <img src="~/images/page-loading.svg" style="height:220px;width:220px;" />
+                        <br />
+                        <span style="margin-top:3px;color:white;">Executing request ...</span>
+                        <br />
+                        <img src="~/images/loader.png" />
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+</body>
+</html>

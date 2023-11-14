@@ -1,0 +1,53 @@
+﻿@using PanelViewModels.TeacherTrainingsViewModels
+@using Common.Extentions
+@{
+    var video = (TeacherCourseMeetingVideosViewModel)ViewBag.VideoDetail;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " مدرسه آنلاین اپیزرو" + " | " +  video.Title;
+
+}
+<script>
+         window.onload = function () {
+         var media_obj = null ;
+                                media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(video.Link.GetKavemoId())");
+                                media_obj.api.DRMText({
+                                      text: ["@Html.Raw(video.UserName)","@Html.Raw(video.TeacherFullName)","@Html.Raw(video.CourseMeetingName)", "@Html.Raw(video.Title)", "آموزشگاه اپیزرو" ] ,
+                                    time: 2.5,
+                                    color: "red",
+                                    fontSize: "17px",
+                                    fontStyle: "bold",
+                                    fontName: "arial",
+                                    opacity: 0.7,
+                                });
+               }
+</script>
+@*@if (video != null)
+{*@
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <hr />
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tag-video">
+                    @Html.Raw(video.Link)
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+@*}*@
+@*else
+{
+    <div class="row m-t-30">
+        <div class="box-empty">
+            <div class="empty">
+                <img src="/assets/img/box-empty.svg">
+                <p>ویدیو ای برای آزمون ثبت نشده است .</p>
+            </div>
+        </div>
+    </div>
+}*@

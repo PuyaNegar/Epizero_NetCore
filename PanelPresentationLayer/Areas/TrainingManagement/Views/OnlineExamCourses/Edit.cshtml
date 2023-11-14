@@ -1,0 +1,186 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.TrainingManagementViewModels.CoursesViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ویرایش</strong>   </h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.Name"></label>
+                                <input asp-for="Edit.Name" class="form-control" data-bind="value: e().Name">
+                                <span asp-validation-for="Edit.Name" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CourseTypeId"></label>
+                                <select disabled asp-for="Edit.CourseTypeId" class="form-control" data-bind="value: e().CourseTypeId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">آنلاین</option>
+
+                                </select>
+                                <span asp-validation-for="Edit.CourseTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.TeacherUserId"></label>
+                                <select disabled asp-for="Edit.TeacherUserId" class="form-control" data-bind="value: e().TeacherUserId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Teachers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Edit.TeacherUserId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.LanguageId"></label>
+                                <select asp-for="Edit.LanguageId" class="form-control" data-bind="value: e().LanguageId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">فارسی</option>
+                                    <option value="2">ترکی</option>
+                                    <option value="3">کردی</option>
+                                    <option value="4">انگلیسی</option>
+                                </select>
+                                <span asp-validation-for="Edit.LanguageId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.Price"></label>
+                                <input type="text" asp-for="Edit.Price" class="form-control currency" data-bind="value: e().Price">
+                                <span asp-validation-for="Edit.Price" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.DiscountPercentOrDiscountAmount"></label>
+                                <input asp-for="Edit.DiscountPercentOrDiscountAmount" class="form-control" data-bind="value: e().DiscountPercentOrDiscountAmount">
+                                <span asp-validation-for="Edit.DiscountPercentOrDiscountAmount" class="danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.StartDate"></label>
+                                <input asp-for="Edit.StartDate" class="form-control" data-bind="value: e().StartDate">
+                                <span asp-validation-for="Edit.StartDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.EndDate"></label>
+                                <input asp-for="Edit.EndDate" class="form-control" data-bind="value: e().EndDate">
+                                <span asp-validation-for="Edit.EndDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsVisibleOnSite"></label>
+                                <select asp-for="Edit.IsVisibleOnSite" class="form-control" data-bind="value: e().IsVisibleOnSite">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsVisibleOnSite" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsActive"></label>
+                                <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                                    <option value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsMultiTeacher"></label>
+                                <select asp-for="Edit.IsMultiTeacher" class="form-control" data-bind="value: e().IsMultiTeacher">
+
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsMultiTeacher" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.Inx"></label>
+                                <input asp-for="Edit.Inx" class="form-control" data-bind="value: e().Inx">
+                                <span asp-validation-for="Edit.Inx" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Edit.DiscountTypeId"></label>
+                            <select asp-for="Edit.DiscountTypeId" type="text" class="form-control" data-bind="value: e().DiscountTypeId">
+                                <option value="1">درصدی</option>
+                                <option value="2">مبلغی</option>
+                            </select>
+                            <span asp-validation-for="Edit.DiscountTypeId" class="danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Edit.DiscountPercentOrDiscountAmount"></label>
+                            <input asp-for="Edit.DiscountPercentOrDiscountAmount" type="text" class="form-control" data-bind="value: e().DiscountPercentOrDiscountAmount">
+                            <span asp-validation-for="Edit.DiscountPercentOrDiscountAmount" class="danger"></span>
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.MetaDescription"></label>
+                                <input asp-for="Edit.MetaDescription" class="form-control" data-bind="value: e().MetaDescription">
+                                <span asp-validation-for="Edit.MetaDescription" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.BannerPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "EditCoursesPicPath",
+                                   KnockoutExpressionString = "MainViewModel.e().BannerPicPath",
+                                   MaxImageHeight = 325,
+                                   MaxImageWidth = 525,
+                                   MinImageHeight = 1,
+                                   MinImageWidth = 1,
+                                   MaxImageSize = 500,
+                                    Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 525 در 325 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                        </div>
+                        <span asp-validation-for="Edit.BannerPicPath" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ویرایش</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

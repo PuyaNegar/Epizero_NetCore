@@ -1,0 +1,259 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.IdentitiesViewModels.StudentUsersViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CityId"></label>
+                                <div class="input-group">
+                                    <input  readonly="readonly" asp-for="Edit.CityId" type="hidden" class="form-control" data-bind="value: e().CityId" />
+                                    <input  readonly="readonly" asp-for="Edit.CityName" type="text" class="form-control" data-bind="value: e().CityName" />
+                                    <span class="input-group-btn">
+                                        <button id="EditCitySelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Edit.CityId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+
+                            <div class="form-group">
+                                <label asp-for="Edit.UserName"></label>
+                                <input asp-for="Edit.UserName" class="form-control" data-bind="value: e().UserName">
+                                <span asp-validation-for="Edit.UserName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.FirstName"></label>
+                                <input asp-for="Edit.FirstName" class="form-control" data-bind="value: e().FirstName">
+                                <span asp-validation-for="Edit.FirstName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.LastName"></label>
+                                <input asp-for="Edit.LastName" class="form-control" data-bind="value: e().LastName">
+                                <span asp-validation-for="Edit.LastName" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.BirthDay"></label>
+                                <input data-mask="9999/99/99" asp-for="Edit.BirthDay" class="form-control" data-bind="value: e().BirthDay">
+                                <span asp-validation-for="Edit.BirthDay" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.HomePhoneNumber"></label>
+                                <input asp-for="Edit.HomePhoneNumber" class="form-control" data-bind="value: e().HomePhoneNumber">
+                                <span asp-validation-for="Edit.HomePhoneNumber" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.FatherMobNo"></label>
+                                <input asp-for="Edit.FatherMobNo" class="form-control" data-bind="value: e().FatherMobNo">
+                                <span asp-validation-for="Edit.FatherMobNo" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.MotherMobNo"></label>
+                                <input asp-for="Edit.MotherMobNo" class="form-control" data-bind="value: e().MotherMobNo">
+                                <span asp-validation-for="Edit.MotherMobNo" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.NationalCode"></label>
+                                <input asp-for="Edit.NationalCode" class="form-control" data-bind="value: e().NationalCode">
+                                <span asp-validation-for="Edit.NationalCode" class="danger"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Gender"></label>
+                                <select asp-for="Edit.Gender" class="form-control" data-bind="value: e().Gender">
+                                    <option value="1">مرد</option>
+                                    <option value="0">زن</option>
+                                </select>
+                                <span asp-validation-for="Edit.Gender" class="danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Email"></label>
+                                <input asp-for="Edit.Email" class="form-control" data-bind="value: e().Email">
+                                <span asp-validation-for="Edit.Email" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.SchoolName"></label>
+                                <input asp-for="Edit.SchoolName" class="form-control" data-bind="value: e().SchoolName">
+                                <span asp-validation-for="Edit.SchoolName" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.FavoriteJob"></label>
+                                <input asp-for="Edit.FavoriteJob" class="form-control" data-bind="value: e().FavoriteJob">
+                                <span asp-validation-for="Edit.FavoriteJob" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.SchoolTypeId"></label>
+                                <select asp-for="Edit.SchoolTypeId" class="form-control" data-bind="value: e().SchoolTypeId">
+                                    <option value="1"> دولتی </option>
+                                    <option value="2">غیر انتفاعی </option>
+                                    <option value="3">نمونه دولتی</option>
+                                    <option value="4">شاهد و ایثارگران</option>
+                                    <option value="5">استعدادهای درخشان</option>
+                                    <option value="6">خیریه</option>
+                                </select>
+                                <span asp-validation-for="Edit.SchoolTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsActive"></label>
+                                <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                                    <option value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.IntroductionWithAcademyTypeId"></label>
+                                <select asp-for="Edit.IntroductionWithAcademyTypeId" class="form-control" data-bind="value: e().IntroductionWithAcademyTypeId">
+                                    <option value="">لطفا انتخاب کنید...</option>
+                                    <option value="1">اس ام اس</option>
+                                    <option value="2">معرفی دوستان</option>
+                                    <option value="3">اینستاگرام</option>
+                                    <option value="4">تلگرام</option>
+                                    <option value="5">آپارات</option>
+                                    <option value="6">جستجو در گوگل</option>
+                                    <option value="7">اساتید</option>
+                                    <option value="8">دیگر سایت ها</option>
+                                    <option value="10">سایر موارد</option>
+                                </select>
+                                <span asp-validation-for="Edit.IntroductionWithAcademyTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.LevelId"></label>
+                                <select asp-for="Edit.LevelId" class="form-control" data-bind="value: e().LevelId">
+                                    <option value=""> لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Levels)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Edit.LevelId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 fileds">
+                            <div class="form-group">
+                                <label asp-for="Edit.FeildId"></label>
+                                <select asp-for="Edit.FeildId" class="form-control" data-bind="value: e().FeildId">
+                                    <option value=""> لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Fields)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Edit.FeildId" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.PersonalPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "EditPersonalPicPath",
+                                   KnockoutExpressionString = "MainViewModel.e().PersonalPicPath",
+                                   MaxImageHeight = 400,
+                                   MaxImageWidth = 400,
+                                   MinImageHeight = 400,
+                                   MinImageWidth = 400,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="Edit.PersonalPicPath" class="danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.NationalCardPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "EditNationalCardPicPath",
+                                   KnockoutExpressionString = "MainViewModel.e().NationalCardPicPath",
+                                   MaxImageHeight = 400,
+                                   MaxImageWidth = 400,
+                                   MinImageHeight = 400,
+                                   MinImageWidth = 400,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر اندازه مجاز تصویر : 400 در 400 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="Edit.NationalCardPicPath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

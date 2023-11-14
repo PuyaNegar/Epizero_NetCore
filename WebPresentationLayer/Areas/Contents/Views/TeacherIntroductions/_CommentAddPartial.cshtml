@@ -1,0 +1,56 @@
+﻿@model WebViewModels.ContentsViewModels.TeacherCommentsViewModel
+
+<div class="row" style="margin-top:30px;">
+    <div class="col-md-12 col-xs-12">
+        <div class="box-question box-question-t-e">
+            <div id="add-q-box" class="add-q-box">
+                <form id="AddComment" asp-action="AddComment" asp-controller="TeacherComments" asp-area="Contents" method="post">
+                    <div class="box-title">
+                        <span class="title">متن نظر </span>
+                    </div>
+                    <div class="box-j">
+                        <div class="form-group">
+                            <input type="hidden" asp-for="TeacherUserId" value="@Context.Request.Query["teacherId"]" />
+                            @*<label asp-for="Context"></label>*@
+                            <textarea asp-for="Comment" rows="3" type="text" class="form-control txt-comment-t-m"></textarea>
+                            <span class="validation" asp-validation-for="Comment"></span>
+                        </div>
+                        <div class="center">
+                            <div id="g-recaptcha" class="g-recaptcha inline-block" data-type="image" data-sitekey="6LfZVC8dAAAAAG_7bh_X1oL4uZUu44bax-x96hpE"></div>
+                        </div>
+                        <div class="left">
+                            <button data-Id="" type="submit" class="btn btn-warning">
+                                <i class="fa fa-plus"></i>
+                                ثبت نظر
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#AddComment").submit(function (e) {
+        e.preventDefault();
+        var form = $("#AddComment").serializeArray();
+        $.ajax({
+            type: "POST",
+            url: "/Contents/TeacherComments/AddComment",
+            data: form, // serializes the form's elements.
+            success: function (data) {
+                if (data == "ok") {
+                    toastr.remove();
+                    toastr.success("نظر شما با موفقیت ثبت شد و بعداز تایید نمایش داده شود");
+                    $("#Comment").val("");
+                    grecaptcha.reset();
+                } else if (data == "rechapchaerror") {
+                    toastr.remove();
+                    toastr.error("رکپچا تایید نشد");
+                    $("#Comment").val("");
+                }
+            }
+        });
+    })
+</script>

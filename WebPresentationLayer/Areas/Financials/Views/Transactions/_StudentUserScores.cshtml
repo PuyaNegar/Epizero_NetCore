@@ -1,0 +1,119 @@
+﻿@{
+    var ScoresBalance = (int)ViewBag.ScoresBalance;
+    var ScoresTransactions = (List<WebViewModels.FinancialsViewModels.StudentUserScoresViewModel>)ViewBag.ScoresTransactions;
+    int i = 1;
+}
+
+
+<style type="text/css">
+    thead tr th, tbody tr td {
+        text-align: center;
+    }
+
+    .financialSummaryPartial .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background-color: #dddd;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .financialSummaryPartial .modal-title {
+        display: inline-block;
+        float: right;
+    }
+
+    .financialSummaryPartial button.close {
+        float: left;
+    }
+
+    .title-y {
+        font-weight: 700;
+        font-size: 14px;
+        display: inline-block;
+        width: 200px;
+        text-align: right;
+        margin-right: 3px;
+    }
+
+    .text-y {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .financialSummaryPartial .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
+</style>
+
+<section class="financialSummaryPartial">
+    <div class="container">
+
+
+
+        <div class="row" style="position:sticky">
+            <div class="split-c">
+                <hr class="hr">
+                <span class="pad-line-s split-liner bg-color-red">
+                    تراکنش های اپیزرو کوین
+                </span>
+            </div>
+        </div>
+        @if (ScoresTransactions.Any())
+        {
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="split-c">
+                 
+                        <span class="pad-line-s split-liner" style="background-color: #758cb9;">
+                            موجودی اپیزرو کوین شما :   @(string.Format("{0:N0}", ViewBag.ScoresBalance))     کوین
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered  table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>اپیزرو کوین</th>
+                                    <th>علت تراکنش امتیاز</th>
+                                    <th>تاریخ ثبت</th>
+                                    <th>توضیحات </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ScoresTransactions)
+                                {
+                                    <tr>
+                                        <td scope="row">@i</td>
+                                        <td>@item.Score</td>
+                                        <td>@item.CustomerScoreTypeName</td>
+                                        <td>@item.RegDateTime</td>
+                                        <td>@item.Description</td>
+                                    </tr>
+                                    i++;
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        }
+        else
+        {
+                <div class="row">
+                    <div class="box-empty">
+                        <div class="empty">
+                            <img src="/assets/img/box-empty.svg"  >
+                        <p>تراکنش های اپیزرو کوین برای شما ثبت نشده است.</p>
+                        </div>
+                    </div>
+                </div>
+        }
+    </div>
+
+</section>
+
+

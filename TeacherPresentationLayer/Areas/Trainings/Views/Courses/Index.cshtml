@@ -1,0 +1,154 @@
+﻿@{
+    var Courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " دوره ها |  مدرسه آنلاین اپیزرو";
+    int i = 0;
+    int j = 0;
+    int t = 0;
+}
+<script type="text/javascript">
+    $(function () {
+        
+ 
+    });
+</script>
+<style type="text/css">
+    .nav-tabs {
+        padding-right: 0 !important;
+    }
+
+    .box-tab .main-tab .ul-nav .nav-s {
+        position: relative;
+        width: unset;
+        top: unset;
+    }
+
+    .box-tab .main-tab .ul-nav {
+        position: relative;
+        height: 100%;
+        border-bottom: unset;
+    }
+
+        .box-tab .main-tab .ul-nav .nav-s .hr-5 {
+            position: absolute;
+            top: 50%;
+            z-index: -1;
+            width: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
+            border-top: 2px solid #eee;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a">دوره ها</span>
+        </div>
+    </div>
+</div>
+<section class="box-tab">
+    <div class="container">
+        @if (Courses.Any())
+        {
+
+            <div class="legend col-md-12 float-r-o-i">
+                <div class="title-o">
+                    <i class="fa fa-wpforms"></i>
+                    <span>دوره های من</span>
+                </div>
+
+                <div class="col-md-12 col-xs-12 main-tab">
+
+                    <div class="ul-nav">
+                        <div class="nav-s">
+                            <hr class="hr-5" />
+                            <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg tab-ul-xs">
+                                @foreach (var a in Courses)
+                                {
+
+                                    <li class="centered col-centered  @(j == 0 ? "active" : "") col-xs-12">
+                                        <a data-toggle="tab" href="#menu_@j">@a.Name</a>
+                                    </li>
+
+                                    j++;
+                                }
+                            </ul>
+                            <ul class="nav nav-tabs hidden-xs tab-ul-lg">
+                                @foreach (var a in Courses)
+                                {
+                                    <li class="centered col-centered col-md-3 @(t == 0  ? "active" : "")">
+                                        <a data-toggle="tab" href="#menu_@t" aria-expanded="true">@a.Name</a>
+                                    </li>
+                                    t++;
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+
+                        @foreach (var item in Courses)
+                        {
+                            <div id="menu_@i" class="tab-pane fade @(i== 0  ? "active in" : "")">
+                                @if (item.CourseMeetings.Count() > 0)
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-striped ">
+
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center;">#</th>
+                                                    <th style="text-align: center;">نام جلسه</th>
+                                                    <th style="text-align: center;">تاریخ شروع</th>
+                               
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{int a = 1;}
+                                                @foreach (var courseMeetings in item.CourseMeetings)
+                                                {
+                                                    <tr>
+                                                        <td style="text-align: center;">@a</td>
+                                                        <td style="text-align: center;"> @courseMeetings.Name</td>
+                                                        <td style="text-align: center;">@courseMeetings.StartDateTime</td>
+                                                         
+                                                    </tr>
+
+                                                    a++;
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="box-empty">
+                                        <div class="empty">
+                                            <img src="~/assets/img/box-empty.svg" />
+                                            <p class="place-holder">جلسه ای برای شما ثبت نشده است.</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            i++;
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" />
+                    <p>دوره ای برای شما ثبت نشده است .</p>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    
+</section>

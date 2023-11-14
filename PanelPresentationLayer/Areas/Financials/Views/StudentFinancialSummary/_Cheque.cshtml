@@ -1,0 +1,64 @@
+﻿@{
+    var CourseMeetingStudents = (List<ComboBoxItems>)ViewBag.CourseMeetingStudents;
+}
+@model PanelViewModels.Prefix.StudentChequePaymentPrefix<PanelViewModels.FinancialsViewModels.StudentFinancialChequePaymentsViewModel>
+
+<div id="chequeModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">پرداخت بصورت چک</h4>
+            </div>
+            <form id="chequeForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="StudentChequePayment.PaidChequeId"> </label>
+                        <select asp-for="StudentChequePayment.PaidChequeId" class="form-control" data-bind="value: cheque().PaidChequeId">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            @foreach (var item in ViewBag.PaidCheques)
+                            {
+                                <option value="@item.Value" data-remainingAmount="@item.Data">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="StudentChequePayment.CourseMeetingStudentId" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StudentChequePayment.RemainingAmount"> </label>
+                        <input asp-for="StudentChequePayment.RemainingAmount" type="text" readonly="readonly" class="form-control currency">
+                        <span asp-validation-for="StudentChequePayment.RemainingAmount" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StudentChequePayment.AmountPaid"> </label>
+                        <input asp-for="StudentChequePayment.AmountPaid" type="text" data-bind="value: cheque().AmountPaid" class="form-control amountPaid currency">
+                        <span asp-validation-for="StudentChequePayment.AmountPaid" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StudentChequePayment.CourseMeetingStudentId"> </label>
+                        <select asp-for="StudentChequePayment.CourseMeetingStudentId" class="form-control" data-bind="value: cheque().CourseMeetingStudentId">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            @foreach (var item in CourseMeetingStudents.Where(c=>c.IsActive))
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="StudentChequePayment.CourseMeetingStudentId" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StudentChequePayment.Description"> </label>
+                        <textarea asp-for="StudentChequePayment.Description" type="text" data-bind="value: cheque().Description" class="form-control text-d"></textarea>
+                        <span asp-validation-for="StudentChequePayment.Description" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

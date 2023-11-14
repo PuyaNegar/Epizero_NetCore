@@ -1,0 +1,40 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.ContentsViewModels.CoursePromoSectionsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label asp-for="Edit.Title"></label>
+                        <input asp-for="Edit.Title" class="form-control" data-bind="value: e().Title">
+                        <span asp-validation-for="Edit.Title" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.Inx"></label>
+                        <input asp-for="Edit.Inx" class="form-control" data-bind="value: e().Inx" type="text">
+                        <span asp-validation-for="Edit.Inx" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Edit.IsActive"></label>
+                        <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                            <option value="1">فعال</option>
+                            <option value="0">غير فعال</option>
+                        </select>
+                        <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,124 @@
+﻿@using WebViewModels.ContentsViewModels
+@{
+    ViewData["Title"] = "فیلتر دوره ها";
+    var Data = (List<FilterdCourseGroupsViewModel>)ViewBag.Data;
+}
+<style type="text/css">
+    .description-level {
+        margin: 40px 30px;
+        padding:10px;
+    }
+
+        .description-level p {
+            line-height: 1.8;
+            color: #555;
+        }
+</style>
+@if (Data.Any())
+{
+
+    <div class="description-level">
+        <div class="row">
+            <div class="col-md-12">
+                <p>@Html.Raw(ViewBag.LevelDescription)</p>
+            </div>
+        </div>
+
+    </div>
+    @foreach (var item in Data)
+    {
+
+        <section class="title-color">
+            <div class="container-fluid SearchPAll">
+                <div class="split-c">
+                    <hr class="hr" />
+                    <span class="pad-line-s split-liner">
+                        @item.LevelName
+                    </span>
+                </div>
+            </div>
+            <div class="container-fluid new-course">
+                <div class="row">
+                    <div style="clear:both;"></div>
+                    <div class="swiper-container swiper-teach">
+                        <div class="swiper-wrapper">
+                            @foreach (var filterdCourse in item.FilterdCourses)
+                            {
+                                <div class="swiper-slide">
+                                    <a>
+                                        <div data-aos="fade-right" class="col-md-12 col-sm-12 col-xs-12 main-new-course">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                                <div class="div-main-img">
+                                                    @if (string.IsNullOrEmpty(filterdCourse.BannerPicPath))
+                                                    {
+                                                        <a title="@filterdCourse.Name" href="/Trainings/Courses/Index?CoursesId=@filterdCourse.Id">
+
+                                                            <img title="@filterdCourse.Name" alt="@filterdCourse.Name" src="~/assets/img/2020-10-10-03-44-15pm-adabiat6.png" />
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a title="@filterdCourse.Name" href="/Trainings/Courses/Index?CoursesId=@filterdCourse.Id">
+                                                            <img title="@filterdCourse.Name" alt="@filterdCourse.Name" src="@filterdCourse.BannerPicPath">
+                                                        </a>
+                                                    }
+                                                </div>
+
+                                                <div class="div-title-content">
+                                                    <a title="@filterdCourse.Name" href="/Trainings/Courses/Index?CoursesId=@filterdCourse.Id">
+                                                        @filterdCourse.Name
+                                                    </a>
+                                                    <br />
+                                                    <span>
+                                                        @filterdCourse.TeacherFullName
+                                                    </span>
+                                                </div>
+                                                <div class="div-img-small">
+                                                    @if (string.IsNullOrEmpty(filterdCourse.TeacherPersonalPicPath))
+                                                    {
+                                                        <img src="~/assets/img/logo.png" alt="@filterdCourse.TeacherFullName" title="@filterdCourse.TeacherFullName" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img title="@filterdCourse.TeacherFullName" alt="@filterdCourse.TeacherFullName" src="@filterdCourse.TeacherPersonalPicPath" />
+                                                    }
+                                                </div>
+                                                <div data-academyProductTypeId="1" data-academyProductId="@filterdCourse.Id" data-toggle="tooltip" data-placement="bottom" title="افزودن به سبد" class="cart-btn div-cart-main">
+                                                    <img src="/assets/img/sabab1.png" alt="افزودن به سبد خرید   @filterdCourse.Name | @filterdCourse.TeacherFullName" title="افزودن به سبد خرید   @filterdCourse.Name | @filterdCourse.TeacherFullName" />
+                                                    <div class="box"></div>
+                                                </div>
+                                                @if (filterdCourse.DiscountPercent != 0)
+                                                {
+                                                    <div class="discount">
+                                                        %@string.Format("{0:N0}", filterdCourse.DiscountPercent)
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination-teach"></div>
+                        <!-- Add Arrows -->
+                        @*<div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>*@
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+else
+{
+    <div class="box-empty">
+        <div class="empty">
+            <img src="~/assets/img/box-empty.svg" alt="دوره های اپیزرو" />
+            <p>هیچ دوره ای برای این مقطع ثبت نشده است</p>
+        </div>
+    </div>
+}

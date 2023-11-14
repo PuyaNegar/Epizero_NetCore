@@ -1,0 +1,96 @@
+﻿@model WebViewModels.IdentitiesViewModels.RegisterViewModel
+
+<div id="regist" class="tab-pane fade ">
+    <form id="registerForm" method="post" data-bind="visible: isActiveRegisterForm() == true">
+
+        <div class="col-md-6 float-r">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="FirstName" type="text" placeholder="نام" required="" class="form-control" data-bind="value: user().FirstName">
+                <span class="validation" asp-validation-for="FirstName"></span>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 float-r">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="LastName" type="text" placeholder="نام خانوادگی" required="" class="form-control" data-bind="value: user().LastName">
+                <span class="validation" asp-validation-for="LastName"></span>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="NationalCode" type="text" placeholder="کد ملی" required="" class="form-control" data-bind="value: user().NationalCode">
+                <span class="validation" asp-validation-for="NationalCode"></span>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="UserName" type="text" placeholder="شماره موبایل" required="" class="form-control" data-bind="value: user().UserName">
+                <span class="validation" asp-validation-for="UserName"></span>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="Password" type="password" autocomplete="off" placeholder="کلمه عبور" required="" class="form-control" data-bind="value: user().Password">
+                <span class="validation" asp-validation-for="Password"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-12 div-input form-group">
+                <input asp-for="RePassword" type="password" autocomplete="off" placeholder="تکرار کلمه عبور" required="" class="form-control" data-bind="value: user().RePassword">
+                <span class="validation" asp-validation-for="RePassword"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <label class="checkbox">
+                <span class="title-bag c-c-cu"><a href="/Contents/Rules">قوانین و مقررات</a> را می پذیرم   </span>
+                <input id="ruleaccept" type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+
+        <div class="col-md-12 div-input">
+            <div class="loaderBox">
+                <div class="loader"><div class="icon-loader"><img alt="ثبت نام در سایت اپیزرو" src="~/assets/img/loader.svg" /></div></div>
+                <input type="submit" name="login" class="login loginmodal-submit btn--login" value="ثبت نام">
+            </div>
+        </div>
+
+
+    </form>
+
+
+    <form id="registerConfirmForm" method="post" data-bind="visible:  isActiveRegisterForm() == false">
+        <div class="col-md-12">
+
+            <div class="col-md-12">
+                <div class="col-md-12 div-input">
+                    <input id="register_confirmCode" type="text" placeholder="کد تایید" required="" class="form-control">
+                    <div class="request">
+                        <span class="timeCountDown_register"></span>
+                        <a id="ReSendCodeBtn_register" class="link-btn font-size-12" style="float:left;">ارسال مجدد کد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 div-input">
+                <div class="loaderBox">
+                    <div class="loader"><div class="icon-loader"><img alt="ثبت نام در اپیزرو" src="~/assets/img/loader.svg" /></div></div>
+                    <input type="submit" name="login" class="login loginmodal-submit disablesBtn" value="ثبت نام">
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+
+</div>

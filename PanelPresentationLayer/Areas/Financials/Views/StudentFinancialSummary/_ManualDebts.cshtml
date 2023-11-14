@@ -1,0 +1,51 @@
+﻿@{
+    var CourseMeetingStudents = (List<ComboBoxItems>)ViewBag.CourseMeetingStudents;
+}
+@model PanelViewModels.Prefix.ManualDebtsPrefix<PanelViewModels.FinancialsViewModels.StudentFinancialManualDebtsViewModel>
+
+<div id="manualDebtsModal" class="modal fade " tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">بدهی ارزش افزوده</h4>
+            </div>
+            <form id="manualDebtsForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="ManualDebts.DebtAmount"> </label>
+                        <input asp-for="ManualDebts.DebtAmount" type="text" data-bind="value: manualDebts().DebtAmount" class="form-control currency">
+                        <span asp-validation-for="ManualDebts.DebtAmount" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ManualDebts.CourseMeetingStudentId"> </label>
+                        <select asp-for="ManualDebts.CourseMeetingStudentId" class="form-control" data-bind="value: manualDebts().CourseMeetingStudentId">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            @foreach (var item in CourseMeetingStudents.Where(c=>c.IsActive))
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ManualDebts.CourseMeetingStudentId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ManualDebts.RegDateTime "> </label>
+                        <input asp-for="ManualDebts.RegDateTime " type="text" data-bind="value: manualDebts().RegDateTime " class="form-control" data-mask="9999/99/99">
+                        <span asp-validation-for="ManualDebts.RegDateTime " class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ManualDebts.Description"> </label>
+                        <textarea asp-for="ManualDebts.Description" type="text" data-bind="value: manualDebts().Description" class="form-control"></textarea>
+                        <span asp-validation-for="ManualDebts.Description" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

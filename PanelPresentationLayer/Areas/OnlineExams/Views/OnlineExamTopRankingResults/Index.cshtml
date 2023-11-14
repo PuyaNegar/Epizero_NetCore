@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "کارنامه کلی"; 
+    ViewData["PageFarsiName"] = "کارنامه کلی";
+    var AllResult = (List<PanelViewModels.OnlineExamViewModels.StudentOnlineExamResultGroupsViewModel>)ViewBag.AllResult;
+}
+    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs nav-justified" id="myTab">
+                <li class="active">
+                    <a data-toggle="tab" href="#Present" aria-expanded="true">
+                        کارنامه حاضرین
+                    </a>
+                </li>
+
+                <li class="tab-red">
+                    <a data-toggle="tab" href="#Absent" aria-expanded="false">
+                        کارنامه غایبین
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="Present" class="tab-pane active">
+                    @{ await Html.RenderPartialAsync("_Present.cshtml", AllResult); }
+                </div>
+
+                <div id="Absent" class="tab-pane">
+                    @{ await Html.RenderPartialAsync("_Absent.cshtml", AllResult); }
+                </div>
+            </div>
+        </div>
+        <div class="horizontal-space"></div>
+
+    </div>
+</div>

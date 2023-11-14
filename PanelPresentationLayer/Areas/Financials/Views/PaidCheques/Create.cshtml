@@ -1,0 +1,128 @@
+﻿@model PanelViewModels.FinancialsViewModels.PaidChequesViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="DueDate"></label>
+                                <input data-mask="9999/99/99" asp-for="DueDate" class="form-control" data-bind="value: c().DueDate">
+                                <span asp-validation-for="DueDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="IssueDate"></label>
+                                <input data-mask="9999/99/99" asp-for="IssueDate" class="form-control" data-bind="value: c().IssueDate">
+                                <span asp-validation-for="IssueDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="ChequeNo"></label>
+                                <input asp-for="ChequeNo" class="form-control" data-bind="value: c().ChequeNo">
+                                <span asp-validation-for="ChequeNo" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="AmountPaid"></label>
+                                <input type="text" asp-for="AmountPaid" class="form-control currency" data-bind="value: c().AmountPaid">
+                                <span asp-validation-for="AmountPaid" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="BankId"> </label>
+                                <select asp-for="BankId" type="text" data-bind="value: c().BankId" class="form-control">
+                                    <option value="">لطفاً انتخاب کنید</option>
+                                    @foreach (var item in ViewBag.Banks)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="BankId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="ChequesStatusTypeId"></label>
+                                <select asp-for="ChequesStatusTypeId" type="text" data-bind="value: c().ChequesStatusTypeId" class="form-control">
+                                    <option value="">لطفاً انتخاب کنید</option>
+                                    <option value="1">وصول شده</option>
+                                    <option value="2">وصول نشده</option>
+                                    <option value="3">برگشت خورده</option>
+                                    <option value="4">عودت داده شده</option>
+                                </select>
+                                <span asp-validation-for="ChequesStatusTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="BranchCode"></label>
+                                <input asp-for="BranchCode" class="form-control" data-bind="value: c().BranchCode">
+                                <span asp-validation-for="BranchCode" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="BranchName"></label>
+                                <input asp-for="BranchName" class="form-control" data-bind="value: c().BranchName">
+                                <span asp-validation-for="BranchName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="FishingCode"></label>
+                                <input asp-for="FishingCode" class="form-control" data-bind="value: c().FishingCode">
+                                <span asp-validation-for="FishingCode" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="AccountNumber"></label>
+                                <input asp-for="AccountNumber" class="form-control" data-bind="value: c().AccountNumber">
+                                <span asp-validation-for="AccountNumber" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="NameAccountHolder"></label>
+                                <input asp-for="NameAccountHolder" class="form-control" data-bind="value: c().NameAccountHolder">
+                                <span asp-validation-for="NameAccountHolder" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea rows="3" asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                                <span asp-validation-for="Description" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

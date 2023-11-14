@@ -1,0 +1,271 @@
+﻿@model IEnumerable<PanelViewModels.FinancialsViewModels.TeacherPaymentMethodsViewModel>
+@{
+    ViewData["Title"] = "پرداختی ها به معلم";
+    ViewData["PageFarsiName"] = "پرداختی ها به معلم";
+    string Area = "Financials";
+    string Controller = "TeacherPaymentMethods";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;margin-top:2px;">
+        <button class="btn btn-warning btn-xs editBox" type="button" style="margin-right:2px; margin-top:2px;float:right;"><i class="fa fa-book " style="margin-left: 1px;"></i> زمانبدی پرداخت و تسویه</button>
+    </div>
+</script>
+<script type="text/javascript">
+    MainViewModel.date = ko.observable({});
+    MainViewModel.payment = ko.observable({});
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/' + @ViewBag.CourseId,
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        //================================
+        AddBoxModalOnShow = function () {
+            MainViewModel.c().CourseId = @ViewBag.CourseId;
+        }
+        //================================
+        EditBoxModalOnShow = function () {
+            MainViewModel.e().CourseId = @ViewBag.CourseId;
+        }
+        //================================
+        EditBoxModalOnHide = function () {
+            $('#reloadTableBtn').click();
+        }
+        //***************************************************************************
+        $('body').on('click', '.payment', function (e) {
+            e.preventDefault();
+            $('.date').val(($(this).parent().parent().find('.dateTime').text()));
+            $('.price').val(($(this).parent().parent().find('.settledamount')).attr('data-settledamount'));
+            MainViewModel.payment().TeacherSattlementScheduleId = $(this).attr('data-Id');
+            $('#PaymentModal').modal({ backdrop: 'static', keyboard: false });
+            $('#PaymentModal').modal('show');
+        });
+        //***************************************************************************
+        $('body').on('click', '.add-Scheduling', function (e) {
+            e.preventDefault();
+            $('#addSchedulingModal').modal({ backdrop: 'static', keyboard: false });
+            $('#addSchedulingModal').modal('show');
+        });
+        //***************************************************************************
+        $('#addSchedulingModal').on("hidden.bs.modal", function (event) {
+            $('#AddSchedulingForm #Date').val('');
+            $('body').addClass('modal-open');
+            $('#EditBox').modal('show');
+        });
+        //***************************************************************************
+        $('#EditBox').on("hidden.bs.modal", function (event) {
+            $('#reloadTableBtn').click();
+        });
+
+        //***************************************************************************
+        $('#PaymentModal').on("hidden.bs.modal", function (event) {
+            $('body').addClass('modal-open');
+            $('#EditBox').modal('show');
+        });
+        //***************************************************************************
+        $('body').on('change', '#TeacherPaymentMethodTypeId', function () {
+            toastr.remove();
+            $('.number').hide();
+            if ($(this).val() == 1 && $(this).val() != 3) {
+                $('.title-PercentOrFee').text('مبلغ به ازای هر جلسه');
+                $('.percentOrFee').show();
+                $('.number').hide();
+            } else if ($(this).val() == 2 && $(this).val() != 3) {
+                $('.title-PercentOrFee').text('در صد همکاری');
+                $('.percentOrFee').show();
+                $('.number').hide();
+                var range = parseInt($('#PercentOrFee').val());
+                if (range > 100) {
+                    toastr.error("در صد همکاری باید عددی بین 0 تا 100 باشد.");
+                }
+            } else if ($(this).val() != 1 && $(this).val() != 2 && $(this).val() == 3)  {
+                $('.percentOrFee').hide();
+                $('.number').show();
+            }
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            
+        });
+        //***************************************************************************
+        $('body').on('keyup', '#PercentOrFee', function () {
+            toastr.remove();
+            if ($('#TeacherPaymentMethodTypeId').val() == 2) {
+                var range = parseInt($(this).val());
+                if ( range > 100 ) {
+                    toastr.error("در صد همکاری باید عددی بین 0 تا 100 باشد.");
+                }
+            }
+        });
+        //***************************************************************************
+        function readSchedules(id) {
+            DataTransfer('/Financials/TeacherSattlementSchedules/Read/' + id, '', '',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.e(f.Value);
+                        $('#EditBox').modal({ backdrop: 'static', keyboard: false });
+                        $('#EditBox').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+          //***************************************************************************
+        $('body').on('click', '.editBox', function (e) {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            MainViewModel.date().TeacherPaymentMethodId = id;
+            readSchedules(id);
+        });
+        //***************************************************************************
+        $('body').on('click', '.deletePaymentBtn', function (e) {
+            var data = { Id: $(this).attr('data-Id') };
+            e.preventDefault();
+            bootbox.confirm({
+                message: "آیا از حذف زمانبندی پرداخت مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        DataTransfer('/Financials/TeacherSattlementSchedules/Delete/', ko.toJSON(data), '',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    readSchedules(MainViewModel.date().TeacherPaymentMethodId);
+                                    initialBoxModal()
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+
+                    } else { initialBoxModal()}
+                }
+            });
+        });
+        //***************************************************************************
+        function initialBoxModal() { 
+        $('.bootbox-confirm').on("hidden.bs.modal", function (event) {
+            $('body').addClass('modal-open');
+            $('#EditBox').modal('show');
+        });
+        }
+         //***************************************************************************
+        $('#AddSchedulingForm').submit(function () {
+            if ($(this).valid()) {
+
+                DataTransfer('/Financials/TeacherSattlementSchedules/Add/', ko.toJSON(MainViewModel.date()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#addSchedulingModal').modal('hide');
+                            readSchedules(MainViewModel.date().TeacherPaymentMethodId);
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //***************************************************************************
+        $('#paymentForm').submit(function () {
+            if ($(this).valid()) {
+
+                DataTransfer('/Financials/TeacherSattlementSchedules/AddSattlement/', ko.toJSON(MainViewModel.payment()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            readSchedules(MainViewModel.date().TeacherPaymentMethodId);
+                            $('#PaymentModal').modal('hide');
+
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="margin-bottom: 0; color: #a86363; font-size: 14px !important; padding: 7px;" class="form-group">
+                                    <span style="font-size:15px;" class="glyphicon glyphicon-list alert-info-icon"></span>    پرداختی های مربوط به دوره <span class="alert-info-text"> @(ViewBag.CourseName)   </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="TeacherFullName">معلم</th>
+                                    <th data-viewModel="TeacherPaymentMethodTypeName">نحوه ی پرداخت</th>
+                                    <th data-viewModel="TotalDebtAmount" data-thousandseparator="true">مجموع بدهی (تومان)</th>
+                                    <th data-viewModel="TotalSattledAmount" data-thousandseparator="true">مجموع تسویه ها (تومان)</th>
+                                    <th style="width: 180px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("AddScheduling.cshtml");
+                        await Html.RenderPartialAsync("Payment.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

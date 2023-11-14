@@ -1,0 +1,109 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.CourseMeetingsViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" data-bind="value: c().Name">
+                                <span asp-validation-for="Name" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select disabled="disabled" asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option selected="selected" value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="StartDate"></label>
+                                <input asp-for="StartDate" class="form-control datePicker" data-mask="9999/99/99" data-bind="value: c().StartDate">
+                                <span asp-validation-for="StartDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="StartTime"></label>
+                                <input asp-for="StartTime" type="text" class="form-control clockpicker" readonly="readonly" placeholder="جهت انتخاب ساعت کليک کنید" data-autoclose="true" data-bind="value: c().StartTime" />
+                                <span asp-validation-for="StartTime" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Price"></label>
+                                <input type="text" asp-for="Price" class="form-control currency" data-bind="value: c().Price">
+                                <span asp-validation-for="Price" class="danger"></span>
+                            </div>
+                        </div>
+                         
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsPurchasable"></label>
+                                <select asp-for="IsPurchasable" class="form-control" data-bind="value: c().IsPurchasable">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="IsPurchasable" class="danger"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea rows="3" asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                                <span asp-validation-for="Description" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="DiscountTypeId"></label>
+                            <select asp-for="DiscountTypeId" type="text" class="form-control" data-bind="value: c().DiscountTypeId">
+                                <option value="1">درصدی</option>
+                                <option value="2">مبلغی</option>
+                            </select>
+                            <span asp-validation-for="DiscountTypeId" class="danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DiscountPercentOrDiscountAmount"></label>
+                            <input asp-for="DiscountPercentOrDiscountAmount" type="text" class="form-control" data-bind="value: c().DiscountPercentOrDiscountAmount">
+                            <span asp-validation-for="DiscountPercentOrDiscountAmount" class="danger"></span>
+                        </div><!-- /.col-lg-6 -->
+                    </div><!-- /.row -->
+
+
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

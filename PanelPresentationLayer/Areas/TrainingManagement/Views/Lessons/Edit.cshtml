@@ -1,0 +1,64 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.TrainingManagementViewModels.LessonsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.LevelId"></label>
+                                <div class="input-group">
+                                    <input asp-for="Edit.LevelId" type="hidden" class="form-control" data-bind="value: e().LevelId" />
+                                    <input asp-for="Edit.LevelName" type="text" class="form-control" data-bind="value: e().LevelName" />
+                                    <span class="input-group-btn">
+                                        <button id="EditLevelSelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Edit.LevelId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.FieldId"></label>
+                                <select asp-for="Edit.FieldId" class="form-control" data-bind="value: e().FieldId">
+                                    <option value="">لطفا انتخاب کنید</option>
+                                    @foreach (var item in ViewBag.Fields)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Edit.FieldId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.Name"></label>
+                                <input asp-for="Edit.Name" class="form-control" data-bind="value: e().Name">
+                                <span asp-validation-for="Edit.Name" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.UnitCount"></label>
+                                <input asp-for="Edit.UnitCount" class="form-control" data-bind="value: e().UnitCount">
+                                <span asp-validation-for="Edit.UnitCount" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

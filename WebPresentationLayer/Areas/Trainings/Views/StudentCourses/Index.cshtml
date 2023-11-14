@@ -1,0 +1,116 @@
+﻿@{
+    var StudentCourses = (List<WebViewModels.TrainingsViewModels.StudentCoursesViewModel>)ViewBag.Data;
+    ViewData["Title"] = "دوره های من";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> دوره های من </span>
+        </div>
+    </div>
+</div>
+<section class="box-menu box-course">
+    <div class="container">
+        @if (StudentCourses.Any())
+        {
+            <div class="legend col-md-12">
+                <div class="title-o">
+                    <i class="fa fa-list-alt"></i>
+                    <span>دوره های من</span>
+                </div>
+
+                <div class="col-md-12 hidden-xs">
+
+                    <div class="col-md-12 title-tbl-div">
+
+
+                        <div class="float-r width-d-25 text-align-r f-size-13 bold">
+                            عنوان
+                        </div>
+
+
+                        <div class="float-r width-d-25 text-align-r min-height-1 bold">
+                            مدرس
+                        </div>
+
+                        <div class="float-r width-d-15 text-align-r min-height-1 bold">
+                            تاریخ شروع
+                        </div>
+
+                        <div class="float-r width-d-15 text-align-r min-height-1 bold">
+                            تاریخ پایان
+                        </div>
+
+                        <div class="float-l width-d-5  text-align-l">
+                        </div>
+
+                    </div>
+                </div>
+                @foreach (var item in StudentCourses)
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                        <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+
+
+
+                            <div class="hidden-xs float-r width-d-25 text-align-r bold f-size-12">
+                                @item.Name
+                            </div>
+
+                            <div class="hidden-sm hidden-md hidden-lg col-xs-12  float-r text-align-r bold f-size-12">
+                                @item.Name
+                            </div>
+
+                            <div class="float-r width-d-25 txt-w text-align-r   min-height-1">
+                                @item.TeacherFullName
+                            </div>
+
+                            <div class="float-r width-d-15 txt-w text-align-r   min-height-1">
+                                @item.StartDateTime
+                            </div>
+                            <div class="float-r width-d-15 txt-w text-align-r min-height-1">
+                                @item.EndDateTime
+                            </div>
+
+
+                            <div class="hidden-xs btn-dore-lg center">
+                                <a href="/Trainings/Courses?CoursesId=@item.Id">
+                                    <div class="cover">
+                                        <i class="fa fa-eye download"></i>
+                                        <span class="date">مشاهده    </span>
+                                    </div>
+                                </a>
+                            </div>
+
+
+
+                            <div class="hidden-md hidden-lg hidden-sm col-xs-9 btn-dore-xs btn-dore-xs-d">
+                                <a href="/Trainings/Courses?CoursesId=@item.Id">
+                                    <div class="cover">
+                                        <i class="fa fa-eye download"></i>
+                                        <span class="date">مشاهده دوره</span>
+                                    </div>
+                                </a>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                } 
+            </div>
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="دوره های شما"/>
+                    <p>دوره ای برای شما ثبت نشده است .</p>
+                </div>
+            </div>
+
+        }
+    </div>
+</section>
+

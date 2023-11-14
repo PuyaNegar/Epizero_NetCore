@@ -1,0 +1,43 @@
+﻿ @using WebViewModels.ContentsViewModels
+@using WebBusinessLogicLayer.BusinessComponents.ContentsComponents
+ 
+
+@{
+    var result = AboutUsComponent.Find();
+    ViewData["Title"] =  @result.Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+
+@section MetaTag{
+    
+@*        <meta name="title" content="@Html.Raw(result.MetaTitle) ">*@
+        <meta name="description" content="@Html.Raw(result.MetaDescription)">
+ @*       <meta name="keywords" content="@Html.Raw(result.KeyWordsMetaTag)">
+        <link rel="canonical" href="@Html.Raw(result.CanonicalHref)" />*@
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:title" content="@Html.Raw(result.MetaTitle)" />
+        <meta property="og:description" content="@Html.Raw(result.MetaDescription)" />
+}
+
+
+
+<section>
+    <div class="container-fluid">
+        <div class="aboutus">
+            <div class="col-xs-12 col-md-12">
+                <div class="col-xs-12 col-md-12 img-main">
+                    <img src="@result.BannerPicPath" alt="@Html.Raw(result.Title)" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="col-xs-12 col-md-12 description">
+                   @Html.Raw(result.Description)
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

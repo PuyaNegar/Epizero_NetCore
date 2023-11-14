@@ -1,0 +1,34 @@
+﻿@model WebViewModels.LoginWithMobNoPrefix<WebViewModels.IdentitiesViewModels.ConfirmMobNoViewModel>
+
+
+<div id="mob" class="tab-pane fade">
+    <form id="loginWithMobNoForm" data-bind="visible: isActiveLoginMobNoForm()">
+        <input asp-for="LoginWithMobNo.UserName" type="text" placeholder="موبایل" class="form-control btn-sendcode">
+        <span asp-validation-for="LoginWithMobNo.UserName"> </span>
+        <input type="submit" class="send-code" value="ارسال کد" />
+
+    </form>
+
+        <div  data-bind="visible: !isActiveLoginMobNoForm()">
+
+            <div class="col-md-12">
+                <div class="col-md-12 div-input">
+                    <input id="login_confirmCode" type="number" placeholder="کد تایید" required="" class="form-control">
+                 
+                    <div class="request">
+                        <span class="timeCountDown_login"></span>
+                        <a id="ReSendCodeBtn_login" class="link-btn font-size-12" style="float:left;">ارسال مجدد کد</a>
+                    </div>
+                  
+                </div>
+            </div>
+            <div class="col-md-12 div-input">
+                <div class="loaderBox">
+                    <div class="loader"><div class="icon-loader"><img alt="ورود به سایت با موبایل" src="~/assets/img/loader.svg" /></div></div>
+                    <input id="loginWithMobNoBtn" type="submit" class="login loginmodal-submit" value="وارد شوید">
+
+                </div>
+            </div>
+        </div>
+</div>
+

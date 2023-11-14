@@ -1,0 +1,104 @@
+﻿@model List<PanelViewModels.OnlineExamViewModels.StudentOnlineExamResultGroupsViewModel>
+@{
+    int i = 1;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a">نتایج آزمون غایبین </span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    @if (Model.Where(c => c.IsAbsentOnMainTime) != null && Model.Where(c => c.IsAbsentOnMainTime).Any())
+    {
+
+
+        @foreach (var result in Model.Where(c => c.IsAbsentOnMainTime))
+        {
+            int count = 0;
+            float totalScore = 0;
+            <div class="col-lg-12 col-sm-12 col-xs-12 border-widget m-b-20">
+                <div class="widget">
+                    <div class="widget-header">
+                        <span style="margin-right : 15px" class="name-stu widget-caption">@result.StudentFullName</span>
+
+                    </div>
+                    <div class="widget-body">
+                        <div class="exam-rotbe">
+                            <div class="k-hr-main">
+                                @foreach (var item in result.StudentOnlineExamResults)
+                                {
+                                    count++;
+                                    totalScore = item.RawScore + totalScore;
+                                    <div class="m-t-20 k-hr row">
+                                        <div class="col-lg-12">
+                                            <h5 class="row-title before-green">@item.LessonName</h5>
+                                        </div>
+                                        <div class="m-t-20 col-lg-3">
+                                            <span class="title">ضریب درس</span> : <span class="text">@item.LessonUnitCount</span>
+                                        </div>
+                                        <div class="m-t-20 col-lg-3">
+                                            <span class="title">درست</span> : <span class="text">@item.CorrectAnswered</span>
+                                        </div>
+                                        <div class="m-t-20  col-lg-3">
+                                            <span class="title">نادرست</span> : <span class="text">@item.IncorrectAnswered</span>
+                                        </div>
+                                        <div class="m-t-20  col-lg-3">
+                                            <span class="title">بدون جواب</span> : <span class="text">@item.Unanswered</span>
+                                        </div>
+                                        <div class="m-t-20  col-lg-3">
+                                            <span class="title">نمره خام</span> : <span class="text">@item.RawScore</span>
+                                        </div>
+                                        <div class="m-t-20 col-lg-3">
+                                            <span class="title">حداقل نمره</span> : <span class="text">@item.MinScore</span>
+                                        </div>
+                                        <div class="m-t-20  col-lg-3">
+                                            <span class="title">حداکثر نمره</span> : <span class="text">@item.MaxScore</span>
+                                        </div>
+                                        <div class="m-t-20 col-lg-3">
+                                            <span class="title">میانگین تراز</span> : <span class="text">@item.AverageBalance.ToString("#.##")</span>
+                                        </div>
+                                        <div class="m-t-20 col-lg-3">
+                                            <span class="title">میانگین درصد</span> : <span class="text">@item.AvrageScore.ToString("#.##")</span>
+                                        </div>
+                                        <div class="m-t-20  col-lg-3">
+                                                <span class="title">رتبه در درس</span> : <span class="text">@item.LessonRank</span>
+                                            </div>
+                                        <div class="m-t-20  col-lg-3">
+                                            <span class="title">تراز</span> : <span class="text">@item.Balance</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <hr />
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="rotbe-all">
+                                        <span class="title title-all">رتبه در کل</span> : <span class="text text-all">@result.TotalBalance</span> <br>
+                                        <span class="title title-all">رتبه در کل</span> : <span class="text text-all">@result.TotalRank</span> <br>
+                                        @*<span style="margin-top:8px;display:inline-block" class="title title-all"> نمره کل </span> : <span class="text text-all">@(totalScore / count)</span>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row m-t-30">
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="/assets/img/box-empty.svg">
+                    <p>نتیجه ای برای آزمون ثبت نشده است .</p>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

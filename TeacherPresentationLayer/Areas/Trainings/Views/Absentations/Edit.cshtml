@@ -1,0 +1,74 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.TrainingManagementViewModels.AbsentationsViewModel>
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">   <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>نام جلسه</label>
+                                <input asp-for="Edit.CourseMeetingName" readonly="readonly" class="form-control" data-bind="value: updateAbsentationStudents().CourseMeetingName">
+                                <span asp-validation-for="Edit.CourseMeetingName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.Date"></label>
+                                <input readonly="readonly" asp-for="Edit.Date" class="form-control" data-bind="value: updateAbsentationStudents().Date">
+                                <span asp-validation-for="Edit.Date" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.CountStudent"></label>
+                                <input type="text" readonly="readonly" asp-for="Edit.CountStudent" class="form-control" data-bind="value: updateAbsentationStudents().CountStudent">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsPresentCount"></label>
+                                <input type="text" readonly="readonly" asp-for="Edit.IsPresentCount" class="form-control" data-bind="value: updateAbsentationStudents().IsPresentCount">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>انتخاب همه</label>
+                        <input type="checkbox" class="checkbox-all" />
+
+                    </div>
+                    <table id="edit_absentations_table" class="table table-striped tbl-checkBox">
+                        <thead>
+                            <tr>
+                                <th scope="col">ردیف</th>
+                                <th style="text-align:center">نام دانش آموز</th>
+                                <th style="text-align:center">وضعیت حضور</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: updateAbsentationStudents().StudentsAbsentationState">
+                            <tr>
+                                <th scope="row" data-bind="text: $index() + 1"></th>
+                                <td style="text-align:center" data-bind="text: StudentFullName"> </td>
+                                 <td style="text-align:center">
+                                    <input class="itemcheckbox"  type="checkbox" data-bind="checked:  IsPresent , attr: {'data-studentUserId' : StudentUserId}" />
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger " data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

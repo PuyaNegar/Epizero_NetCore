@@ -1,0 +1,86 @@
+﻿@using PanelViewModels.OnlineExamViewModels;
+@{
+    var AllResult = (List<StudentOnlineExamResultGroupsViewModel>)ViewBag.AllResult;
+}
+<div class="widget">
+    @foreach (var item in AllResult.Where(c => !c.IsAbsentOnMainTime))
+    {
+        int count = 0;
+        float totalScore = 0;
+        <div class="widget-header">
+            <span class="name-stu widget-caption">@item.StudentFullName</span>
+            <div class="widget-buttons">
+                <a href="#" data-toggle="maximize">
+                    <i class="fa fa-expand pink"></i>
+                </a>
+                <a href="#" data-toggle="dispose">
+                    <i class="fa fa-times darkorange"></i>
+                </a>
+            </div>
+        </div>
+        <div class="widget-body">
+            <div class="exam-rotbe">
+                @foreach (var result in item.StudentOnlineExamResults)
+                {
+
+                    count++;
+                    totalScore = @result.RawScore + totalScore;
+
+                    <div class="m-t-20 k-hr row">
+                        <div col-lg-12>
+                            <h5 class="row-title before-green">@result.LessonName</h5>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">ضریب درس</span> : <span class="text">@result.LessonUnitCount</span>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">میانگین تراز</span> : <span class="text">@result.AverageBalance</span>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">رتبه در درس</span> : <span class="text">@result.LessonRank</span>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">درست</span> : <span class="text">@result.CorrectAnswered</span>
+                        </div>
+                        <div class="m-t-20  col-lg-3">
+                            <span class="title">نادرست</span> : <span class="text">@result.IncorrectAnswered</span>
+                        </div>
+                        <div class="m-t-20  col-lg-3">
+                            <span class="title">بدون جواب</span> : <span class="text">@result.Unanswered</span>
+                        </div>
+                        <div class="m-t-20  col-lg-3">
+                            <span class="title">نمره خام</span> : <span class="text">@result.RawScore</span>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">حداقل نمره</span> : <span class="text">@result.MinScore</span>
+                        </div>
+                        <div class="m-t-20  col-lg-3">
+                            <span class="title">حداکثر نمره</span> : <span class="text">@result.MaxScore</span>
+                        </div>
+                        <div class="m-t-20 col-lg-3">
+                            <span class="title">میانگین درصد</span> : <span class="text">@result.AvrageScore.ToString("#.##")</span>
+                        </div>
+                        @*<div class="m-t-20  col-lg-3">
+                                <span class="title">رتبه در درس</span> : <span class="text">@result.LessonRank</span>
+                            </div>*@
+                        <div class="m-t-20  col-lg-3">
+                            <span class="title">تراز</span> : <span class="text">@result.Balance.ToString("#.##")</span>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="rotbe-all">
+                            <span class="title title-all">تراز کل</span> : <span class="text text-all">@item.TotalBalance.ToString("#.##")</span> <br />
+                            <span class="title title-all">نمره کل</span> : <span class="text text-all">@item.TotalScore.ToString("#.##")</span> <br />
+                            <span class="title title-all">رتبه در کل</span> : <span class="text text-all">@item.TotalRank</span> <br />
+                       
+                            @*<span style="margin-top:8px;display:inline-block" class="title title-all"> نمره کل </span> : <span class="text text-all">@(totalScore/count)</span>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

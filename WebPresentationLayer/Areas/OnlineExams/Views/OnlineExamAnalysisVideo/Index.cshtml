@@ -1,0 +1,96 @@
+﻿@using Common.Extentions
+@{
+    ViewData["Title"] = "ویدیو تحلیل آزمون";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    var OnlineExams = (WebViewModels.OnlineExamsViewModels.OnlineExamsViewModel)ViewBag.OnlineExams;
+    var StudentUser = (WebViewModels.IdentitiesViewModels.LoginedUsersViewModel)ViewBag.StudentUser;
+}
+<style type="text/css">
+    .tag-video {
+        width: 100%;
+    }
+</style>
+<script>
+         window.onload = function () {
+         var media_obj = null ; 
+                                media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(OnlineExams.AnalysisVideoLink.GetKavemoId())");
+                                media_obj.api.DRMText({
+                                    text: ["@Html.Raw(StudentUser.UserName)", "@Html.Raw(StudentUser.FirstName + " " + StudentUser.LastName)", "آموزشگاه اپیزرو" ] ,
+                                    time: 2.5,
+                                    color: "red",
+                                    fontSize: "17px",
+                                    fontStyle: "bold",
+                                    fontName: "arial",
+                                    opacity: 0.4,
+                                }); 
+               }
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> ویدیو تحلیل آزمون </span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    @*<div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row detail">
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">آزمون</span> : <span class="text">@OnlineExams.Name</span>
+                    </div>
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">مدت زمان آزمون</span> : <span class="text">@OnlineExams.Duration</span>
+                    </div>
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">تاریخ شروع</span> : <span class="text">@OnlineExams.StartDate</span>
+                    </div>
+
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">نوع سوالات</span> : <span class="text">@OnlineExams.QuestionTypeName</span>
+                    </div>
+                </div>
+                <div class="row detail">
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">بیشترین نمره</span> : <span class="text">@OnlineExams.MaxGrade</span>
+                    </div>
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">تصادفی بودن گزینه ها</span> : <span class="text">@OnlineExams.IsRandomOptionName</span>
+                    </div>
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">تصادفی بودن  سوالات</span> : <span class="text">@OnlineExams.IsRandomQuestionsName</span>
+                    </div>
+                    <div class="col-md-3 col-xs-6 pull-right text-align-c">
+                        <span class="title">نمره منفی  </span> : <span class="text">@OnlineExams.HasNegativePointName</span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    @if (!string.IsNullOrEmpty(OnlineExams.AnalysisVideoLink))
+    {
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tag-video">
+                    @Html.Raw(OnlineExams.AnalysisVideoLink)
+                </div>
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row m-t-30">
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="/assets/img/box-empty.svg" alt="ویدیو ی آموزشی ">
+                    <p>ویدیو ای برای آزمون ثبت نشده است .</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

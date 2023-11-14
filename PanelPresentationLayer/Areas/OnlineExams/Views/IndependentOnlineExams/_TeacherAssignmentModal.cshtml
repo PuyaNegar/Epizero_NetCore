@@ -1,0 +1,38 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.CourseMeetingDedicatedTeachersViewModel
+
+<div id="teacherAssignmentModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="teacherAssignmentForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>انتساب دبیر</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row"> 
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="CourseMeetingDedicated_TeacherUserId">انتخاب دبیر</label>
+                                <select id="CourseMeetingDedicated_TeacherUserId" class="form-control" data-bind="value: ta().TeacherUserId">
+                                    <option value="0">لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Teachers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

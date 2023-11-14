@@ -1,0 +1,51 @@
+﻿<style>
+    .dataTables_length, .dataTables_filter, .dataTables_info {
+        display: none;
+    }
+
+    @@media (min-width: 1200px) {
+        .pull-right-lg {
+            float: left;
+            /*margin-top: 10px;*/
+        }
+
+        .pull-left-lg {
+            float: right;
+            /*margin-top: 10px;*/
+        }
+    }
+</style>
+
+<div style="margin-bottom: 10px;padding-top:3px;padding:10px;padding-right:15px;padding-left:15px; background-color:#eaf3ff;">
+    <div class="form-inline" role="form" id="GridFilterBar">
+
+        <div class="form-group pull-left-lg" style="margin-top: 7px;">
+            <span id="table_info"> </span>
+        </div>
+
+        <div class="form-group pull-right-lg ">
+            <span style="margin-right: 2px;">نمایش </span>
+            <select autocomplete="off" id="length_change" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+            <span> رکورد</span>
+        </div>
+
+        <div class="form-group pull-right-lg ">
+            <div autocomplete="off" class="input-group" style="position: relative;">
+                <span id="seaechClear" class="glyphicon glyphicon-remove serach-clear" style=""></span>
+                <input id="searchValue" class="form-control input-sm" placeholder="جستجو..." aria-controls="modelList" type="search" />
+                <span class="input-group-btn ">
+                    <button id="searchBtn" class="btn btn-default input-sm" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+
+            </div>
+        </div>
+
+        <div class="form-group pull-right-lg ">
+            <span>جستجو بر اساس:</span>
+            <select id="SearchWith" class="form-control input-sm" style="margin-left: 5px; min-width: 100px;"></select>
+        </div>
+
+        <div style="clear: both;"></div>
+    </div>
+</div>
+

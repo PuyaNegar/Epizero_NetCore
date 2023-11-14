@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "نمايش ویدیو";
+    ViewData["PageFarsiName"] = "نمايش ویدیو";
+ 
+}
+ 
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget video-widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش ویدیو</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div class="video-link">
+                    @Html.Raw(ViewBag.Link)
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

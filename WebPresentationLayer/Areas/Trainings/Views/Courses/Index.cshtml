@@ -1,0 +1,1749 @@
+﻿@using WebViewModels.TrainingsViewModels
+@using Common.Extentions
+@using Common.Enums
+@{
+    var o = 1;
+    var l = 1;
+    var j = 0;
+    var isShowQuestuin = ViewBag.IsQuestionShow;
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+    var courseName = Html.Raw((Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ") + " " + Courses.Name);
+    ViewData["Title"] = (Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ") + " " + Courses.Name;
+    string style = string.IsNullOrEmpty(Courses.BannerPicPath) ? "background-image:url('/assets/img/2020-11-08-09-01-37pm-7.png')" : "background-image : url(#)".Replace("#", Courses.BannerPicPath);
+}
+@section Scripts {
+
+    <script type="text/javascript">
+        $(function () {
+            $('input:radio').change(function () {
+                var is_external = $("input[name='rating2']:checked").val();
+                mainViewModel.newComment().Rate = is_external;
+                //alert("selected values: " + is_external);
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addNewCommentForm').submit(function () {
+                mainViewModel.newComment().CourseId = '@Courses.Id';
+                if ($(this).valid()) {
+                    DataTransfer('/Trainings/CourseStudentNewComments/AddStudentNewComments', 'post', ko.toJSON(mainViewModel.newComment()), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.newComment({});
+                            $('#addNewCommentModal').modal('hide');
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+
+
+
+
+
+
+
+            $('body').on('click', '.btnSendNewComment', function () {
+                //var radios = document.getElementsByName('rating2');
+                //for (var i = 0; i < radios.length; i++) {
+                //    if (radios[i].checked) {
+                //        radios[i].checked = false;
+                //        break;
+                //    }
+                //}
+                $('#addNewCommentModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addNewCommentModal').modal('show');
+            });
+
+
+
+            $('#captchaImg').click(function () {
+                $('#captchaImg').attr('src', '/Captcha/Get/' + Number.parseInt(Math.random() * 100000));
+            });
+            //$('#captchaImg').click();
+            $('#contactUsForm').submit(function () {
+                if ($(this).valid()) {
+                    toastr.remove();
+                    if (mainViewModel.contactUs().CaptchText == null) {
+                        toastr.error('متن کپچا را وارد کنید');
+                    }
+                    $('.icon-loader').show();
+                    mainViewModel.contactUs().CoursesId = @ViewBag.CoursesId;
+                    mainViewModel.contactUs().Description = '@courseName';
+                    DataTransfer('/api/Contents/ContactUs/Add', 'post', ko.toJSON(mainViewModel.contactUs()), '.loader', function (e) {
+                        toastr.success(e.Message);
+                        mainViewModel.contactUs({});
+                        $('#captchaImg').click();
+                    }, function (e) {
+                        toastr.error(e.responseJSON.Message);
+                    });
+                }
+                return false;
+            });
+
+            if ('@isShowQuestuin' != 'False') {
+                $('.nav-tabs li.li-q-u a').click();
+                $('html, body').animate({
+                    scrollTop: $(".li-q-u").offset().top
+                }, 2000);
+            }
+
+
+            $('body').on('click', '.btn-answer', function () {
+                $(this).parent().find('.box-answer-s').toggle("slow");
+            });
+
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.btn-Update_Field', function () {
+
+                var data = {
+                    FieldId: $('#FieldId').val()
+                }
+                DataTransfer('/api/Identities/UserProfiles/UpdateField/', 'Post', ko.toJSON(data), '.loader',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 500);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+
+
+
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        @if (User.Identity.IsAuthenticated && Courses.CourseMeetings.Where(c => c.IsAvailableForSpecificFields).Any() && (Courses.StudentFieldId == 0 || Courses.StudentFieldId == 1))
+        {
+            <text>
+                    $('#SelectedFieldModal').modal({ backdrop: 'static', keyboard: false });
+                $('#SelectedFieldModal').modal('show');
+            </text>
+        }
+
+                //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                function ReadCourseStudentQuestions() {
+                    DataTransfer('/api/Trainings/CourseStudentQuestions/ReadAll/' + @Courses.Id, 'Get', '', '',
+                        function (f) {
+                            toastr.remove();
+                            mainViewModel.allCourseStudentQuestions(f.Value);
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+            ReadCourseStudentQuestions();
+
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.showBtnPic', function () {
+                var url = $(this).attr('data-url');
+                $('#img-question').attr('src', url);
+                $('#btnDownloadPic-q').attr('attr-u', url);
+                $('#showQuestionPicPathModal').modal({ backdrop: 'static', keyboard: false });
+                $('#showQuestionPicPathModal').modal('show');
+            });
+
+            $('body').on('click', '#btnDownloadPic-q', function () {
+                window.open($(this).attr('attr-u'), '_blank');
+            });
+            $('body').on('click', '.showBtnFile', function () {
+                window.open($(this).attr('data-url'), '_blank');
+            });
+            $('body').on('click', '.add-a-q', function () {
+                $('#addQuestionModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addQuestionModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.add-answer', function () {
+                mainViewModel.questionAnswerAdd().StudentQuestionId = $(this).attr('data-Id');
+                $('#addAnswerModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addAnswerModal').modal('show');
+            });
+            $('#addQuestionModal').on("hidden.bs.modal", function (event) {
+                $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#question_stopButton').prop('disabled', false);
+                $('#question_recordButton').prop('disabled', false);
+                $('#question_audioplayback').addClass("hidden");
+                $('#question_removeButton').hide();
+            });
+            $('#addAnswerModal').on("hidden.bs.modal", function (event) {
+                $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $('#answer_removeButton').hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '#question_removeButton', function () {
+                mainViewModel.questionAdd().AudioPath = null;
+                $('#question_stopButton').prop('disabled', false);
+                $('#question_recordButton').prop('disabled', false);
+                $('#question_audioplayback').addClass("hidden");
+                $(this).hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '#answer_removeButton', function () {
+                mainViewModel.questionAdd().AudioPath = null;
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $(this).hide();
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addQuestionForm').submit(function () {
+                if ($(this).valid()) {
+                    mainViewModel.questionAdd().CourseId = @Courses.Id;
+                    DataTransfer('/Trainings/CourseStudentQuestions/AddQuestion', 'post', ko.toJSON(mainViewModel.questionAdd()), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                            $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                            mainViewModel.questionAdd({});
+                            $('#addQuestionModal').modal('hide');
+                            $('#question_stopButton').prop('disabled', false);
+                            $('#question_recordButton').prop('disabled', false);
+                            $('#question_audioplayback').addClass("hidden");
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addAnswerModal').on("hidden.bs.modal", function (event) {
+                $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                $('#answer_stopButton').prop('disabled', false);
+                $('#answer_recordButton').prop('disabled', false);
+                $('#answer_audioplayback').addClass("hidden");
+                $('#answer_removeButton').hide();
+            });
+            $('#addAnswerForm').submit(function () {
+                if ($(this).valid()) {
+
+                    DataTransfer('/Trainings/CourseStudentQuestions/AddAnswer', 'post', ko.toJSON(mainViewModel.questionAnswerAdd()), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.questionAnswerAdd({});
+                            $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                            $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                            $('#addAnswerModal').modal('hide');
+                            $('#answer_stopButton').prop('disabled', false);
+                            $('#answer_recordButton').prop('disabled', false);
+                            $('#answer_audioplayback').addClass("hidden");
+                            $('#answer_removeButton').hide();
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+
+            $('.showOnlineExamResultBtn').click(function () {
+                //$('#continuesToShowOnlineExamResultBtn').attr('href', '/OnlineExams/StudentOnlineExamResults?OnlineExamId=' + $(this).attr('data-onlineExamId'));
+                $('#continuesToShowOnlineExamResultBtn').attr('href', '/OnlineExams/StudentOnlineExamResults?OnlineExamId=' + $(this).attr('data-onlineExamId') + '&CourseId=' + @Courses.Id);
+                $('#continuesToShowOnlineExamResultModal').modal({ backdrop: 'static', keyboard: false });
+                $("#continuesToShowOnlineExamResultModal").modal("show");
+            });
+            //==========================================================
+            $('.enterExamBtn').click(function () {
+                var el = $(this);
+                DataTransfer('/OnlineExams/StudentOnlineExamValidations/Operation?OnlineExamId=' + $(this).attr('data-onlineExamId'), 'post', '', '.loader', function (e) {
+                    window.location.href = el.attr('data-redirectUrl');
+                }, function (e) {
+
+
+                    $('#alertModal').modal({ backdrop: 'static', keyboard: false });
+                    $('#alertModal').modal("show");
+                    $('#txtalert').html(e.responseJSON.Message)
+                    /*toastr.remove();*/
+                    /*toastr.error(e.responseJSON.Message);*/
+                });
+            });
+            //============================================================
+            $('.bt-c-c').click(function () {
+
+                window.location.href = "/Identities/UserProfiles/Index";
+                $('#alertModal').modal("hide");
+
+            });
+            //============================================================
+            $('body').on('click', '.showTeachersBtn', function () {
+
+
+
+
+                $('#teachersModal').modal('show');
+
+            });
+        });
+    </script>
+}
+@functions {
+    string EncriptRefId(int onlineExamId, int UserId)
+    {
+        return (onlineExamId.ToString() + "-" + UserId.ToString()).ToString().EncriptWithDESAlgoritm();
+    }
+}
+<style type="text/css">
+    .btnos-show:hover {
+        color: #337ab7;
+    }
+
+    .box-bottom-main .bottom-right .box-sub .sub-m a {
+        color: #333;
+    }
+
+        .box-bottom-main .bottom-right .box-sub .sub-m a:hover {
+            color: #555;
+        }
+
+    .btn-classroom {
+        color: #fff !important;
+        background-color: #82c2eb;
+        border-color: #82c2eb;
+        font-size: 16px;
+        line-height: 0px;
+        margin-top: 2px;
+        padding: 16px 20px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+        //var faq = document.getElementsByClassName("faq-page");
+        //var i;
+
+        //for (i = 0; i < faq.length; i++) {
+        //    faq[i].addEventListener("click", function () {
+        //        this.classList.toggle("active");
+        //        var body = this.nextElementSibling;
+        //        if (body.style.display === "block") {
+        //            body.style.display = "none";
+        //            $('.faq-container-bottom').css('display', 'block');
+        //        } else {
+        //            body.style.display = "block";
+        //            $('.faq-container-bottom').css('display', 'none');
+        //        }
+        //    });
+
+        //}
+
+        //$('body').on('click', '.faq-container-bottom', function () {
+        //    $('.faq-page').click();
+        //});
+
+        $('body').on('click', '.faq-page', function () {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $(this).parent().find('.faq-body').css('display', 'none');
+                $(this).parent().parent().parent().find('.faq-container-bottom').css('display', 'block');
+
+            } else {
+                $(this).addClass('active');
+                $(this).parent().find('.faq-body').css('display', 'block');
+                $(this).parent().parent().parent().find('.faq-container-bottom').css('display', 'none');
+            }
+        });
+        $('body').on('click', '.faq-container-bottom', function () {
+            $(this).parent().find('.faq-container .faq-page').click();
+        });
+
+    });
+</script>
+
+<section class="singleCourse-new">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="box-top-main">
+                    <div class="flex-f">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="top-title">
+                                <p>به     @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ")  @Courses.Name خوش آمدید. </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="top-img">
+                                <img src="~/assets/img/logo/epz.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-bottom-main">
+                    <div class="flex-f">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="bottom-right">
+                                <div class="right-box">
+                                    <span class="t-m-ostad">اساتید دوره :</span>
+                                    @if (string.IsNullOrEmpty(Courses.TeacherPicPath))
+                                    {
+                                        if (Courses.IsMultiTeacher)
+                                        {
+                                            @foreach (var indexTeacher in Courses.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                                            {
+                                                <div class="teacher-box">
+                                                    <div class="t-img">
+                                                        @if (string.IsNullOrEmpty(indexTeacher.PersonalPicPath))
+                                                        {
+                                                            <img src="~/assets/img/logo.png" alt="@indexTeacher.TeacherFullName" title="@indexTeacher.TeacherFullName" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@indexTeacher.PersonalPicPath" alt="@indexTeacher.TeacherFullName" title="@indexTeacher.TeacherFullName" />
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <div class="t-text">
+                                                            <div><span class="t-title">مدرس :</span> <span class="t-name">@indexTeacher.TeacherFullName</span></div>
+                                                            <div> <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId" class="savabegh">مشاهده سوابق استاد</a></div>
+                                                        </div>
+                                                        @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                                        {
+                                                            <div>
+                                                                <div> <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id" class="savabegh btnos-show">مشاهده جزوات دوره</a></div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            <div class="teacher-box">
+                                                <div class="t-img">
+                                                    @if (string.IsNullOrEmpty(Courses.TeacherPicPath))
+                                                    {
+                                                        <img src="~/assets/img/logo.png" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@Courses.TeacherPicPath" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" />
+                                                    }
+
+                                                </div>
+                                                <div>
+                                                    <div class="t-text">
+                                                        <div><span class="t-title">مدرس :</span> <span class="t-name">@Courses.TeacherFullName</span></div>
+                                                        <div> <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId" class="savabegh">مشاهده سوابق استاد</a></div>
+                                                    </div>
+                                                    @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                                    {
+                                                        <div>
+                                                            <div> <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id" class="savabegh btnos-show">مشاهده جزوات دوره</a></div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Courses.IsMultiTeacher)
+                                        {
+                                            @foreach (var indexTeacher in Courses.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                                            {
+                                                <div class="teacher-box">
+                                                    <div class="t-img">
+                                                        <img src="@indexTeacher.PersonalPicPath" alt="@indexTeacher.TeacherFullName" title="@indexTeacher.TeacherFullName" />
+                                                    </div>
+                                                    <div>
+                                                        <div class="t-text">
+                                                            <div><span class="t-title">مدرس :</span> <span class="t-name">@indexTeacher.TeacherFullName</span></div>
+                                                            <div> <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId" class="savabegh">مشاهده سوابق استاد</a></div>
+                                                        </div>
+                                                        @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                                        {
+                                                            <div>
+                                                                <div> <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id" class="savabegh btnos-show">مشاهده جزوات دوره</a></div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="teacher-box">
+                                                <div class="t-img">
+                                                    <img src="@Courses.TeacherPicPath" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" />
+                                                </div>
+                                                <div>
+                                                    <div class="t-text">
+                                                        <div><span class="t-title">مدرس :</span> <span class="t-name">@Courses.TeacherFullName</span></div>
+                                                        <div> <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId" class="savabegh">مشاهده سوابق استاد</a></div>
+                                                    </div>
+                                                    @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                                    {
+                                                        <div>
+                                                            <div> <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id" class="savabegh btnos-show">مشاهده جزوات دوره</a></div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        }
+                                    }
+                                    @foreach (var teacher in Courses.CourseDedicatedTeachers.Where(c => !c.IsIndexTeacher).Take(2))
+                                    {
+                                        <div class="teacher-box">
+                                            <div class="t-img">
+                                                @if (string.IsNullOrEmpty(teacher.PersonalPicPath))
+                                                {
+                                                    <img src="~/assets/img/logo.png" alt="@teacher.TeacherFullName" title="@teacher.TeacherFullName" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="@teacher.PersonalPicPath" alt="@teacher.TeacherFullName" title="@teacher.TeacherFullName" />
+                                                }
+                                            </div>
+
+                                            <div class="t-text">
+                                                <div><span class="t-title">مدرس :</span> <span class="t-name">@teacher.TeacherFullName</span></div>
+                                                <div> <a href="/Contents/TeacherIntroductions?teacherId=@teacher.TeacherUserId" class="savabegh">مشاهده سوابق استاد</a></div>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="bottom-right m-t-10">
+                                <div class="box-sub">
+                                    <div class="sub-t">
+                                        <i class="fa fa-sticky-note-o"></i> <span>عنوان  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ")   :</span>
+                                    </div>
+                                    <div class="sub-m"><span>@Courses.Name</span></div>
+                                </div>
+                                <div class="box-sub">
+                                    <div class="sub-t">
+                                        <i class="fa fa-desktop"></i> <span>نوع  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ")   :</span>
+                                    </div>
+                                    <div class="sub-m"><span>@Courses.CourseTypeName</span></div>
+                                </div>
+                                @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                {
+                                    <div class="box-sub">
+                                        <div class="sub-t">
+                                            <i class="fa fa-list"></i> <span>جزوات دوره :</span>
+                                        </div>
+                                        <div class="sub-m">
+                                            <span>
+                                                <a target="_blank" href="/Trainings/CourseBooklets/Index?CoursesId=@Courses.Id">مشاهده </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training && Courses.CourseTypeId != (int)CourseType.Offline)
+                                {
+                                    <div class="box-sub">
+                                        <div class="sub-t">
+                                            <i class="fa fa-tv"></i> <span>ورود به کلاس اپیزرو :</span>
+                                        </div>
+                                        <div class="sub-m">
+                                            <span>
+                                                <a class="btn  btn-success btn-classroom" target="_blank" href="/Trainings/OnlineClasses">ورود </a>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                }
+                                @if (Courses.CourseTypeId != (int)CourseType.Offline)
+                                {
+                                    <div class="box-sub">
+                                        <div class="sub-t">
+                                            <i class="fa fa-clock-o"></i> <span>
+                                                زمان شروع  @(
+                                            Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  "
+                                            )   :
+                                            </span>
+                                        </div>
+                                        <div class="sub-m"><span>@Courses.StartDate</span></div>
+                                    </div>
+                                }
+                                <div class="box-sub">
+                                    <div class="sub-t-x">
+                                        <span>هزینه  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ")   :</span>
+                                    </div>
+                                    <div class="sub-m">
+                                        @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && Courses.IsVisibleOnSite)
+                                        {
+                                            <div class="btn-co btn-co-m" style="line-height: 34px;">
+                                                @if (Courses.DiscountPrice < Courses.Price)
+                                                {
+                                                    <div class="center price">
+                                                        <div class="discount-price">
+                                                            <span>
+                                                                @(string.Format("{0:N0}", Courses.Price)) تومان
+                                                            </span>
+                                                        </div>
+                                                        <div class="pr-color" style="padding-left:3px;padding-right:0px;">
+                                                            <span>
+                                                                @(string.Format("{0:N0}", Courses.DiscountPrice)) تومان
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="center">
+                                                        <span>
+                                                            @(Courses.Price == 0 ? "رایگان" : string.Format("{0:N0}  ", Courses.Price)) @(Courses.Price != 0 ? "تومان" : "")
+
+                                                        </span>
+
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                @if (Courses.DiscountPrice < Courses.Price)
+                                {
+                                    <div class="box-sub flex-direction-column">
+                                        <div class="txt-price-s">
+                                            <div class="txt"><span>سود شما از ثبت نام  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ") : </span></div>
+                                            <div class="pri-s">  @(Courses.Price == 0 ? "رایگان" : string.Format("{0:N0}  ", Courses.Price - Courses.DiscountPrice))    @(Courses.Price == 0 ? " " : "تومان")  </div>
+                                            @*                                 <div class="pri-s">  @(Courses.Price == 0 ? "رایگان" : string.Format("{0:N0}  ", Courses.DiscountPrice))    @(Courses.Price == 0 ? " " : "تومان")  </div>*@
+                                        </div>
+                                        <div class="txt-price-s">
+                                            @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                            {
+                                                <div class="btn-buy">
+                                                    <a class="cart-btn" data-academyProductTypeId="1" data-academyProductId="@Courses.Id">
+                                                        @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                                                        {
+                                                            <span>خرید جزوه</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "ثبت نام در دوره" : "ثبت نام در آزمون ها")
+                                                        }
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="box-sub flex-direction-column">
+                                        <div class="txt-price-s">
+                                            @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse)
+                                            {
+
+                                                <div class="btn-buy">
+                                                    <a class="cart-btn" data-academyProductTypeId="1" data-academyProductId="@Courses.Id">
+                                                        @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                                                        {
+                                                            <span>خرید جزوه</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "ثبت نام در دوره" : "ثبت نام در آزمون ها")
+                                                        }
+                                                    </a>
+                                                </div>
+
+
+                                            }
+                                        </div>
+                                    </div>
+
+                                }
+                                <div class="box-sub">
+                                    <div class="txt-price-s">
+                                        <img class="coin" src="~/assets/img/coins.png" />
+                                        <span class="sekkeh-s">با خرید این دوره <span>@Courses.NumberCoins</span> سکه به کیف پول شما اضافه می شود</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="bottom-left">
+                                @if (Courses.CourseSampleVideos.Any())
+                                {
+                                    <div id="Carousel" class="carousel slide">
+                                        <ol class="carousel-indicators">
+                                            @for (int i = 0; i < Courses.CourseSampleVideos.Count(); i++)
+                                            {
+                                                <li data-target="Carousel" data-slide-to="@i" class="@(i==0 ? "active" : "")"></li>
+                                            }
+                                        </ol>
+                                        <div class="carousel-inner">
+                                            @foreach (var courseSampleVideo in Courses.CourseSampleVideos)
+                                            {
+                                                <div class="item @(j== 0 ? "active" : "")">
+                                                    @Html.Raw(courseSampleVideo.Link)
+                                                </div>
+                                                <span style="display:none">
+                                                    @(j++)
+                                                </span>
+                                            }
+                                        </div>
+                                        <a class="left carousel-control" href="#Carousel" data-slide="prev">
+                                            <span class="glyphicon glyphicon-chevron-left"></span>
+                                        </a>
+                                        <a class="right carousel-control" href="#Carousel" data-slide="next">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            @* <div class="bottom-left-emtiaz">
+                            <div class="row">
+                            <div class="col-md-8 col-xs-12">
+                            <div class="left-box-e">
+                            <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                            <div class="left-box-main">
+                            <div class="bar-main">
+                            <div class="skills bar-active"></div>
+                            </div>
+                            <span class="percent-d">60%</span>
+                            <div class="star-e">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                            <div class="left-box-main">
+                            <div class="bar-main">
+                            <div class="skills bar-active"></div>
+                            </div>
+                            <span class="percent-d">60%</span>
+                            <div class="star-e">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                            <div class="left-box-main">
+                            <div class="bar-main">
+                            <div class="skills bar-active"></div>
+                            </div>
+                            <span class="percent-d">60%</span>
+                            <div class="star-e">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                            <div class="left-box-main">
+                            <div class="bar-main">
+                            <div class="skills bar-active"></div>
+                            </div>
+                            <span class="percent-d">60%</span>
+                            <div class="star-e">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="col-md-4 col-xs-12">
+                            <div class="right-box-e">
+                            <div class="digit-e"><span>4.65</span></div>
+                            <div class="star-e">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            </div>
+                            <div class="text-e"><span>میانگین رای</span></div>
+                            </div>
+                            </div>
+
+                            </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <hr class="hr-fr" />
+            </div>
+        </div>
+        @if (Courses.CourseMeetings.Any() && Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training)
+        {
+            @if (Courses.CourseMeetings.Any())
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="main-title">
+                            <span>
+                                جلسات دوره
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="faq-description">
+                            <section class="faq-container">
+                                <div class="faq-one">
+                                    <h1 class="faq-page active">مشاهده جلسات دوره</h1>
+                                    <div class="faq-body" style="display:block">
+                                        @foreach (var courseMeeting in Courses.CourseMeetings)
+                                        {
+                                            <div class="box-courseMetting">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-xs-12">
+                                                        <div class="cm-main">
+                                                            <div class="cm-logo">
+                                                                <img src="~/assets/img/logo/videoplayer.png" />
+                                                            </div>
+                                                            @*<div class="cm-title">
+                                                                <span> جلسه @o :</span>
+                                                            </div>*@
+                                                            <div class="cm-text">
+                                                                <span>@courseMeeting.Name</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="fl-d-f-d">
+                                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                                            <div class="dm-action">
+                                                                <div class="dm-price">
+                                                                    <div class="dm-fl-d">
+                                                                        <div class="dm-p-title">
+                                                                            <span class="gimat"> قیمت : </span>
+                                                                        </div>
+                                                                        @if (!courseMeeting.IsPurchasable)
+                                                                        {
+                                                                            <div class="center">
+                                                                                <span>
+                                                                                    ------
+                                                                                </span>
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @if (courseMeeting.DiscountPrice < courseMeeting.Price)
+                                                                            {
+                                                                                <div class="center price" style="position:relative">
+                                                                                    <div class="discount-price">
+                                                                                        <span>
+                                                                                            @(string.Format("{0:N0}", courseMeeting.Price))  تومان
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <span>
+                                                                                            @(string.Format("{0:N0}", courseMeeting.DiscountPrice))  تومان
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="center">
+                                                                                    <span>
+                                                                                        @(courseMeeting.Price == 0 ? "رایگان" : string.Format("{0:N0} تومان", courseMeeting.Price))
+                                                                                    </span>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="dm-btn">
+                                                                    @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && !Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any(c => c == courseMeeting.Id))
+                                                                    {
+                                                                        @if (courseMeeting.IsPurchasable)
+                                                                        {
+                                                                            <a class="cart-btn btn-byu-s" data-academyProductTypeId="2" data-academyProductId="@courseMeeting.Id">
+                                                                                خرید جلسه
+                                                                            </a>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="cart-btn btn-byu-s" href="/Trainings/CourseMeetingSections?CourseMeetingId=@courseMeeting.Id">
+                                                                            <span>مشاهده جلسه</span>
+                                                                        </a>
+                                                                    }
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-12 col-xs-12">
+                                                            <div class="fl-d-f-dd">
+
+                                                                <div class="dm-main">
+                                                                    <span class="dm-title"> مدرس : </span>
+                                                                    <span class="dm-text">
+                                                                        @if (Courses.IsMultiTeacher)
+                                                                        {
+                                                                            @if (courseMeeting.CourseDedicatedTeacher == null)
+                                                                            {
+                                                                                <span class="showTeachersBtn">چند استادی</span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a href="/Contents/TeacherIntroductions?teacherId=@courseMeeting.CourseDedicatedTeacher.TeacherUserId">@courseMeeting.CourseDedicatedTeacher.TeacherFullName</a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"><span>@courseMeeting.TeacherFullName</span></a>
+                                                                        }
+                                                                    </span>
+                                                                </div>
+
+
+                                                                <div class="dm-main">
+                                                                    @if (courseMeeting.HasHomework)
+                                                                    {
+                                                                        <i class="fa fa-check dm-icon"></i>
+                                                                        <span class="dm-title"> تکلیف : </span>
+                                                                        <span class="dm-text"> دارد </span>
+                                                                    }
+                                                                    else
+
+                                                                    {
+                                                                        <i class="fa fa-close dm-icon"></i>
+                                                                        <span class="dm-title"> تکلیف : </span>
+                                                                        <span class="dm-text"> فعلا تکلیفی ثبت نشده </span>
+                                                                    }
+                                                                </div>
+
+                                                                @if (courseMeeting.HasBooklet)
+                                                                {
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-check dm-icon"></i>
+                                                                        <span class="dm-title"> جزوه : </span>
+                                                                        <span class="dm-text"> دارد </span>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-close dm-icon"></i>
+                                                                        <span class="dm-title"> جزوه : </span>
+                                                                        <span class="dm-text"> فعلا جزوه ای ثبت نشده  </span>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span style="display:none">@(o++);</span>
+                                        }
+                                    </div>
+                                </div>
+                                <hr class="hr-line">
+
+                            </section>
+                            <section class="faq-container-bottom ">
+                                <div class="more-setion-bo">
+                                    <span>  برای مشاهده <span> @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  جلسات  " : "  زیر آزمون ها  ")</span> کلیک کنید</span>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        @if (Courses.CourseMeetings.Any() && Courses.CourseCategoryType == Common.Enums.CourseCategoryType.OnlineExam)
+        {
+            @if (Courses.CourseMeetings.Count() > 0)
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="main-title">
+                            <span>
+                                زیر آزمون ها
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="  faq-description">
+                            <section class="faq-container">
+                                <div class="faq-one ">
+                                    <h1 class="faq-page active">مشاهده زیر آزمون ها </h1>
+                                    @foreach (var courseMeeting in Courses.CourseMeetings)
+                                    {
+                                        @if (!(User.Identity.IsAuthenticated && courseMeeting.IsAvailableForSpecificFields && !courseMeeting.OnlineExamFieldIds.Contains(Courses.StudentFieldId)))
+                                        {
+                                            <div class="faq-body" style="display:block">
+
+                                                <div class="box-courseMetting">
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-xs-12">
+                                                            <div class="cm-main">
+                                                                <div class="cm-logo">
+                                                                    <img src="~/assets/img/logo/videoplayer.png" />
+                                                                </div>
+                                                                @*<div class="cm-title">
+                                                                    <span> آزمون @l :</span>
+                                                                </div>*@
+                                                                <div class="cm-text">
+                                                                    <span>@courseMeeting.Name</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="fl-d-f-d">
+                                                            <div class="col-md-3 col-sm-12 col-xs-12">
+                                                                <div class="dm-action">
+                                                                    <div class="dm-price">
+                                                                        <div class="dm-fl-d">
+                                                                            <div class="dm-p-title">
+                                                                                <span class="gimat"> قیمت : </span>
+                                                                            </div>
+                                                                            @if (!courseMeeting.IsPurchasable)
+                                                                            {
+                                                                                <div class="center">
+                                                                                    <span>
+                                                                                        ------
+                                                                                    </span>
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @if (courseMeeting.DiscountPrice < courseMeeting.Price)
+                                                                                {
+                                                                                    <div class="center price" style="position:relative">
+                                                                                        <div class="discount-price">
+                                                                                            <span>
+                                                                                                @(string.Format("{0:N0}", courseMeeting.Price))  تومان
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <span>
+                                                                                                @(string.Format("{0:N0}", courseMeeting.DiscountPrice))  تومان
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <div class="center">
+                                                                                        <span>
+                                                                                            @(courseMeeting.Price == 0 ? "رایگان" : string.Format("{0:N0} تومان", courseMeeting.Price))
+                                                                                        </span>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="dm-btn">
+                                                                        @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && !Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any(c => c == courseMeeting.Id))
+                                                                        {
+                                                                            if (courseMeeting.IsPurchasable)
+                                                                            {
+                                                                                <a class="cart-btn btn-buy-azmon" data-academyProductTypeId="2" data-academyProductId="@courseMeeting.Id">
+                                                                                    ثبت نام آزمون
+                                                                                </a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="enterExamBtn btn-back-color-blue" data-redirectUrl="@(AppConfigProvider.GetOnlineExamUrl() + "?RefId=" + EncriptRefId(courseMeeting.OnlineExamId.Value, ViewBag.UserId))" data-onlineExamId="@courseMeeting.OnlineExamId">
+                                                                                <span>ورود به آزمون</span>
+                                                                            </a>
+                                                                            <a class="showOnlineExamResultBtn bg-color-red" data-onlineExamId="@courseMeeting.OnlineExamId">
+                                                                                <span class="date">مشاهده نتایج</span>
+                                                                            </a>
+
+
+                                                                            @if (courseMeeting.IsShowQuestionAnswer)
+                                                                            {
+                                                                                @if (!string.IsNullOrEmpty(courseMeeting.AnalysisVideoLink))
+                                                                                {
+                                                                                    <a class="btn-back-color-green" href="/OnlineExams/OnlineExamAnalysisVideo?OnlineExamId=@courseMeeting.OnlineExamId">
+                                                                                        <span class="date">فیلم تحلیل آزمون</span>
+                                                                                    </a>
+                                                                                }
+
+                                                                                <a class="bg-color-red" href="/OnlineExams/OnlineExamQuestions?OnlineExamId=@courseMeeting.OnlineExamId">
+                                                                                    <span class="date">مشاهده پاسخنامه</span>
+                                                                                </a>
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-9 col-sm-12 col-xs-12">
+                                                                <div class="fl-d-f-dd">
+
+                                                                    <div class="dm-main">
+                                                                        <span class="dm-title"> مدرس : </span>
+                                                                        <span class="dm-text">
+                                                                            @if (Courses.IsMultiTeacher)
+                                                                            {
+                                                                                @if (courseMeeting.CourseDedicatedTeacher == null)
+                                                                                {
+                                                                                    <span class="showTeachersBtn">چند استادی</span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a href="/Contents/TeacherIntroductions?teacherId=@courseMeeting.CourseDedicatedTeacher.TeacherUserId">@courseMeeting.CourseDedicatedTeacher.TeacherFullName</a>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"><span>@courseMeeting.TeacherFullName</span></a>
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-calendar dm-icon"></i>
+                                                                        <span class="dm-title"> تاریخ/زمان شروع : </span>
+                                                                        <span class="dm-text"> @courseMeeting.StartDateTime.Split("-")[0] -  @courseMeeting.StartDateTime.Split("-")[1] </span>
+                                                                    </div>
+
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-calendar dm-icon"></i>
+                                                                        <span class="dm-title"> تاریخ/زمان پایان : </span>
+                                                                        <span class="dm-text"> @courseMeeting.EndDateTime.Split("-")[0] -  @courseMeeting.EndDateTime.Split("-")[1] </span>
+                                                                    </div>
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-clock-o dm-icon"></i>
+                                                                        <span class="dm-title"> مدت زمان آزمون : </span>
+                                                                        <span class="dm-text"> @courseMeeting.CourseDuration دقیقه </span>
+                                                                    </div>
+                                                                    <div class="dm-main">
+                                                                        <i class="fa fa-clock-o dm-icon"></i>
+                                                                        <span class="dm-title"> تعداد سوالات : </span>
+                                                                        <span class="dm-text"> @courseMeeting.NumberQuestions  </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span style="display:none">@(l++);</span>
+                                        }
+                                    }
+                                </div>
+                                <hr class="hr-line">
+
+                            </section>
+                            <section class="faq-container-bottom ">
+                                <div class="more-setion-bo">
+                                    <span>  برای مشاهده <span> @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  جلسات  " : "  زیر آزمون ها  ")</span> کلیک کنید</span>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="main-title">
+                    <span>
+                        اطلاعات @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "دوره" : "آزمون")
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="more-course-s">
+                    <div class="more-box">
+                        <div class="more-img">
+                            <i class="fa fa-circle"></i>
+                            @if (Courses.IsMultiTeacher)
+                            {
+                                <img src="~/assets/img/logo/modares.png" />
+                            }
+                            else
+                            {
+                                @if (string.IsNullOrEmpty(Courses.TeacherPicPath))
+                                {
+                                    <img src="~/assets/img/logo/modares.png" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" />
+                                }
+                                else
+                                {
+                                    <img src="@Courses.TeacherPicPath" alt="@Courses.TeacherFullName" title="@Courses.TeacherFullName" />
+                                }
+                            }
+                        </div>
+                        <div class="more-title">
+                            @if (Courses.IsMultiTeacher)
+                            {
+                                <span>مدرسین : </span>
+                            }
+                            else
+                            {
+                                <span>مدرس : </span>
+                            }
+                        </div>
+                        <div class="more-text">
+                            @if (Courses.IsMultiTeacher)
+                            {
+                                @foreach (var indexTeacher in Courses.CourseDedicatedTeachers)
+                                {
+                                    <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"> @indexTeacher.TeacherFullName  </a>
+
+                                    <span class="line">-</span>
+                                }
+                            }
+                            else
+                            {
+                                <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"> @Courses.TeacherFullName </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="more-box">
+                        <div class="more-img">
+                            <i class="fa fa-circle"></i>
+                            <img src="~/assets/img/logo/mokhatab.png" />
+                        </div>
+                        <div class="more-title">
+                            <span>مخاطب : </span>
+                        </div>
+                        <div class="more-text">
+                            @(string.IsNullOrEmpty(Courses.Audience) ? "ثبت نشده" : Courses.Audience)
+                        </div>
+                    </div>
+                    <div class="more-box">
+                        <div class="more-img">
+                            <i class="fa fa-circle"></i>
+                            <img src="~/assets/img/logo/tedadjalaseh.png" />
+                        </div>
+                        <div class="more-title">
+                            <span>  @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "تعداد جلسه  " : "تعداد زیر ازمون   "): </span>
+                        </div>
+                        <div class="more-text">
+                            @(string.IsNullOrEmpty(Courses.CourseMeetingCount) ? "ثبت نشده" : Courses.CourseMeetingCount)
+                        </div>
+                    </div>
+                    <div class="more-box">
+                        <div class="more-img">
+                            <i class="fa fa-circle"></i>
+                            <img src="~/assets/img/logo/nahveye.png" />
+                        </div>
+                        <div class="more-title">
+                            <span> نحوه ارایه فیلم : </span>
+                        </div>
+                        <div class="more-text">
+                            به صورت محافظت شده قابل مشاهده در روی دو عدد از دستگاه های خریدار دوره
+                        </div>
+                    </div>
+                    <div>
+                        <hr />
+                    </div>
+                    <div class="more-box-c">
+                        @Html.Raw(Courses.Description)
+                        @* <div class="aspan-m">
+                        <i class="fa fa-check"></i>
+                        <span class="aspan-text"> پشتیبانی و رفع اشکال توسط استاد</span>
+                        </div>
+                        <div class="aspan-m">
+                        <i class="fa fa-check"></i>
+                        <span class="aspan-text"> برگزاری آزمون های آنلاین حین دوره</span>
+                        </div>
+                        <div class="aspan-m">
+                        <i class="fa fa-check"></i>
+                        <span class="aspan-text">  دریافت جزوه درس</span>
+                        </div>
+                        <div class="aspan-m">
+                        <i class="fa fa-check"></i>
+                        <span class="aspan-text">  حل تکلیف پس از هر جلسه و رفع اشکال توسط استاد</span>
+                        </div>*@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="main-title">
+                    <span>
+                        درباره اساتید @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "دوره" : "آزمون")
+                    </span>
+                </div>
+            </div>
+        </div>
+        @if (Courses.IsMultiTeacher)
+        {
+            @if (Courses.CourseDedicatedTeachers.Count() > 0)
+            {
+                @foreach (var item in Courses.CourseDedicatedTeachers)
+                {
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="about-ostad-s">
+                                <div class="about-ostad">
+                                    <div class="row flex flex-direction-column-f">
+                                        <div class="col-md-3 col-xs-12">
+                                            <div class="box-a-o">
+                                                <div class="img-a-o">
+                                                    @if (string.IsNullOrEmpty(item.PersonalPicPath))
+                                                    {
+                                                        <img src="~/assets/img/logo/logo.png" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@item.PersonalPicPath" />
+                                                    }
+
+                                                </div>
+                                                <div class="txt-a-o">
+                                                    <span class="tlt-a-o"> مدرس :</span> <span class="name-a-o"> @item.TeacherFullName</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 col-xs-12">
+                                            <div class="more-box-c">
+                                                <div class="aspan-m">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span class="aspan-text"> پشتیبانی و رفع اشکال توسط استاد</span>
+                                                </div>
+                                                <div class="aspan-m">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span class="aspan-text"> برگزاری آزمون های آنلاین حین دوره</span>
+                                                </div>
+                                                <div class="aspan-m">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span class="aspan-text">  دریافت جزوه درس</span>
+                                                </div>
+                                                <div class="aspan-m">
+                                                    <i class="fa fa-circle"></i>
+                                                    <span class="aspan-text">  حل تکلیف پس از هر جلسه و رفع اشکال توسط استاد</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <hr />
+                                        </div>
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="video-ostad-s">
+                                                <div class="video-s">
+                                                    <script src="https://stream.epizero.com/quesp1nhfjtw/embed"></script>
+                                                </div>
+                                                <div class="video-s">
+                                                    <script src="https://stream.epizero.com/quesp1nhfjtw/embed"></script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="tit-ost">
+                                                <span>نمونه تدریس استاد</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="about-ostad-s">
+                        <div class="about-ostad">
+                            <div class="row flex flex-direction-column-f">
+                                <div class="col-md-3 col-xs-12">
+                                    <div class="box-a-o">
+                                        <div class="img-a-o">
+                                            @if (string.IsNullOrEmpty(Courses.TeacherPicPath))
+                                            {
+                                                <img src="~/assets/img/logo/logo.png" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@Courses.TeacherPicPath" />
+                                            }
+
+                                        </div>
+                                        <div class="txt-a-o">
+                                            <span class="tlt-a-o"> مدرس :</span> <span class="name-a-o"> @Courses.TeacherFullName</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-xs-12">
+                                    <div class="more-box-c">
+                                        @foreach (var teacherResume in Courses.TeacherResumes)
+                                        {
+                                            <div class="aspan-m">
+                                                <i class="fa fa-circle"></i>
+                                                <span class="aspan-text"> @teacherResume.Title</span>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*   <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                        <hr />
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                        <div class="video-ostad-s">
+                        <div class="video-s">
+                        <script src="https://stream.epizero.com/quesp1nhfjtw/embed"></script>
+                        </div>
+                        <div class="video-s">
+                        <script src="https://stream.epizero.com/quesp1nhfjtw/embed"></script>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                        <div class="tit-ost">
+                        <span>نمونه تدریس استاد</span>
+                        </div>
+                        </div>
+                        </div>*@
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Courses.CommentOldStudentCourses.Count > 0)
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="img-t">
+                        <img src="~/assets/img/logo/objects.png" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <div class="main-title">
+                        <span class="m-t-10">
+                            نظرات دانش آموزان سابق
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid plr-0">
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <div class="swiper-nazarat">
+                        <div class="swiper-container swiper9">
+                            <div class="swiper-wrapper">
+                                @foreach (var item in Courses.CommentOldStudentCourses)
+                                {
+                                    <div class="swiper-slide">
+                                        <div class="flex-swiper-d">
+                                            <div class="sw-img-main">
+                                                <div class="sw-img">
+                                                    @if (string.IsNullOrEmpty(item.PersonalPicPath))
+                                                    {
+                                                        <img src="~/assets/img/logo/logo.png" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@item.PersonalPicPath" />
+                                                    }
+                                                </div>
+                                            </div>
+
+
+                                            <div class="sw-p">
+                                                @if (@item.CommentTypeId == (int)CommentType.Text)
+                                                {
+                                                    <p>
+                                                        @Html.Raw(item.CommentText)
+                                                    </p>
+                                                }
+                                                @if (@item.CommentTypeId == (int)CommentType.Film)
+                                                {
+                                                    <div class="film-c">
+                                                        <div>@Html.Raw(item.CommentVideo)</div>
+                                                    </div>
+                                                }
+                                                @if (@item.CommentTypeId == (int)CommentType.Voice)
+                                                {
+                                                    <div style="text-align:center" class="voice-c">
+                                                        <audio controls>
+                                                            <source src="@item.CommentAudio" type="audio/ogg">
+                                                            <source src="@item.CommentAudio" type="audio/mpeg">
+                                                            مرورگر شما از تگ صوتی پشتیبانی نمی کند.
+                                                        </audio>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="sw-des">
+                                                <div class="sw-name">@item.StudentUserFullName</div>
+                                                <div class="sw-date">@item.RegDateTime   </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="main-title">
+                    <span class="m-t-10">
+                        سوالات متداول
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Courses.CourseFAQs.Count() > 0)
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="faq-q-m  faq-description">
+                        <section class="faq-container">
+                            @foreach (var item in Courses.CourseFAQs)
+                            {
+                                <div class="faq-one">
+                                    <!-- faq question -->
+                                    <h1 class="faq-page">@item.QuestionContext</h1>
+                                    <!-- faq answer -->
+                                    <div class="faq-body">
+                                        <p>
+                                            @item.AnswerContext
+                                        </p>
+                                    </div>
+                                    <hr class="hr-line">
+                                </div>
+                            }
+
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="img-t">
+                    <img src="~/assets/img/logo/objects (1).png" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="main-title">
+                    <span class="m-t-10">
+                        پرسش و پاسخ دوره
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @{
+        await Html.RenderPartialAsync("Questions.cshtml");
+        await Html.RenderPartialAsync("AddAnswerModal.cshtml");
+        await Html.RenderPartialAsync("~/Views/Component/AddQuestionModal.cshtml");
+        await Html.RenderPartialAsync("_AlertModal.cshtml");
+        await Html.RenderPartialAsync("_SelectedFieldModal.cshtml");
+        await Html.RenderPartialAsync("_TeachersModel.cshtml");
+        await Html.RenderPartialAsync("_ShowQuestionPicPathModal.cshtml");
+        await Html.RenderPartialAsync("_AddNewCommentModal.cshtml");
+    }
+    <div id="continuesToShowOnlineExamResultModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div>
+                    <div class="modal-header create-modal">
+                        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"> <strong>پیام سیستم</strong>   </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>هشدار</p>
+                        <p>
+                            در صورت مشاهده نتایج آزمون، آزمون شما پایان یافته و امکان ورود مجدد به آزمون را نخواهید داشت. آیا آدامه می دهید ؟
+                        </p>
+                        <p> </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default btn-sm" style="width:100px;" data-dismiss="modal">انصراف</a>
+                        <a id="continuesToShowOnlineExamResultBtn" style="width:100px;" class="btn btn-default btn-sm pull-left">ادامه</a>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+    @{
+        await Html.RenderPartialAsync("_NewComments.cshtml");
+        await Html.RenderPartialAsync("_ContactUs.cshtml");
+    }
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-12 col-md-12">
+                <div class="main-title">
+                    <span class="m-t-10">
+                        دوره های مرتبط
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="similarCoures-d">
+                    @if (Courses.SimilarCoures.Any())
+                    {
+                        @foreach (var similarCourse in Courses.SimilarCoures)
+                        {
+                            <div data-aos="fade-right" class="col-md-3 col-sm-3 col-xs-12 main-new-course">
+                                <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                    <div class="div-main-img">
+                                        @if (string.IsNullOrEmpty(similarCourse.LogoPicPath))
+                                        {
+                                            if (!string.IsNullOrEmpty(similarCourse.BannerPicPath))
+                                            {
+                                                <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                                    <img title="@similarCourse.Name" alt="@similarCourse.Name" src="@similarCourse.BannerPicPath" />
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                                    <img title="@similarCourse.Name" alt="@similarCourse.Name" src="~/assets/img/2020-10-10-03-44-15pm-adabiat6.png" />
+                                                </a>
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                                <img alt="@similarCourse.Name" title="@similarCourse.Name" src="@similarCourse.LogoPicPath">
+                                            </a>
+                                        }
+                                    </div>
+
+                                    <div class="div-title-content">
+                                        @similarCourse.Name <br>
+                                        <span>
+                                            @similarCourse.TeacherFullName
+                                        </span>
+                                    </div>
+                                    <div class="div-img-small">
+                                        @if (string.IsNullOrEmpty(similarCourse.TeacherPersonalPicPath))
+                                        {
+                                            <img src="~/assets/img/logo.png" alt="@similarCourse.TeacherFullName" title="@similarCourse.TeacherFullName" />
+                                        }
+                                        else
+                                        {
+                                            <img alt="@similarCourse.TeacherFullName" title="@similarCourse.TeacherFullName" src="@similarCourse.TeacherPersonalPicPath">
+                                        }
+
+                                    </div>
+                                    <div data-academyProductTypeId="1" data-academyProductId="@similarCourse.Id" data-toggle="tooltip" data-placement="bottom" title="افزودن به سبد" class="cart-btn div-cart-main">
+                                        <img src="/assets/img/sabab1.png" alt="اطلاعات بیشتر دوره">
+                                        <div class="box"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div style="clear:both;"></div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom_div" class="hwp-bottom-price-section" aria-hidden="false">
+        <div class="container">
+            <div class="course-bottom-container">
+                <div>
+                    <p><strong>@(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? " دوره " : " آزمون ") @Courses.Name</strong></p>
+                </div>
+                <div id="bottom-buy-link" style="width: 100%">
+
+                    <div class="pull-left">
+
+
+                        <a class="hamyar-red-button  border-red cart-btn" data-academyProductTypeId="1" data-academyProductId="@Courses.Id">
+                            @if (Courses.CourseTypeId == (int)Common.Enums.CourseType.Book)
+                            {
+                                <span>خرید جزوه</span>
+                            }
+                            else
+                            {
+                                @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "ثبت نام در دوره" : "ثبت نام در آزمون")
+                            }
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section> 

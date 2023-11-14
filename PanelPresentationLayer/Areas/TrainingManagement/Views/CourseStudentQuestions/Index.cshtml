@@ -1,0 +1,313 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.StudentCourseQuestionsViewModel>
+@{
+    ViewData["Title"] = "پرسش و پاسخ دوره";
+    ViewData["PageFarsiName"] = "پرسش و پاسخ دوره";
+    string Area = "TrainingManagement";
+    string Controller = "CourseStudentQuestions";
+}
+<script src="~/assets/js/manage-audio.js"></script>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;">
+        <button class="btn btn-info btn-xs edit" type="button" style="margin-left:3px; margin-top:2px;"><i class="fa fa-question-circle" style="margin-left: 1px;"></i>تعیین وضعیت</button>
+        <button class="btn btn-warning btn-xs btn-answerViewer" type="button" style="margin-left:10px; margin-top:2px;"><i class="fa fa-eye" style="margin-left: 1px;"></i>پاسخ ها</button>
+    </div>
+</script>
+<script type="text/javascript">
+    MainViewModel.ac = ko.observable({});// مشاهده و تعیین وضعیت پاسخ ها
+    MainViewModel.confirm = ko.observable({});// وضعیت پاسخ ها
+    MainViewModel.adminAnswerContex = ko.observable({});// متن سوال
+
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+
+         $('body').on('click', '.download-filePath', function (e) {
+             e.preventDefault();
+             window.open($(this).attr('href'), '_blank');
+         });
+
+        $('body').on('click', '.download-picPath', function (e) {
+            e.preventDefault();
+            window.open($(this).attr('href'), '_blank');
+        });
+
+
+
+        $('#delete, #create').remove();
+        rebulidChosen("#Course");
+        //***************************************************************************
+        $('#Course,#ConfirmStatusType').change(function () {
+            $('#applyFilter').click();
+        });
+        //***************************************************************************
+        $('body').on('click', '.btn-answerViewer', function () {
+            var Id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            DataTransfer('/TrainingManagement/CourseStudentQuestions/ReadAnswers/' + Id, '', '',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.ac(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+            $('#AnswerViewerModal').modal({ backdrop: 'static', keyboard: false });
+            $('#AnswerViewerModal').modal('show');
+        });
+         //***************************************************************************
+        $('body').on('click', '.btn-answerConfirm', function (e) {
+            e.preventDefault();
+            MainViewModel.confirm().Id = $(this).attr('data-Id')
+
+            $('#data-answerPicPath').attr('data-url', $(this).attr('data-AnswerPicPath'));
+            $('#data-answerFilePath').attr('data-url', $(this).attr('data-AnswerFilePath'));
+            $('#data-answerAudioPath').attr('src', $(this).attr('data-AnswerAudioPath'));
+            $('#data-answerAudioPath-1').attr('src', $(this).attr('data-AnswerAudioPath'));
+
+            var attr = $(this).attr('data-AnswerFilePath');
+            var attr2 = $(this).attr('data-AnswerPicPath');
+            var attr3 = $(this).attr('data-AnswerAudioPath');
+
+            if (typeof attr == 'undefined' || attr == false) {
+                $('.div-file').hide();
+            } else {
+                $('.div-file').show();
+            }
+
+
+            if (typeof attr2 == 'undefined' || attr2 == false) {
+                $('.div-pic').hide();
+            } else {
+                $('.div-pic').show();
+            }
+
+            if (typeof attr2 == 'undefined' || attr2 == false) {
+                $('.div-audio').hide();
+            } else {
+                $('.div-audio').show();
+            }
+
+            
+            $('#answerContext').html($(this).attr('data-AnswerContext'));
+            $('#answeredUserFullName').val($(this).attr('data-AnsweredUserFullName'));
+            $('#regDateTime').val($(this).attr('data-RegDateTime'));
+            $('#AnswerConfirmModal').modal({ backdrop: 'static', keyboard: false });
+            $('#AnswerConfirmModal').modal('show');
+        });
+        //***************************************************************************
+        $('body').on('click', '.btn-dwn', function () {
+            window.open($(this).attr('data-url'), '_blank');
+        });
+         //***************************************************************************
+        $('#ConfirmForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/TrainingManagement/CourseStudentQuestions/ConfirmAnswer/', ko.toJSON(MainViewModel.confirm()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#AnswerConfirmModal').modal('hide');
+                            readAnswer(MainViewModel.ac().Id);
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //***************************************************************************
+        function readAnswer(id) { 
+            DataTransfer('/TrainingManagement/CourseStudentQuestions/ReadAnswers/' + id, '', '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.ac(f.Value);
+                    }
+                },
+                function () {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        //***************************************************************************
+        $('body').on('submit', '.btn-confirm', function (e) {
+            e.preventDefault();
+            $('#AnswerConfirmModal').modal('hide');
+        });
+        //***************************************************************************
+        $('#AnswerConfirmModal').on("hidden.bs.modal", function (event) {
+            $('body').addClass('modal-open');
+            $('#IsBestAnswer').val('').change();
+            $('#IsVerified').val('').change();
+            $('#AnswerViewerModal').modal('show');
+        });
+        //***************************************************************************
+        $('#AnswerViewerModal').on("hidden.bs.modal", function (event) {
+            $('#reloadTableBtn').click();
+        });
+        //***************************************************************************
+        $('body').on('click', '.btn-addQuestion', function (e) {
+            e.preventDefault();
+            MainViewModel.adminAnswerContex().QuestionId = $(this).attr('data-Id');
+            $('#AdminAnswerContexBox').modal({ backdrop: 'static', keyboard: false });
+            $('#AdminAnswerContexBox').modal('show');
+        });
+        //***************************************************************************
+        $('#AdminAnswerContexBox').on("hidden.bs.modal", function (event) {
+            $('body').addClass('modal-open');
+            $('#AnswerViewerModal').modal('show');
+            MainViewModel.adminAnswerContex({});
+        });
+         //***************************************************************************
+        $('#AdminAnswerContexForm').submit(function () {
+            if ($(this).valid()) {
+              
+                DataTransfer('/TrainingManagement/CourseStudentQuestions/AddAdminAnswers/', ko.toJSON(MainViewModel.adminAnswerContex()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            readAnswer(MainViewModel.ac().Id);
+                            $('#AdminAnswerContexBox').modal('hide');
+                            $('#question_removeButton').hide();
+                            $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                            $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                            $('#answer_stopButton').prop('disabled', false);
+                            $('#answer_recordButton').prop('disabled', false);
+                            $('#answer_audioplayback').addClass("hidden");
+                            $('#answer_removeButton').hide();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+
+
+
+        $('#AdminAnswerContexBox').on("hidden.bs.modal", function (event) {
+            $('#AnswerFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+            $('#AnswerPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+            $('#answer_stopButton').prop('disabled', false);
+            $('#answer_recordButton').prop('disabled', false);
+            $('#answer_audioplayback').addClass("hidden");
+            $('#answer_removeButton').hide();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#answer_removeButton', function () {
+            MainViewModel.adminAnswerContex().AudioPath = null;
+            $('#answer_stopButton').prop('disabled', false);
+            $('#answer_recordButton').prop('disabled', false);
+            $('#answer_audioplayback').addClass("hidden");
+            $(this).hide();
+        });
+    });
+</script>
+
+
+<style>
+    .d-img img{
+        max-width: 160px !important;
+        margin-bottom: 15px;
+    }
+
+ 
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group" id="ComboBoxSection">
+                                    <label for="Course">لیست دوره‌ها</label>
+                                    <select id="Course" class="form-control" data-placeholder="موردی را انتخاب کنید" data-bind="value: fe().CourseId">
+                                        <option value="0">همـــه</option>
+                                        @foreach (var item in ViewBag.Courses)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="ConfirmStatusType">وضعیت</label>
+                                    <select id="ConfirmStatusType" class="form-control" data-placeholder="موردی را انتخاب کنید" data-bind="value: fe().ConfirmStatusTypeId">
+                                        <option value="1">در حال بررسی</option>
+                                        <option value="2">تأیید شده</option>
+                                        <option value="3">رد شده </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th> 
+                                    <th data-viewModel="StudentUserFullName">دانش آموز</th>
+                                    <th data-viewModel="CourseName">دوره</th>
+                                    <th data-viewModel="RegDateTime">تاریخ ثبت</th>
+                                    <th data-viewModel="CourseStatusType">وضعیت</th>
+                                    <th data-viewModel="VerifiedDateTime">تاریخ تعیین وضعیت</th>
+                                    <th data-viewModel="UnVerifiedAnswerCount">تعداد پاسخ بررسی نشده</th>
+                                    <th style="width: 210px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("AnswerViewerModal.cshtml");
+                        await Html.RenderPartialAsync("AnswerConfirmModal.cshtml");
+                        await Html.RenderPartialAsync("AdminAnswerContextModal.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

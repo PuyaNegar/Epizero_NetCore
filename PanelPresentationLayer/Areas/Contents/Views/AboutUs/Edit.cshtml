@@ -1,0 +1,114 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.ContentsViewModels.AboutUsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Title"></label>
+                                <input asp-for="Edit.Title" class="form-control" data-bind="value: e().Title">
+                                <span asp-validation-for="Edit.Title" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.SubTitle"></label>
+                                <textarea rows="2" asp-for="Edit.SubTitle" class="form-control" data-bind="value: e().SubTitle"></textarea>
+                                <span asp-validation-for="Edit.SubTitle" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.AltBannerPicPath"></label>
+                                <textarea rows="2" asp-for="Edit.AltBannerPicPath" class="form-control" data-bind="value: e().AltBannerPicPath"></textarea>
+                                <span asp-validation-for="Edit.AltBannerPicPath" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.MetaDescription"></label>
+                                <textarea rows="2" asp-for="Edit.MetaDescription" class="form-control" data-bind="value: e().MetaDescription"></textarea>
+                                <span asp-validation-for="Edit.MetaDescription" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.MetaTitle"></label>
+                                <textarea rows="2" asp-for="Edit.MetaTitle" class="form-control" data-bind="value: e().MetaTitle"></textarea>
+                                <span asp-validation-for="Edit.MetaTitle" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CanonicalHref"></label>
+                                <textarea rows="2" asp-for="Edit.CanonicalHref" class="form-control" data-bind="value: e().CanonicalHref"></textarea>
+                                <span asp-validation-for="Edit.CanonicalHref" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.KeyWordsMetaTag"></label>
+                                <textarea rows="2" asp-for="Edit.KeyWordsMetaTag" class="form-control" data-bind="value: e().KeyWordsMetaTag"></textarea>
+                                <span asp-validation-for="Edit.KeyWordsMetaTag" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.BannerPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                    new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                        DefualuNullImagePath = "/images/DefaultFlag.png",
+                                        Name = "EditAboutUsBannerPicPath",
+                                        KnockoutExpressionString = "MainViewModel.e().BannerPicPath",
+                                        MaxImageHeight = 2000,
+                                        MaxImageWidth = 2000,
+                                        MinImageHeight = 1,
+                                        MinImageWidth = 1,
+                                        MaxImageSize = 1024,
+                                        HasDeleteBtn = true,
+                                        Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 2000 در 2000 پیکسل \r\n حداکثر حجم مجاز تصویر : 1024 کیلوبایت"
+                                    })
+                            </div>
+                            <span asp-validation-for="Edit.BannerPicPath" class="danger"></span>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

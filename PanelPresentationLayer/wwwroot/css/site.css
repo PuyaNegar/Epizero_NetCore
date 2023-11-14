@@ -1,0 +1,565 @@
+﻿@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: bold;
+    src: url('/fonts/eot/IRANSansWeb_Bold.eot');
+    src: url('/fonts/eot/IRANSansWeb_Bold.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+    url('/fonts/woff2/IRANSansWeb_Bold.woff2') format('woff2'), /* Chrome36+, Opera24+*/
+    url('/fonts/woff/IRANSansWeb_Bold.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/IRANSansWeb_Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: 500;
+    src: url('/fonts/eot/IRANSansWeb_Medium.eot');
+    src: url('/fonts/eot/IRANSansWeb_Medium.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+    url('/fonts/woff2/IRANSansWeb_Medium.woff2') format('woff2'), /* Chrome36+, Opera24+*/
+    url('/fonts/woff/IRANSansWeb_Medium.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/IRANSansWeb_Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: 300;
+    src: url('/fonts/eot/IRANSansWeb_Light.eot');
+    src: url('/fonts/eot/IRANSansWeb_Light.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+    url('/fonts/woff2/IRANSansWeb_Light.woff2') format('woff2'), /* Chrome36+, Opera24+*/
+    url('/fonts/woff/IRANSansWeb_Light.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/IRANSansWeb_Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: 200;
+    src: url('/fonts/eot/IRANSansWeb_UltraLight.eot');
+    src: url('/fonts/eot/IRANSansWeb_UltraLight.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+    url('/fonts/woff2/IRANSansWeb_UltraLight.woff2') format('woff2'), /* Chrome36+, Opera24+*/
+    url('/fonts/woff/IRANSansWeb_UltraLight.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/IRANSansWeb_UltraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: normal;
+    src: url('/fonts/eot/IRANSansWeb.eot');
+    src: url('/fonts/eot/IRANSansWeb.eot?#iefix') format('embedded-opentype'), /* IE6-8 */
+    url('/fonts/woff2/IRANSansWeb.woff2') format('woff2'), /* Chrome36+, Opera24+*/
+    url('/fonts/woff/IRANSansWeb.woff') format('woff'), /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/IRANSansWeb.ttf') format('truetype');
+}
+.pagination ul li.active {
+    z-index:0;
+}
+.alert-info div.row div{
+    z-index: 5;
+}
+html {
+    overflow-y: visible;
+}
+body , div , h1 , h2 , h3 , h4 , h5 , h6 , p , ul , li , a {
+    font-family : IRANSans !important;
+}
+*{
+    outline : none !important;
+}
+.btn.dropdown-toggle:not(:first-child), .btn-default.dropdown-toggle:not(:first-child) {
+    border-right-width: 1px !important;
+ 
+}
+body{
+    padding-right:0px !important;
+}
+textarea{
+    resize:none !important;
+}
+/*//====================================================================================================//*/
+.databox .databox-left .databox-text {
+    font-weight: bold;
+    font-size: 13px;
+}
+.dashbord-main .dashboard-title {
+    color: #555;
+    font-size: 16px;
+}
+.dashbord-main .dashboard-txt {
+    color: #888;
+    font-size: 14px;
+}
+.dashbord-main .dashbord-logo img{
+    width:150px;
+    cursor:pointer;
+}
+.dashbord-main .dashbord-logo{
+    text-align:center;
+    margin:10px 0 10px 0;
+   
+}
+.dashbord-main .dashbord-logo a {
+    display: inline-block;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    transition: all .3s;
+    overflow:hidden;
+}
+    .dashbord-main .dashbord-logo a:hover {
+        border: 2px solid #f4b400;
+        transition: all .3s;
+    }
+        /*//====================================================================================================//*/
+        .widget-body {
+            padding: 15px !important;
+            min-height: 400px;
+        }
+
+.widget-caption{
+    font-size:15px !important;
+    font-weight: bold !important;
+}
+.widget-header{
+    padding:5px !important;
+    padding-right:20px !important;
+}
+
+.btn-labeled{
+    width:120px;
+}
+hr {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+.buttons-preview a {
+    width: 100px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+ 
+.danger{
+    font-size:11px;
+}
+.create-modal {
+    border-bottom: 3px solid #53a93f !important;
+}
+.create-modal span {
+        color: #53a93f !important;
+    }
+.edit-modal span {
+    color: #57b5e3 !important;
+}
+.edit-modal {
+    border-bottom: 3px solid #57b5e3 !important;
+}
+
+
+.role-modal {
+    border-bottom: 3px solid #c39c01 !important;
+}
+    .role-modal span  {
+        color: #c39c01 !important;
+    }
+
+#SearchWith, #length_change, .dataTables_length select {
+    padding: 0px !important;
+}
+
+#modelList {
+    width: 100% !important;
+}
+
+#modelList_wrapper {
+    min-height: 350px;
+}
+
+
+.serach-clear {
+    position: absolute;
+    left: 15px;
+    top: 8px;
+    z-index: 100;
+    color: lightgray;
+    cursor: pointer;
+}
+
+#seaechClear {
+    left: 45px !important;
+}
+
+.serach-clear:hover {
+    color: gray;
+}
+input[type="checkbox"] {
+    position:static;
+    opacity:1;
+}
+
+ 
+.html5buttons{
+    display:none;
+}
+
+.table-responsive{
+    position:relative;
+    padding-bottom:90px;
+    min-height:350px;
+}
+
+.datepicker-plot-area {
+    z-index: 10000;
+}
+
+.dropdown-menu {
+     cursor: pointer; 
+}
+ 
+.bottom-border {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px groove black;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.table.table-bordered.dataTable th, table.table-bordered.dataTable td{
+    border-left-width:1px !important;
+}
+.chosen-container {
+    font-size: 12px !important;
+}
+
+.comboBoxIconLoader {
+    font-size: 20px;
+    left: 15px;
+    top: 32px;
+    position: absolute;
+    color: #843319;
+    display:none;
+}
+.reletive{
+    position:relative;
+}
+ 
+html > body.modal-open {
+    overflow: hidden !important;
+}
+
+.alert.alert-info {
+    border-color: #f3b0b0;
+    /*background: #f9d5d5;*/
+    background: #fcebeb;
+}
+    .alert.alert-info label {
+        color: #a86363;
+    }
+    .alert.alert-info span {
+        color: #a86363;
+    }
+
+.fade.in {
+    background: rgba(0,0,0, 0.5);
+}
+.modal-backdrop{
+    display:none;
+   
+}
+
+.alert-info-icon{
+  font-size:25px;
+  vertical-align:middle;
+  margin-left:5px;
+}
+
+.alert-info-icon {
+    font-size: 25px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.alert-info-text{
+    font-weight:bold;
+/*    text-decoration:underline;*/
+}
+.main-container{
+    height:90vh;
+}
+.page-sidebar .sidebar-menu > li > a {
+    border-top: 1px solid #e6e6e6 !important;
+}
+.table thead.bordered-darkorange > tr > th {
+    border-bottom: 3px solid #d7d7d7;
+}
+.ltr{
+   direction:ltr;
+}
+.modal{
+    direction:ltr;
+}
+.modal-dialog {
+    direction: rtl;
+}
+
+
+
+.checkbox label:after,
+.radio label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin: 5px;  
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+    .checkbox .cr .cr-icon,
+    .radio .cr .cr-icon {
+        position: absolute;
+        font-size: .8em;
+        line-height: 0;
+        top: 50%;
+        left: 20%;
+       
+    }
+
+    .radio .cr .cr-icon {
+        margin-left: 10px;
+    }
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+    .checkbox label input[type="checkbox"] + .cr > .cr-icon,
+    .radio label input[type="radio"] + .cr > .cr-icon {
+        transform: scale(3) rotateZ(-20deg);
+        opacity: 0;
+        transition: all .3s ease-in;
+    }
+
+    .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+    .radio label input[type="radio"]:checked + .cr > .cr-icon {
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+    }
+
+    .checkbox label input[type="checkbox"]:disabled + .cr,
+    .radio label input[type="radio"]:disabled + .cr {
+        opacity: .5;
+    }
+.widget-body{
+    height: auto !important;
+}
+.no-min-height{
+    min-height:0px;
+}
+/*dashboard main page*/
+.dashboard-btn{
+    width:125px;
+    margin:0px;
+    padding:10px 5px 10px 5px;
+    font-size:12px !important;
+}
+.dashboard-lbl {
+    font-size: 16px;
+    font-weight: bold;
+    width: 130px;
+    margin: 5px;
+    padding: 25px;
+    text-align:center;
+}
+.mb15 {
+    margin-bottom:15px;
+}
+.dataTables_empty{text-align:center;}
+
+#Edit_ProductTagsId_chosen ul li, #ProductTagsId_chosen ul li {
+    margin: 5px !important;
+}
+#Edit_ProductTagsId_chosen li.search-choice, #ProductTagsId_chosen li.search-choice {
+    top: 3px;
+}
+.input-validation-error{
+    border-color:red !important;
+}
+.RemainedCreditNegative {
+    border-color: red !important;
+    background-color: #f0abab !important;
+    color: #fff !important;
+}
+
+.note-editor .note-table {
+    direction: ltr;
+}
+
+.note-editor .note-table {
+    right: auto;
+}
+
+.note-editor .note-table-popover {
+    width: 300px;
+}
+
+.note-popover.popover {
+    right: auto !important;
+}
+
+.note-editor .dropdown-menu {
+    left: auto;
+}
+ul.dropdown-menu .tagnestedPro span{
+    padding-left:7px;
+}
+#ProductPropertiesTransferModal .pt-product .chosen-container-multi .chosen-choices {
+    padding: 4px 5px;
+
+}
+    #ProductPropertiesTransferModal .pt-product .chosen-container-multi .chosen-choices li.search-field input {
+        font-family: IRANSans !important;
+        border: 1px solid #e5e5e5;
+    }
+
+
+.pointer-cursor {
+    cursor: pointer !important;
+}
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+#deleteCourse {
+    display:block;
+    margin-right:10px;
+}
+#modelList > tbody > tr > td.td-pos {
+    position: relative;
+}
+
+    #modelList > tbody > tr > td.td-pos .btn-ck {
+        position: absolute;
+        left: 20px;
+        top: 5px;
+    }
+
+    #modelList > tbody > tr > td.td-pos .btn-ck {
+        opacity: .5;
+        transition: all .4s;
+    }
+
+    #modelList > tbody > tr > td.td-pos:hover .btn-ck {
+        opacity: 1;
+        transition: all .4s;
+    }
+.selectedquestion .count {
+    background-color: #ffce55;
+    font-family: IRANSansWeb;
+    color: #796161;
+    padding: 2px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.display-inline {
+    display: inline-block;
+}
+.h-al-a {
+    height:100px;
+}
+.question-ul li {
+    border-radius: 5px;
+    padding: 15px;
+}
+.question-ul li {
+    list-style-type: none;
+}
+.shake-box:hover {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+.returnToQuestionBtn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px
+}
+.empty-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.su-cke {
+    padding: 20px 20px 5px;
+}
+
+    .su-cke .title {
+        float: right;
+        overflow: hidden;
+        padding: 15px;
+        line-height: 1.2;
+        letter-spacing: 2px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .su-cke .title {
+        line-height: 1.2;
+        letter-spacing: 2px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+        .su-cke .title .title-inner {
+            color: #777;
+        }
+
+    .su-cke .btn {
+        float: left;
+        overflow: hidden;
+    }
+ 
+@media only screen and (max-width:992px) {
+    .h-al-a {
+        height: 170px;
+    }
+}

@@ -1,0 +1,55 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.FinancialsViewModels.SalesPartnerUserOptionsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Edit.SalesPartnerUserId"></label>
+                        <select asp-for="Edit.SalesPartnerUserId" class="form-control" data-bind="value: e().SalesPartnerUserId">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            @foreach (var item in ViewBag.SalesPartnerUsers)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Edit.SalesPartnerUserId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.CourseName"></label>
+                        <input readonly="readonly" asp-for="Edit.CourseName" class="form-control" data-bind="value: e().CourseName">
+                        <span asp-validation-for="Edit.CourseName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.SalePartnerIsPrepayment"></label>
+                        <select asp-for="Edit.SalePartnerIsPrepayment" class="form-control" data-bind="value: e().SalePartnerIsPrepayment">
+                            <option value="1">قبل از اعمال تخفیف</option>
+                            <option value="0">پس از اعمال تخفیف</option>
+                        </select>
+                        <span asp-validation-for="Edit.SalePartnerIsPrepayment" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Edit.Amount"></label>
+                        <input type="text" asp-for="Edit.Amount" class="form-control currency" data-bind="value: e().Amount">
+                        <span asp-validation-for="Edit.Amount" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.Percent"></label>
+                        <input asp-for="Edit.Percent" class="form-control" data-bind="value: e().Percent">
+                        <span asp-validation-for="Edit.Percent" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

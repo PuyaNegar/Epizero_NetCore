@@ -1,0 +1,37 @@
+﻿<style type="text/css">
+    .loginmodal-container h3 {
+        text-align: center;
+        font-size: 1.8em;
+    }
+</style>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+       
+                <h3 class="title">ورود به حساب کاربری</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          
+           
+            <br>
+
+            <ul class="nav nav-tabs">
+                <li class="col-md-4 col-xs-12"><a data-toggle="tab" href="#mob" aria-expanded="false">ورود با موبایل</a></li>
+                <li class="col-md-4 col-xs-12 active"><a data-toggle="tab" href="#email" aria-expanded="false">ورود با کلمه عبور</a></li>
+                <li class="col-md-4 col-xs-12"><a data-toggle="tab" href="#regist" aria-expanded="true">حساب کاربری ندارم</a></li>
+            </ul>
+
+            <div class="tab-content">
+                @{ await Html.RenderPartialAsync("_LoginWithMobile.cshtml"); }
+
+                @{ await Html.RenderPartialAsync("_LoginWithUsername.cshtml"); }
+
+                @{ await Html.RenderPartialAsync("_Register.cshtml"); }
+
+               
+            </div>
+            <br>
+            <br>
+
+        </div>
+    </div>
+</div>

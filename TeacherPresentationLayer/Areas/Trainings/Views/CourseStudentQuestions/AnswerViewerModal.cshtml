@@ -1,0 +1,95 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.StudentCourseQuestionsViewModel
+
+<div id="AnswerViewerModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="fa fa-eye" aria-hidden="true"></span><strong>مشاهده پاسخ ها</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label>نام دوره</label>
+                                <input readonly="readonly" class="form-control" data-bind="value: ac().CourseName">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label>نام دانش آموز</label>
+                                <input readonly="readonly" class="form-control" data-bind="value: ac().StudentUserFullName">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label>تاریخ</label>
+                                <input readonly="readonly" class="form-control" data-bind="value: ac().RegDateTime">
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>متن سوال</label>
+                            <textarea readonly="readonly" rows="5" class="form-control" data-bind="value: ac().QuestionContext"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div   class="col-md-12 col-xs-12">
+                            <button data-bind="attr:{'data-Id': ac().Id}"   class="btn btn-success btn-addQuestion"> <i style="vertical-align:middle" class="fa fa-plus"></i> پاسخ دبیر  </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="table-responsive" style="min-height: 150px;">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            @*<th style="width:300px;">پاسخ</th>*@
+                                            <th>نام پاسخ دهنده</th>
+                                            <th>تاریخ ارسال پاسخ</th>
+                                            <th>وضعیت تأیید</th>
+                                            <th>بهترین پاسخ</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- ko foreach: ac().StudentCourseQuestionAnswers -->
+                                        <tr>
+                                            <th scope="row" data-bind="text:  $index()  + 1"></th>
+                                            @*<td data-bind="text: AnswerContext"> </td>*@
+                                            <td data-bind="text: AnsweredUserFullName"></td>
+                                            <td data-bind="text: RegDateTime"></td>
+                                            <td data-bind="text: ConfirmStatusType"></td>
+                                            <td data-bind="text: IsBestAnswer ? 'بلی' : 'خیر'"></td>
+                                            <td><button data-bind="attr: {'data-AnswerPicPath':AnswerPicPath , 'data-AnswerFilePath':AnswerFilePath, 'data-AnswerAudioPath':AnswerAudioPath,'data-Id': Id,'data-AnswerContext': AnswerContext,'data-AnsweredUserFullName': AnsweredUserFullName,'data-RegDateTime': RegDateTime}" class="btn btn-warning btn-answerConfirm btn-sm">مشاهده و تعیین وضعیت</button></td>
+                                        </tr>
+                                        <!-- /ko -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">انصراف</button>
+                    @*<button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>*@
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

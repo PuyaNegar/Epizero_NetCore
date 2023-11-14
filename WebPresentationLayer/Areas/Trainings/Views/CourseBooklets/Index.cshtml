@@ -1,0 +1,191 @@
+﻿@{
+    var CourseBooklets = (List<WebViewModels.TrainingsViewModels.CourseBookletsViewModel>)ViewBag.Data;
+    ViewData["Title"] = "جزوات دوره";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    int i = 1;
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('.btn-description').click(function () {
+            var $title = $(this).find('.title').text();
+            $('.modal-title').html(' جزوه مربوط به   ' + $title);
+            var $text = $(this).find('.descript').text();
+            $('.p-descroiption').html($text);
+            $('#courseBookletDescriptionModal').modal({ backdrop: 'static', keyboard: false });
+            $('#courseBookletDescriptionModal').modal('show');
+        });
+    });
+</script>
+
+<style type="text/css">
+    .modal-title {
+        display: inline-block;
+    }
+
+    .close {
+        float: left;
+    }
+
+    .nav-tabs > li > a {
+        border: unset;
+    }
+
+    .box-tab .main-tab .ul-nav .nav-s .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+
+    .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> جزوات دوره </span>
+        </div>
+    </div>
+</div>
+<section class="box-tab">
+    <div class="container">
+        <!-- Modal -->
+        <div class="modal fade" id="courseBookletDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="p-descroiption">
+
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (CourseBooklets.Any())
+        {
+
+            <div class="legend col-md-12 float-r-o-i">
+                <div class="title-o">
+                    <i class="fa fa-wpforms"></i>
+                    <span>جزوات دوره</span>
+                </div>
+
+                <div class="col-md-12 col-xs-12 main-tab">
+
+                    <div class="col-md-12 hidden-xs">
+                        <div class="col-md-12 title-tbl-div">
+                            <div class="float-r width-d-10 text-align-r min-height-1">
+                                ردیف
+                            </div>
+
+                            <div class="float-r width-d-25 text-align-r f-size-13 bold">
+                                عنوان
+                            </div>
+
+                            <div class="float-r width-d-25  text-align-r">
+                                نام دوره
+                            </div>
+                            <div class="float-r width-d-5  text-align-r">
+
+                            </div>
+                            <div class="float-r width-d-5  text-align-r">
+
+                            </div>
+
+                            <div class="float-r width-d-5  text-align-r">
+
+                            </div>
+
+                            <div class="float-r width-d-5  text-align-r">
+
+                            </div>
+                            <div class="float-r width-d-12  text-align-c">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @foreach (var courseBooklet in CourseBooklets)
+                    {
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                            <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+
+                                <div class="hidden-xs float-r width-d-10 text-align-r">
+                                    @i
+                                </div>
+
+                                <div class="hidden-xs float-r width-d-25 text-align-r bold f-size-12">
+                                    @courseBooklet.Title
+                                </div>
+
+                                <div class="hidden-sm hidden-md hidden-lg col-xs-12  float-r text-align-r bold f-size-12">
+                                    @courseBooklet.Title
+                                </div>
+                                <div class="hidden-xs float-r width-d-25 text-align-r bold f-size-12">
+                                    @courseBooklet.CourseName
+                                </div>
+
+                                <div class="hidden-sm hidden-md hidden-lg col-xs-12  float-r text-align-r bold f-size-12">
+                                    @courseBooklet.CourseName
+                                </div>
+                                <div class="hidden-xs float-r width-d-10 text-align-r min-height-1">
+                                    @*<i class="fa fa-check-circle i-d-0"></i>*@
+                                </div>
+
+                                <div class="hidden-md hidden-lg hidden-sm col-xs-3 float-r text-align-r min-height-1">
+                                    @*<i class="fa fa-check-circle i-d-0"></i>*@
+                                </div>
+
+
+
+                                <div class="div-btn float-r text-align-c min-height-1">
+                                    <a class="bg-color-red ffff bg-round btn-description f-size-12">
+                                        <span class="none descript">@courseBooklet.Description</span>
+                                        <span class="none title">@courseBooklet.Title</span>
+                                        توضیحات
+                                    </a>
+                                </div>
+                                @if (!string.IsNullOrEmpty(courseBooklet.FilePath))
+                                {
+                                    <div class="div-btn float-r text-align-c min-height-1">
+                                        <a class="bg-color-blue ffff bg-round f-size-12" target="_blank" href="@courseBooklet.FilePath">
+                                            دانلود جزوه
+                                        </a>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(courseBooklet.EmbedLink))
+                                {
+                                    <div class="div-btn float-r text-align-c min-height-1">
+                                        <a class="bg-color-yellow ffff bg-round f-size-12" target="_blank" href="/Trainings/ViewOnlineCourseBooklets/Index/@courseBooklet.Id">
+                                            مشاهده آنلاین جزوه
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        i++;
+                    }
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="جزوات دوره"/>
+                    <p>جزواتی برای دوره ثبت نشده است .</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,126 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " لیست دانش آموزان |  مدرسه آنلاین اپیزرو";
+    var courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+}
+<script>
+    $(function () {
+        $('#courseMeetingsComboBox').change(function () {
+            sendDataToServer($(this).val());
+        });
+        //===========================================
+        $('#coursesComboBox').change(function () {
+            $('#courseMeetingsComboBox').find('option').hide();
+            $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').show();
+            var courseMeetingId = $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').eq(0).attr('value');
+            $('#courseMeetingsComboBox').val(courseMeetingId).change();
+        });
+        $('#coursesComboBox').change();
+        //===========================================
+        function sendDataToServer(courseMeetingId) {
+            if (courseMeetingId == null) {
+                mainViewModel.courseMeetingStudents([]);
+                return;
+            }
+            DataTransfer('/api/Trainings/CourseMeetingsStudents/Read?Id=' + courseMeetingId, 'get', '', '.wrapper-parent', function (e) {
+                mainViewModel.courseMeetingStudents(e.Value);
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        }
+      
+
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> لیست دانش آموزان </span>
+        </div>
+    </div>
+</div>
+<section class="list-student">
+    <div class="container">
+        @if (courses.Count() > 0)
+        {
+            <div class="border-i">
+
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="coursesComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    <option value="@course.Id">@course.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="courseMeetingsComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    foreach (var courseMeeting in course.CourseMeetings)
+                                    {
+                                        <option data-courseId="@course.Id" value="@courseMeeting.Id">@courseMeeting.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+    <div class="box-menu">
+        <div class="container">
+            <!-- ko if: courseMeetingStudents().length > 0  -->
+            <div class="legend col-md-12">
+                <div class="title-o">
+                    <i class="fa fa-user"></i>
+                    <span>لیست دانش آموزان</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th style="text-align: center;">نام ونام خوانوادگی</th>
+                                <th style="text-align: center;">جنسیت</th>
+                                <th style="text-align: center;">شهر</th>
+                                <th style="text-align: center; ">دوره</th>
+                                <th style="text-align: center;">نوع ثبت نام</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: courseMeetingStudents() ">
+                            <tr>
+                                <td style="text-align:left" data-bind="text: $index()+1"></td>
+                                <td style="text-align: center;" data-bind="text: StudentFullName"></td>
+                                <td style="text-align: center;" data-bind="text: GenderName"></td>
+                                <td style="text-align: center;" data-bind="text: CityName"></td>
+                                <td style="text-align: center;" data-bind="text: CourseName"></td>
+                                <td style="text-align: center;" data-bind="text: CourseMeetingStudentType"></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+            <!-- /ko -->
+            <!-- ko ifnot: courseMeetingStudents().length > 0 -->
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" />
+                    <p class="place-holder">دانش آموزانی برای این جلسه ثبت نشده است.</p>
+                </div>
+            </div>
+            <!-- /ko -->
+
+        </div>
+    </div>
+</section>

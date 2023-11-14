@@ -1,0 +1,58 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.OnlineExamsViewModels.DescriptiveQuestionsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>مشاهده</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.LessonTopicName"></label>
+                                <input readonly="readonly" asp-for="Edit.LessonTopicName" class="form-control" data-bind="value: e().LessonTopicName">
+                                <span asp-validation-for="Edit.LessonTopicName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.Source"></label>
+                                <input readonly="readonly" asp-for="Edit.Source" class="form-control" data-bind="value: e().Source">
+                                <span asp-validation-for="Edit.Source" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.QuestionTypeName"></label>
+                                <input readonly="readonly" asp-for="Edit.QuestionTypeName" class="form-control" data-bind="value: e().QuestionTypeName">
+                                <span asp-validation-for="Edit.QuestionTypeName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.ResponseTime"></label>
+                                <input type="text" readonly="readonly" asp-for="Edit.ResponseTime" class="form-control" data-bind="value: e().ResponseTime">
+                                <span asp-validation-for="Edit.ResponseTime" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.DifficultyLevelTypeName"></label>
+                                <input type="text" readonly="readonly" asp-for="Edit.DifficultyLevelTypeName" class="form-control" data-bind="value: e().DifficultyLevelTypeName">
+                                <span asp-validation-for="Edit.DifficultyLevelTypeName" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<PanelViewModels.FinancialsViewModels.DiscountCodesViewModel>
+@{
+    ViewData["Title"] = "تخفیفات";
+    ViewData["PageFarsiName"] = "تخفیفات";
+    string Area = "Financials";
+    string Controller = "DiscountCodes";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Create/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        rebulidChosen("#SalePartnerUserId");
+        rebulidChosen("#Edit_CourseMeetingIds");
+        rebulidChosen("#Edit_CourseIds");
+           //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        AddBoxModalOnShow = function () {
+            rebulidChosen("#CourseMeetingIds");
+            rebulidChosen("#CourseIds");
+            if ($('#DiscountCodeTypeId').val() == 1) {
+                $('#MaxDiscountAmount').prop('disabled', true);
+            } else {
+                $('#MaxDiscountAmount').prop('disabled', false);
+            }
+        }
+         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#DiscountCodeTypeId').change(function () {
+            if ($('#DiscountCodeTypeId').val() == 1) {
+                $('#MaxDiscountAmount').prop('disabled', true);
+            } else {
+                $('#MaxDiscountAmount').prop('disabled', false);
+            }
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#AddBox button[type=submit]').click(function () {
+            MainViewModel.c().CourseIds = $('#CourseIds').val();
+            MainViewModel.c().CourseMeetingIds = $('#CourseMeetingIds').val();
+        });
+         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#EditForm button[type=submit]').click(function () {
+            MainViewModel.e().CourseIds = $('#Edit_CourseIds').val();
+            MainViewModel.e().CourseMeetingIds = $('#Edit_CourseMeetingIds').val();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        AddBoxModalOnHide = function () {
+            $('#CourseMeetingIds > option').prop("selected", false);
+            $('#CourseMeetingIds').trigger("chosen:updated");
+            //---------------------------------------------------
+            $('#CourseIds > option').prop("selected", false);
+            $('#CourseIds').trigger("chosen:updated");
+            //----------------------------------------------------
+            $('#SalePartnerUserId > option').prop("selected", false);
+            $('#SalePartnerUserId').trigger("chosen:updated");
+        }
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        EditBoxModelOnShow = function () {
+            for (i = 0; i < MainViewModel.e().CourseMeetingIds.length; i++) {
+                $('#Edit_CourseMeetingIds > option[value=' + MainViewModel.e().CourseMeetingIds[i] + ']').prop("selected", true);
+                $('#Edit_CourseMeetingIds').trigger("chosen:updated");
+            }
+            //--------------------------------------------------
+            for (i = 0; i < MainViewModel.e().CourseIds.length; i++) {
+                $('#Edit_CourseIds > option[value=' + MainViewModel.e().CourseIds[i] + ']').prop("selected", true);
+                $('#Edit_CourseIds').trigger("chosen:updated");
+            }
+        }
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        EditBoxModelOnHide = function () {
+            $('#Edit_CourseMeetingIds > option').prop("selected", false);
+            $('#Edit_CourseMeetingIds').trigger("chosen:updated");
+            //---------------------------------------------------
+            $('#Edit_CourseIds > option').prop("selected", false);
+            $('#Edit_CourseIds').trigger("chosen:updated");
+            //----------------------------------------------------
+            $('#Edit_SalePartnerUserId > option').prop("selected", false);
+            $('#Edit_SalePartnerUserId').trigger("chosen:updated");
+        }
+
+    });
+</script>
+<style type="text/css">
+    .radio {
+        position: relative;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .ct-r {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="Name">نام تخفیف</th>
+                                    <th data-viewModel="Code">کد تخفیف</th>
+                                    <th data-viewModel="DiscountCodeTypeName">نوع کد تخفیف</th>
+                                    <th data-viewModel="AmountOrPercent" data-thousandSeparator="true">مبلغ/درصدتخفیف</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                    <th data-viewModel="SalePartnerUserName">همکار فروش</th>
+                                    <th style="width: 180px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

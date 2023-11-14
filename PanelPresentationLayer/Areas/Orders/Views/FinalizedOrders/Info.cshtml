@@ -1,0 +1,132 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.OrderViewModels.FinalizedOrdersViewModel>
+@using Common.Functions
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>نمایش و تعیین وضعیت سفارش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" style="display:none;">
+                        <label asp-for="Edit.Id"></label>
+                        <input asp-for="Edit.Id" readonly="readonly" type="text" class="form-control" data-bind="value: e().Id">
+                        <span asp-validation-for="Edit.Id" class="danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.InvoiceNo"></label>
+                                <input asp-for="Edit.InvoiceNo" readonly="readonly" type="text" class="form-control" data-bind="value: e().InvoiceNo">
+                                <span asp-validation-for="Edit.InvoiceNo" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.OrderRegDateTime"></label>
+                                <input asp-for="Edit.OrderRegDateTime" readonly="readonly" type="text" class="form-control" data-bind="value: e().OrderRegDateTime">
+                                <span asp-validation-for="Edit.OrderRegDateTime" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.StudentUserFullName"></label>
+                                <input asp-for="Edit.StudentUserFullName" readonly="readonly" type="text" class="form-control" data-bind="value: e().StudentUserFullName">
+                                <span asp-validation-for="Edit.StudentUserFullName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.UserName"></label>
+                                <input asp-for="Edit.UserName" readonly="readonly" type="text" class="form-control" data-bind="value: e().UserName">
+                                <span asp-validation-for="Edit.UserName" class="danger"></span>
+                            </div>
+                        </div>
+                    </div> 
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <center><h5><b>محصولات سفارش</b> </h5> </center>
+                        </div>
+
+                        <div class="col-sm-12 col-xs-12" style="margin:5px 0 20px 0">
+                            <table class="table table-bordered table-hover">
+                                <thead style="background-color:orangered;">
+                                    <tr>
+                                        <th>نوع محصول</th>
+                                        <th>نام محصول</th>
+                                        <th>قیمت</th>
+                                        <th>درصد تخفیف</th>
+                                        <th>مبلغ کد تخفیف</th>
+                                        <th>قیمت نهایی</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: e().OrderDetails">
+                                    <tr>
+                                        <td data-bind="text: AcademyProductTypeName"></td>
+                                        <td data-bind="text: AcademyProductName"></td>
+                                        <td data-bind="text: Price"></td>
+                                        <td data-bind="text: DiscountPercent + '%'"></td>
+                                        <td data-bind="text:  DiscountCodeAmount"></td>
+                                        <td data-bind="text: FinalPrice == 0 ? 'رایگان' : FinalPrice"></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.SubTotal"></label><label>&nbsp;(@AppConfigProvider.GetCurrencyType())</label>
+                                <input asp-for="Edit.SubTotal" readonly="readonly" type="text" class="form-control currency" data-bind="value: e().SubTotal">
+                                <span asp-validation-for="Edit.SubTotal" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.TotalPriceWithDiscount"></label><label>&nbsp;(@AppConfigProvider.GetCurrencyType())</label>
+                                <input asp-for="Edit.TotalPriceWithDiscount" readonly="readonly" type="text" class="form-control" data-bind="value: e().TotalPriceWithDiscount">
+                                <span asp-validation-for="Edit.TotalPriceWithDiscount" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label style="font-size: 12px;" asp-for="Edit.TotalDiscountCodeAmount"></label><label>&nbsp;(@AppConfigProvider.GetCurrencyType())</label>
+                                <input asp-for="Edit.TotalDiscountCodeAmount" readonly="readonly" type="text" class="form-control currency" data-bind="value: e().TotalDiscountCodeAmount">
+                                <span asp-validation-for="Edit.TotalDiscountCodeAmount" class="danger"></span>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.DiscountCode"></label> 
+                                <input asp-for="Edit.DiscountCode" readonly="readonly" type="text" class="form-control currency" data-bind="value: e().DiscountCode">
+                                <span asp-validation-for="Edit.DiscountCode" class="danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.PaymentAmount"></label><label>&nbsp;(@AppConfigProvider.GetCurrencyType())</label>
+                                <input asp-for="Edit.PaymentAmount" readonly="readonly" type="text" class="form-control currency" data-bind="value: e().PaymentAmount">
+                                <span asp-validation-for="Edit.PaymentAmount" class="danger"></span>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                   
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" style="width:100px; height:30px;"> انصراف </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

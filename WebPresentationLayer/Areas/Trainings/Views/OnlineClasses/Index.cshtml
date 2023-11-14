@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "کلاس آنلاین";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    var onlineClasses = (List<OnlineClassesViewModel>)ViewBag.onlineClasses;
+} 
+<script type="text/javascript">
+    $(function () {
+ 
+        //======================================================
+        $('body').on('click', '.enterClassBtn', function () {
+            DataTransfer('/Trainings/OnlineClasses/JoinToClass?CourseMeetingId=' + $(this).attr('data-courseMeetingId'), 'post', '', '.wrapper-parent',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        window.location.href = f.Value;
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error(e.responseJSON.Message);
+                });
+        }); 
+          //======================================================
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> کلاس آنلاین </span>
+        </div>
+    </div>
+</div>
+<section class="online-classes">
+ 
+    <div class="container">
+        <div class="row">
+            @if (onlineClasses.Any())
+            {
+                @foreach (var onlineClass in onlineClasses)
+                {
+                    <div class="col-md-6 col-lg-6 col-xs-12 pull-right m-t-30">
+                        <div class="box-online">
+                            <div class="row">
+                                <div class="col-md-3 pull-right img-user">
+                                    <img alt="@onlineClass.CourseName" src=" @(string.IsNullOrEmpty(onlineClass.TeacherPersonalPicPath) ? "/assets/img/profile_image_man.png" : onlineClass.TeacherPersonalPicPath )" />
+                                </div>
+                                <div class="col-md-9 pull-right content">
+                                    <div class="course"><span class="title">دوره :</span> <span class="text">@(onlineClass.CourseMeetingName + " ( " + onlineClass.CourseName + " ) " )</span></div>
+                                    <div class="teacher"><span class="title">استاد :</span> <span class="text">@onlineClass.TeacherFullName</span></div>
+                                    <div class="btn-area">
+                                        <button class="btn btn-success enterClassBtn" data-courseMeetingId="@onlineClass.CourseMeetingId">ورود به جلسه</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date">
+                                <div class="area-date"> <span class="text">@onlineClass.StartDateTime</span> <span class="title">: تاریخ شروع  </span></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="box-empty">
+                    <div class="empty">
+                        <img src="~/assets/img/box-empty.svg"  alt="کلاس آنلاین"/>
+                        <p>کلاس آنلاینی برای شما ثبت نشده است.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

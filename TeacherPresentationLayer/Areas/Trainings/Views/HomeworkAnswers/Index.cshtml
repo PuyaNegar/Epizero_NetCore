@@ -1,0 +1,256 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " تکالیف دریافتی دانش آموزان |  مدرسه آنلاین اپیزرو";
+    var courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+    var HomeworkAnswers = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherHomeworkAnswersViewModel>)ViewBag.HomeworkAnswers;
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#courseMeetingsComboBox').change(function () {
+                sendDataToServer($(this).val());
+            });
+            $('#addGradForm').submit(function () {
+
+
+                if ($(this).valid()) {
+                    DataTransfer('/Trainings/HomeworkAnswers/UpdateGrade ', 'post', ko.toJSON(mainViewModel.addGradStudents()), '.loader',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.addGradStudents({});
+                            $('.btn-homeworkReceive').eq(0).click();
+                            setTimeout(function () {
+                                $('#addGardeModal').modal('hide');
+                            }, 300);
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('#coursesComboBox').change(function () {
+                $('#courseMeetingsComboBox').find('option').hide();
+                $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').show();
+                var courseMeetingId = $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').eq(0).attr('value');
+                $('#courseMeetingsComboBox').val(courseMeetingId).change();
+               
+            });
+            $('#coursesComboBox').change();
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            function sendDataToServer(courseMeetingId) {
+                if (courseMeetingId == null) {
+                    mainViewModel.homeworkTeachers([]);
+                    return;
+                }
+                DataTransfer('/api/Trainings/Homeworks/Read?Id=' + courseMeetingId, 'get', '', '.wrapper-parent', function (e) {
+                    mainViewModel.homeworkTeachers(e.Value);
+                    $('.btn-homeworkReceive').eq(0).click();
+
+                }, function (e) {
+                    toastr.error(e.responseJSON.Message);
+                });
+            }
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            
+            $('body').on('click', '.btn-homeworkReceive', function () {
+                DataTransfer('/api/Trainings/HomeworkAnswers/Read?Id=' + $(this).attr('data-Id'), 'Get', '', '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.homeworkReceived(f.Value); 
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.btn-description', function () {
+                $('.description-text').html($(this).attr('data-description'));
+                $('#descriptionModal').modal({ backdrop: 'static', keyboard: false });
+                $('#descriptionModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.addGrade', function () {
+                $('#studentFullName').val($(this).attr('data-StudentFullName'))
+                mainViewModel.addGradStudents().HomeworkAnswerId = $(this).attr('data-Id');
+                mainViewModel.addGradStudents().StudentuserId = $(this).attr('data-StudentUserId');
+                $('#addGardeModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addGardeModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.showFile', function () {
+                var fileUrl = $(this).attr('data-file');
+                window.open(fileUrl, '_blank');
+            });
+          
+            
+           
+        });
+    </script>
+}
+<style type="text/css">
+    .box-tab ul {
+        padding-right: 0
+    }
+    .modal-btn .loaderBox {
+        display: inline-block;
+    }
+    .modal-btn  .btn-sm {
+        padding: 3px 10px;
+    }
+    .modal-btn .btn{
+        margin-top:0;
+    }
+    .list-homwork-daryafti .btn-description {
+        height: 25px;
+        line-height: 0.5;
+        padding-top: 6px;
+    }
+
+    .list-homwork-daryafti .btn-info {
+        margin-top: 0px;
+    }
+    #addGardeModal .loaderBox .icon-loader {
+        border-radius: 0 !important;
+    }
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> تکالیف دریافتی دانش آموزان </span>
+        </div>
+    </div>
+</div>
+<section class="box-tab list-student list-homwork-daryafti">
+    <div class="container">
+        @if (courses.Count() > 0)
+        {
+            <div class="border-i">
+
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="coursesComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    <option value="@course.Id">@course.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="courseMeetingsComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    foreach (var courseMeeting in course.CourseMeetings)
+                                    {
+                                        <option data-courseId="@course.Id" value="@courseMeeting.Id">@courseMeeting.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+    <div class="container">
+        <div class="legend m-t-30 col-md-12 float-r-o-i">
+            <div class="title-o">
+                <i class="fa fa-wpforms"></i>
+                <span>تکالیف دریافتی</span>
+            </div>
+
+            <div class="col-md-12 col-xs-12 main-tab">
+                <!-- ko if: mainViewModel.homeworkTeachers().length > 0-->
+                <div class="ul-nav">
+                    <div class="nav-s">
+                        <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg tab-ul-xs">
+                            <!-- ko foreach: mainViewModel.homeworkTeachers()-->
+                            <li data-bind="attr: {'data-Id':Id , class: $index() == 0 ? 'btn-homeworkReceive centered col-centered col-xs-12 active' : 'btn-homeworkReceive centered col-centered col-xs-12'}">
+                                <a data-toggle="tab" href="#menu_0" data-bind="text:Title"> </a>
+                            </li>
+                            <!-- /ko -->
+
+                        </ul>
+                        <ul class="nav nav-tabs hidden-xs tab-ul-lg">
+                            <!-- ko foreach: mainViewModel.homeworkTeachers()-->
+                            <li data-bind="attr: {'data-Id':Id , class: $index() == 0 ? 'btn-homeworkReceive centered col-centered active' : 'btn-homeworkReceive centered col-centered' }">
+                                <a data-toggle="tab" href="#menu_0" data-bind="text:Title " aria-expanded="true"></a>
+                            </li>
+                            <!-- /ko -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <!-- ko if: mainViewModel.homeworkReceived().length > 0 -->
+                    <div id="menu_0" class="tab-pane fade active in">
+                        <div class="table-responsive">
+                            <table class="table table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th class="center">#</th>
+                                        <th class="center">دانش آموز</th>
+                                        <th class="center">تاریخ دریافت</th>
+                                        <th class="center">نمره</th>
+                                        <th class="center">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- ko foreach: mainViewModel.homeworkReceived() -->
+                                    <tr>
+                                        <td class="center" data-bind="text: $index()+1"></td>
+                                        <td class="center" data-bind="text : StudentFullName"></td>
+                                        <td class="center" data-bind="text : RegDateTime"></td>
+                                        <td class="center" data-bind="text : Grade"></td>
+                                        <td class="center">
+                                            <button data-bind="attr:{'data-description':Description}" class="btn btn-success btn-sm btn-description m-t-0">توضیحات</button>
+                                            <!-- ko if:FilePath != null -->
+                                            <button data-bind="attr:{'data-file':FilePath}" class="btn btn-warning btn-sm showFile line-height-1">مشاهده فایل</button>
+                                            <!-- /ko -->
+                                            <button data-bind="attr:{'data-Id':Id,'data-StudentUserId':StudentUserId,'data-StudentFullName':StudentFullName}" class="btn btn-info btn-sm addGrade">افزودن نمره</button>
+                                        </td>
+                                    </tr>
+                                    <!-- /ko -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko ifnot: mainViewModel.homeworkReceived().length > 0 -->
+                    <div class="box-empty">
+                        <div class="empty">
+                            <img src="~/assets/img/box-empty.svg" />
+                            <p>تکلیفی ارسال نشده است .</p>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                </div>
+                <!-- /ko -->
+                <!-- ko ifnot: mainViewModel.homeworkTeachers().length > 0-->
+                <div class="box-empty">
+                    <div class="empty">
+                        <img src="~/assets/img/box-empty.svg" />
+                        <p>تکلیفی برای دانش آموز نشده است .</p>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+</section>
+@{ await Html.RenderPartialAsync("_AddGradePartial");}
+@{ await Html.RenderPartialAsync("_DescriptionHomeWorkPartial");}

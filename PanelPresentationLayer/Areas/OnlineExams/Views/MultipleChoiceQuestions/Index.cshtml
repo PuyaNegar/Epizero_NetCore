@@ -1,0 +1,176 @@
+﻿@model IEnumerable<PanelViewModels.OnlineExamsViewModels.MultipleChoiceQuestionsViewModel>
+@{
+    ViewData["Title"] = "سوالات تستی";
+    ViewData["PageFarsiName"] = "سوالات تستی";
+    string Area = "OnlineExams";
+    string Controller = "MultipleChoiceQuestions";
+}
+<style type="text/css">
+    #modelList > tbody > tr > td:first-child:not(.dataTables_empty) {
+        display: none;
+    }
+
+    #modelList > thead > tr > th:first-child {
+        display: none;
+    }
+
+    td img {
+        z-index: 1 !important;
+    }
+  
+    .tbl-auto tbody tr td p img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto !important;
+        height: auto !important;
+    }
+    .dataTables_empty {
+        display: block;
+        width: 100%;
+    }
+</style>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script id="operands" type="text/html">
+    <a style="width:50px;margin-bottom:5px" class="btn btn-info btn-xs shiny editBtn">ویرایش</a>
+    <a style="width: 50px; margin-bottom: 5px" class="btn btn-warning btn-xs shiny edit"> مشاهده</a>
+    <a style="width: 50px; margin-bottom: 5px" class="btn btn-danger btn-xs shiny deletebtn"> حذف</a>
+</script>
+<script type="text/javascript">
+
+    isDefaultCreateBtn = false;
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        GenerateReturnBtn();
+        //*****************************************************
+        $('#LessonSelectBtn').click(function () {
+            openLessonSelectorModal('', 'LessonId', 'LessonName');
+        });
+        $('#btnPrint, #btnExcel,#delete').remove();
+        //*****************************************************
+        var IsLessonIdInlocalStorage = localStorage.getItem("LessonId");
+        if (IsLessonIdInlocalStorage != null) {
+            $('#LessonId').val(localStorage.getItem("LessonId"));
+            $('#LessonName').val(localStorage.getItem("LessonName"));
+            MainViewModel.fe().LessonId = localStorage.getItem("LessonId");
+            $('#applyFilter').click();
+        }
+        //*****************************************************
+        $('body').on('click','.deletebtn',function () {
+            var elememt = $(this);
+                bootbox.confirm({
+                    message: "آیا برای حذف موارد انتخاب شده مطمئن می باشید؟",
+                    buttons: {
+                        confirm: {
+                            label: 'تایید',
+                            className: 'btn-primary'
+                        },
+                        cancel: {
+                            label: 'انصراف',
+                            className: 'btn-default'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+
+                            var id = table.row(elememt.parents('tr')).data().Id;
+                            var data = { Id: id }
+                            DataTransfer('/OnlineExams/MultipleChoiceQuestions/Delete',
+                                ko.toJSON(data),
+                                '',
+                                function (e) {
+                                    var f = e;
+                                    toastr.remove();
+                                    if (!f.IsSuccess) {
+                                        toastr.error(f.Message);
+                                    } else {
+                                        toastr.success(f.Message);
+                                        if (OnDeletedCallBack != null) {
+                                            OnDeletedCallBack();
+                                        }
+                                        $('#reloadTableBtn').click()
+                                    }
+                                },
+                                function (e) {
+                                    toastr.remove();
+                                    toastr.error("خطا در ارتباط با سرور");
+                                }
+                            );
+                        }
+                    }
+                });
+        });
+        //======================================================================
+        $('body').on('click', '#create', function () {
+            var LessonId = $('#LessonId').val();
+                localStorage.setItem("LessonId", LessonId);
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            var LessonName = $('#LessonName').val();
+            localStorage.setItem("LessonName", LessonName);
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            window.location.href = '/OnlineExams/MultipleChoiceQuestions/QuestionDesignPage/';
+        });
+        //======================================================================
+        $('body').on('click', '.editBtn', function () {
+            var id = table.row($(this).parents('tr')).data().Id
+            window.location.href = '/OnlineExams/MultipleChoiceQuestions/QuestionDesignPage/' + id;
+        });
+        //=========================================================
+        $('body').on('click', '#Selector_LessonBtn', function () {
+            $('#applyFilter').click();
+        });
+
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info">
+                        <div class="row">
+                            @await Html.PartialAsync("_SelectedLessonPartial.cshtml")
+                        </div>
+                    
+                        <input id="applyFilter" type="button" style="display:none;" />
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="tbl-auto table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;"></th>
+                                    <th data-viewModel="QuestionContext_Html" data-orderable="false" style="width: 100%">متن سوال</th>
+                                    <th style="width: 100%">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Edit.cshtml");
+
+                        await Html.RenderPartialAsync("~/Views/Component/LessonSelectorComponent.cshtml");
+
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

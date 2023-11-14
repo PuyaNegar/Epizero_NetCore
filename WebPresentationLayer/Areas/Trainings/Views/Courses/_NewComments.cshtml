@@ -1,0 +1,95 @@
+﻿@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="img-t">
+                <img src="~/assets/img/logo/group 2611356.png" />
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <div class="main-title">
+                <span class="m-t-10">
+                    نظرات جدید
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<section class="question-sec">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="faq-description">
+                    <section class="faq-container">
+                        <div class="faq-one">
+                            <h1 class="faq-page active">نظرات جدید</h1>
+                            <div class="faq-body" style="display:block">
+                                @if (Courses.CourseStudentNewComments.Count() > 0)
+                                {
+                                    <div class="swiper-nazarat swiper-nazarat-d" style="background-color: #fff;">
+                                        <div class="swiper-container swiper10">
+                                            <div class="swiper-wrapper">
+                                                @foreach (var item in Courses.CourseStudentNewComments)
+                                                {
+                                                    <div class="swiper-slide">
+                                                        <div class="sw-img">
+                                                            @if (string.IsNullOrEmpty(item.PersonalPicPath))
+                                                            {
+                                                                <img src="~/assets/img/logo/logo.png" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@item.PersonalPicPath" />
+                                                            }
+
+                                                        </div>
+                                                        <div class="sw-p">
+                                                            <p>
+                                                                @Html.Raw(item.Comment)
+                                                            </p>
+                                                        </div>
+                                                        <div class="sw-des">
+                                                            <div class="sw-name">@item.StudentUserFullName</div>
+                                                            <div class="sw-date">@item.RegDateTime</div>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }else{
+
+                                    <div class="box-empty" style="border-bottom-right-radius:0;border-bottom-left-radius:0;">
+                                        <div class="empty">
+                                            <img src="/assets/img/box-empty.svg"  >
+                                            <p>نظری برای این دوره ثبت نشده است</p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <div class="ersal-newComment">
+                                        <button class="btn btn-info btnSendNewComment">ارسال نظر</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <hr class="hr-line">
+                    </section>
+                    <section class="faq-container-bottom" style="display:none">
+                        <div class="more-setion-bo">
+                            <span>برای مشاهده نظرات جدید کلیک کنید</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

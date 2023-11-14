@@ -1,0 +1,57 @@
+﻿@model  PanelViewModels.EditPrefix<PanelViewModels.IdentitiesViewModels.EditAdminUsersViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Edit.UserName"></label>
+                        <input asp-for="Edit.UserName" readonly="readonly" class="form-control" data-bind="value: e().UserName">
+                        <span asp-validation-for="Edit.UserName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.FirstName"></label>
+                        <input asp-for="Edit.FirstName" class="form-control" data-bind="value: e().FirstName">
+                        <span asp-validation-for="Edit.FirstName" class="danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Edit.UserGroupId"></label>
+                        <select disabled="disabled" asp-for="Edit.UserGroupId" class="form-control" data-bind="value: e().UserGroupId">
+                            <option value="1">مدیر سیستم</option>
+                            <option value="4">پشتیبان</option>
+                            <option value="5">همکار فروش</option>
+                            <option value="6">مشاور</option>
+                        </select>
+                        <span asp-validation-for="Edit.UserGroupId" class="danger"></span>
+                    </div>
+
+                    
+
+                    <div class="form-group">
+                        <label asp-for="Edit.LastName"></label>
+                        <input asp-for="Edit.LastName" class="form-control" data-bind="value: e().LastName">
+                        <span asp-validation-for="Edit.LastName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.IsActive"></label>
+                        <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                            <option value="1">فعال</option>
+                            <option value="0">غیر فعال</option>
+                        </select>
+                        <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

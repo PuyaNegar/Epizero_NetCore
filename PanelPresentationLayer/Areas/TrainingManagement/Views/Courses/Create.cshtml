@@ -1,0 +1,297 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.CoursesViewModel
+@{
+    var FAQs = ViewBag.FAQs;
+    var OldStudentComments = ViewBag.OldStudentComments;
+}
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label asp-for="LessonId"></label>
+                                <div class="input-group">
+                                    <input asp-for="LessonId" type="hidden" class="form-control" data-bind="value: c().LessonId" />
+                                    <input asp-for="LessonName" readonly="readonly" type="text" class="form-control" data-bind="value: c().LessonName" />
+                                    <span class="input-group-btn">
+                                        <button id="LessonSelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="LessonId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" data-bind="value: c().Name">
+                                <span asp-validation-for="Name" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="CourseTypeId"></label>
+                                <select asp-for="CourseTypeId" class="form-control" data-bind="value: c().CourseTypeId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">آنلاین</option>
+                                    <option value="2">آفلاین</option>
+                                    <option value="3">جزوه،کتاب</option>
+                                </select>
+                                <span asp-validation-for="CourseTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="TeacherUserId"></label>
+                                <select asp-for="TeacherUserId" class="form-control" data-bind="value: c().TeacherUserId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Teachers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="TeacherUserId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="LanguageId"></label>
+                                <select asp-for="LanguageId" class="form-control" data-bind="value: c().LanguageId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">فارسی</option>
+                                    <option value="2">ترکی</option>
+                                    <option value="3">کردی</option>
+                                    <option value="4">انگلیسی</option>
+                                </select>
+                                <span asp-validation-for="LanguageId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Price"></label>
+                                <input type="text" asp-for="Price" class="form-control currency" data-bind="value: c().Price">
+                                <span asp-validation-for="Price" class="danger"></span>
+                            </div>
+                        </div>
+                        @* <div class="col-md-4 col-xs-12">
+                        <div class="form-group">
+                        <label asp-for="DiscountPercent"></label>
+                        <input asp-for="DiscountPercent" class="form-control" data-bind="value: c().DiscountPercent">
+                        <span asp-validation-for="DiscountPercent" class="danger"></span>
+                        </div>
+                        </div>*@
+
+
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="CourseDuration"></label>
+                                <input asp-for="CourseDuration" class="form-control" data-bind="value: c().CourseDuration">
+                                <span asp-validation-for="CourseDuration" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="StartDate"></label>
+                                <input asp-for="StartDate" class="form-control" data-bind="value: c().StartDate">
+                                <span asp-validation-for="StartDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="EndDate"></label>
+                                <input asp-for="EndDate" class="form-control" data-bind="value: c().EndDate">
+                                <span asp-validation-for="EndDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="CourseMeetingCount"></label>
+                                <input asp-for="CourseMeetingCount" class="form-control" data-bind="value: c().CourseMeetingCount">
+                                <span asp-validation-for="CourseMeetingCount" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select disabled="disabled" asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option selected="selected" value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsMultiTeacher"></label>
+                                <select asp-for="IsMultiTeacher" class="form-control" data-bind="value: c().IsMultiTeacher">
+                                    <option selected="selected" value="0">خیر</option>
+                                    <option value="1">بلی</option>
+                                </select>
+                                <span asp-validation-for="IsMultiTeacher" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Inx"></label>
+                                <input asp-for="Inx" class="form-control" data-bind="value: c().Inx">
+                                <span asp-validation-for="Inx" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsShowDetailsInWeb"></label>
+                                <select asp-for="IsShowDetailsInWeb" class="form-control" data-bind="value: c().IsShowDetailsInWeb">
+                                    <option selected="selected" value="0">خیر</option>
+                                    <option value="1">بلی</option>
+                                </select>
+                                <span asp-validation-for="IsShowDetailsInWeb" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsVisibleOnSite"></label>
+                                <select asp-for="IsVisibleOnSite" class="form-control" data-bind="value: c().IsVisibleOnSite">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="IsVisibleOnSite" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Audience"></label>
+                                <input asp-for="Audience" class="form-control" data-bind="value: c().Audience">
+                                <span asp-validation-for="Audience" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="MetaDescription"></label>
+                                <input asp-for="MetaDescription" class="form-control" data-bind="value: c().MetaDescription">
+                                <span asp-validation-for="MetaDescription" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="DiscountTypeId"></label>
+                            <select asp-for="DiscountTypeId" type="text" class="form-control" data-bind="value: c().DiscountTypeId">
+                                <option value="1">درصدی</option>
+                                <option value="2">مبلغی</option>
+                            </select>
+                            <span asp-validation-for="DiscountTypeId" class="danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DiscountPercentOrDiscountAmount"></label> 
+                            <input asp-for="DiscountPercentOrDiscountAmount" type="text" class="form-control" data-bind="value: c().DiscountPercentOrDiscountAmount">
+                            <span asp-validation-for="DiscountPercentOrDiscountAmount" class="danger"></span>
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <hr style="visibility:hidden" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="CourseFAQIds"></label>
+                                <select asp-for="CourseFAQIds" class="form-control" data-bind="c().CourseFAQIds" data-placeholder="سوال‌ها را انتخاب کنید" multiple>
+                                    @foreach (var item in FAQs)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CourseFAQIds" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="CommentOldStudentCoursesIds"></label>
+                                <select asp-for="CommentOldStudentCoursesIds" class="form-control" data-bind="c().CommentOldStudentCoursesIds" data-placeholder="نظرات‌  را انتخاب کنید" multiple>
+                                    @foreach (var item in OldStudentComments)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CommentOldStudentCoursesIds" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div><p style="text-align:center">اندازه استاندارد  تصویر بکگراند 320 * 1000 می باشد</p></div>
+                            <div><p style="text-align:center">اندازه استاندارد تصویر زمینه 325 * 525 می باشد</p></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="BannerPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                {
+                                ButtonFarsiName = "آپلود تصویر",
+                                DefualuNullImagePath = "/images/DefaultFlag.png",
+                                Name = "CoursesPicPath",
+                                KnockoutExpressionString = "MainViewModel.c().BannerPicPath",
+                                MaxImageHeight = 2000,
+                                MaxImageWidth = 2000,
+                                MinImageHeight = 1,
+                                MinImageWidth = 1,
+                                MaxImageSize = 500,
+                                Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 2000 در 2000 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                                })
+                            </div>
+                            <span asp-validation-for="BannerPicPath" class="danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="LogoPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                {
+                                ButtonFarsiName = "آپلود تصویر",
+                                DefualuNullImagePath = "/images/DefaultFlag.png",
+                                Name = "LogoPicPath",
+                                KnockoutExpressionString = "MainViewModel.c().LogoPicPath",
+                                MaxImageHeight = 2000,
+                                MaxImageWidth = 2000,
+                                MinImageHeight = 1,
+                                MinImageWidth = 1,
+                                MaxImageSize = 500,
+                                Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 2000 در 2000 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                                })
+                            </div>
+                            <span asp-validation-for="LogoPicPath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

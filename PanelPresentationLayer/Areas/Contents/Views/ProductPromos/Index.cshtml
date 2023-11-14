@@ -1,0 +1,99 @@
+﻿@model IEnumerable<PanelViewModels.ContentsViewModels.ProductPromosViewModel>
+@{
+    ViewData["Title"] = "محصولات سکشن‌های تبلیغاتی";
+    ViewData["PageFarsiName"] = "محصولات سکشن‌های تبلیغاتی";
+    string Area = "Contents";
+    string Controller = "ProductPromos";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Create/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '/@Area/@Controller/Details/', false);
+    $(function () {
+  
+        rebulidChosen("#PromoSection");
+        //***************************************************************************
+        $('#PromoSection').change(function () {
+            $('#applyFilter').click();
+        });
+        //***************************************************************************
+        $('#PromoSection').change();
+          //***************************************************************************
+        EditBoxModalOnShow = function () {
+            $("#Edit_ProductPromoSectionGroupId").val($('#Edit_ProductPromoSectionGroupId').val()).change();
+            rebulidChosen("#Edit_ProductPromoSectionGroupId");
+        }
+        //***************************************************************************
+        AddBoxModalOnShow = function () {
+            $("#ProductPromoSectionGroupId").val($('#ProductPromoSectionGroupId').val()).change();
+            rebulidChosen("#ProductPromoSectionGroupId");
+        }
+         //***************************************************************************
+        AddBoxModalOnHide = function () {
+            UserChosenResetComponent();
+        }
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group" id="ComboBoxSection">
+                                    <label for="PromoSection">لیست سکشن تبلیغاتی</label>
+                                    <select id="PromoSection" class="form-control" data-bind="value : fe().PromoSectionsId" data-placeholder="موردی را انتخاب کنید">
+                                        @foreach (var item in ViewBag.PromoSections)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="false">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="ProductName">نام محصول</th>
+                                    <th data-viewModel="ProductPromoSectionGroupName">سکشن تبلیغاتی</th>
+                                    <th data-viewModel="Inx">اولویت نمایش</th>
+                                    <th style="width: 140px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

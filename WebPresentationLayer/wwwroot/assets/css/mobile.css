@@ -1,0 +1,619 @@
+.content-tbl-f .div-btn {
+    width: 100%
+}
+
+#registerForm .float-r {
+    float:unset;
+}
+.transaction .nav {
+    display: block;
+ 
+} 
+.box-calendar .width-d-15 {
+    width: 30%;
+}
+
+.box-money .box-mon {
+    margin-bottom: 15px;
+}
+.w-f-ms {
+}
+.w-f-ms-k {
+    width: 100%;
+}
+.btn-d-d {
+    width: 100%;
+}
+.mohasebat {
+    height: unset;
+    display: unset;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+    .mohasebat .div-all {
+        display: block;
+    }
+
+        .mohasebat .div-all .balance {
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 0;
+        }
+
+        .mohasebat .div-all .total {
+            border: 1px solid #9ba4a9;
+            border-right: 1px solid #9ba4a9;
+            border-top-left-radius: unset;
+            border-top: none;
+            padding-right: unset;
+            padding-left: unset;
+        }
+
+            .mohasebat .div-all .total .item {
+                font-size: 12px;
+            }
+
+.box-azmon .list-azmon .main .discount-lg {
+    height: 26px;
+    width: 57px;
+    padding-top: 4px;
+}
+
+.box-azmon .list-azmon .main .discount-lg {
+    margin-top: -29px;
+    margin-left: 7px;
+}
+
+.box-azmon .list-azmon .main .btn-lg {
+    margin-left: 88px;
+    margin-top: -27px;
+    height: 26px;
+    padding-top: 2px;
+}
+
+.box-azmon .list-azmon .main .title-lg {
+    padding-left: 18px;
+}
+
+.box-download .content0 .content-tbl-f .as-a-t {
+    width: 100%;
+}
+
+.box-download .content0 .content-tbl-f .btn-dore-lg {
+    width: 100%;
+}
+
+    .box-download .content0 .content-tbl-f .btn-dore-lg .cover {
+        margin-bottom: 20px;
+        text-align: center
+    }
+
+
+.list-azmon-t .list-azmon .main .main-img {
+    float: right;
+    min-height: 130px;
+    width: 100%;
+}
+
+.list-azmon-t  .list-azmon .main .btn-lg {
+    z-index: 100;
+    float: left;
+    height: 26px;
+    margin-top: -28px;
+    padding-top: 0px;
+}
+.list-azmon-t .list-azmon .main .discount-lg {
+    height: 27px !important;
+    margin-top: -32px;
+}
+.list-azmon-t .list-azmon .main {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+
+.container {
+    transform: translateZ(100px);
+    transition: transform 500ms;
+}
+
+    .container.flip {
+        transform: rotateY(90deg) translateZ(288px);
+    }
+.searchBox {
+    position: relative;
+    z-index: 1;
+}
+.main-teacher .content .pic-teacher-banner {
+    width: 100%;
+    height: 130px;
+}
+.main-teacher .content .main-pic-teacher .pic {
+    width: 85px;
+    height: 85px;
+    background-color: #888;
+    text-align: center;
+    margin-top: -7px;
+    margin-left: 2px;
+    border-radius: 100%;
+    float: left;
+}
+.error .page-title {
+    padding-right: 10px;
+}
+.error .not-found .not-found-content {
+    padding-right: 10px;
+}
+    .error .not-found .not-found-content .title {
+        font-size: 20px;
+    }
+.error .not-found .not-found-icon-wrapper {
+    margin-top: 30px;
+}
+.cart .box-main {
+    padding:15px;
+}
+.cart .box-main {
+    display: block;
+}
+.cart .box-dix .form-control {
+    display: inline-block;
+    width:  100% !important;
+}
+.cart .box-main .box-dix {
+   margin-top:10px;
+}
+.cart .factor {
+    padding-right:10px;
+    margin-bottom: 30px;
+}
+    .cart .factor .title {
+        font-size: 14px;
+    }
+    .cart .factor .numbric {
+        font-size: 15px;
+    }
+.error-404-area .notfound h1 {
+    font-size: 35px;
+}
+.error-404-area .notfound h3 {
+    font-size: 20px;
+}
+
+
+.aboutus .description {
+    font-size: 13px;
+}
+
+.cart .box-main {
+    margin-right: 5px;
+}
+.cart .factor {
+    margin-right: 5px;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn {
+    width: unset;
+}
+.productshow .header-main .main .content-text .left .div-main .hid {
+    height: 70px;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn-co {
+    width: unset;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn-co-m {
+    width: 60% !important;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn img {
+    width: 16px;
+    float: right;
+    margin-left: 6px;
+    margin-top: 9px;
+    margin-right: 2px;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn a,
+.productshow .header-main .main .content-text .left .div-main .infobtn a {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.productshow .header-main .main .content-text .left .div-main .infobtn {
+    padding-left: 0;
+    padding-right: 0;
+}
+ 
+
+#MyTransaction .row-com1::after, #MyTransaction .row-com2::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    bottom: 0;
+    right: 0;
+    border-left: 20px solid transparent;
+    border-top: 20px solid transparent;
+}
+
+#MyTransaction .table-row-content .row-com1, 
+#MyTransaction .table-row-content .row-com2{
+    border: 2px solid #ddd;
+}
+
+#MyTransaction .row-com1, 
+#MyTransaction .row-com2{
+    height: 90px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+}
+
+#MyTransaction .row-com1,
+#MyTransaction .row-com2 {
+    height: 90px !important;
+    margin-bottom: 15px;
+}
+#MyTransaction .throw-m-red{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #dd6060;
+}
+#MyTransaction .p-m-plus {
+    font-size: 25px;
+    color: #fff;
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    z-index: 9;
+}
+.table-row-content > div:nth-child(2n) {
+    background-color: beige;
+}
+#MyTransaction .row-com1::after {
+    border-right: 20px solid green;
+    border-bottom: 20px solid green;
+}
+#MyTransaction  .table-row-content {
+    background-color: #fff !important;
+    margin: 0;
+}
+#MyTransaction .dic-m, .row-com1 .div-center, #MyTransaction .row-com2 .div-center {
+    text-align: right;
+}
+#MyTransaction .dic-m, .row-com1 .div-center, #MyTransaction .row-com2 .div-center {
+    text-align: right;
+}
+#MyTransaction .typeInvoice {
+    display: unset;
+}
+#MyTransaction .throw-m-green {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #9fd172;
+}
+#MyTransaction .balance-m  {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-size: 15px;
+    font-weight: 700;
+}
+    #MyTransaction .balance-m , .date-m  {
+        text-align: left;
+    }
+
+#MyTransaction .balance-m {
+    font-size: 15px;
+}
+#MyTransaction .row-com2::after {
+    border-right: 20px solid red;
+    border-bottom: 20px solid red;
+}
+#MyTransaction .p-m-mines {
+    font-size: 37px;
+    color: #fff;
+    position: absolute;
+    right: 7px;
+    bottom: 2px;
+    z-index: 9;
+}
+.credit-main .account-box {
+    max-width: 320px;
+}
+
+.transaction .tab-main-product-show ul {
+    width: 80%;
+}
+.transaction .nav  {
+    padding-right:0;
+}
+
+    .transaction .nav > li, .transaction .nav > li a {
+        width: 100%;
+        display: block;
+ 
+    }
+        .transaction .nav > li, .transaction .nav > li:last-child a {
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+#MyTransaction .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+#MyTransaction .balance-m {
+    text-align: left !important;
+}
+.w-m-100-f {
+    width:100%;
+}
+.txt-w {
+    width:100% !important;
+}
+.btn-dore-xs-d {
+    text-align: center !important;
+}
+.modal-backdrop {
+    z-index: -1;
+}
+.productshow .header-main .main .content .title {
+    
+    margin-left:unset;
+}
+#MyTransaction .table-row-content .row-color {
+    max-height: unset;
+}
+.singleCourse .add-q-btn .all-see-btn,
+.question-main .add-q-btn .all-see-btn {
+    margin-bottom: 10px;
+}
+.singleCourse .tab-pane .box-question .all-a-box,
+.question-main .tab-pane .box-question .all-a-box {
+    margin-right: 10px;
+}
+.singleCourse .tab-pane .box-question .q-text p,
+.question-main .tab-pane .box-question .q-text p {
+    min-width: unset;
+}
+.singleCourse .tab-pane .box-question .box-j p,
+.question-main .tab-pane .box-question .box-j p {
+    min-width: unset;
+}
+.singleCourse .add-q-btn .all-see-btn,
+.question-main .add-q-btn .all-see-btn {
+    font-size: 13px;
+}
+.singleCourse .add-q-btn .btn-a-i,
+.question-main .add-q-btn .btn-a-i {
+    font-size: 13px;
+}
+.singleCourse .add-q-btn,
+.question-main .add-q-btn {
+    text-align: center;
+}
+.searchBox .main-search .input-s {
+    width: 100%;
+}
+.searchBox {
+    width: 100%;
+}
+    .searchBox .main-search {
+        width: 100%;
+    }
+        .searchBox .main-search .mg-t-b {
+            width: 100%;
+        }
+        .searchBox .main-search .input-s {
+ 
+            min-width: unset;
+        }
+            .header-main .row {
+ 
+    display: block;
+    
+}
+.header-main .options-site {
+    float: left !important;
+}
+.searchBox .main-search .mg-t-b {
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+ .videos-epizero .list-box {
+    padding: 0 20px;
+}
+
+ .videos-epizero .box-video-item {
+    width: 48% !important;
+}
+ 
+.productshow .header-main .main .content-text .right {
+    float: right;
+ 
+}
+.productshow .header-main .main .content-text .m-t-90 {
+    /*margin-top:90px;*/
+}
+.videos-epizero .list-items {
+    order: 1;
+}
+.productshow .header-main .main::after {
+ 
+    top: 0px;
+ 
+}
+ .videos-epizero .view-videos .img-mac {
+    width: 90%;
+}
+
+ .videos-epizero .view-videos .box-video {
+    width: 80%;
+    height: 185px;
+}
+
+ .videos-epizero .box-video-item.active::after {
+    right: 0 !important;
+    opacity: 1;
+    left: 0 !important;
+    top: -10px;
+    transform: rotate(28deg);
+    margin: 0 auto;
+}
+
+ .videos-epizero .list-right .box-video-item.active::after {
+    transform: rotate(90deg);
+}
+
+ .videos-epizero .lg-vw,
+ .tabs-epizero .title-section .title-name::after {
+    display: none;
+}
+
+.videos-epizero .box-video-item {
+    font-size: 13px;
+}
+
+ .videos-epizero .view-videos::after {
+    width: 100px;
+    height: 130px;
+    background-size: 80px;
+}
+ 
+    .main-teacher .content .pic-teacher-banner {
+        height: 330px;
+    }
+.productshow .header-main .main .content-text .left .div-main .infobtn .btn {
+    width: 48%;
+}
+.m-b-m-20 {
+    margin-bottom:20px;
+}
+.singleCourse-q .nav-tabs {
+    padding-right:0;
+}
+.singleCourse-q .nav-tabs li{
+  width:100%;
+}
+    .singleCourse-q .nav-tabs li:last-child {
+        width: 100%;
+    }
+
+
+.footer-main .footer-copyright .cp-text {
+  
+    text-align: center;
+}
+.tab-main-product-show ul.nav {
+    width: 100%;
+}
+.descrip-ul-n ul {
+    padding-right:0;
+}
+.transaction .info {
+    flex-direction:column;
+  
+}
+    .transaction .info .m-l-100 {
+        margin-left:0;
+        margin-bottom:30px;
+    }
+.rules-content ul  {
+    padding-right : 5px;
+}
+.azmoons-epizero .item-azmoon .box-azmoon .name-azmoon > a {
+    font-size: 14px;
+}
+.azmoons-epizero .btn-more {
+    padding: 7px 15px;
+    left: 7px;
+    top: 10px;
+}
+
+.comment-teacher .comment-main .comment-txt {
+    min-width: unset;
+}
+.productshow .header-main .main .content .title {
+    position: relative;
+    top: -48px;
+}
+.productshow .header-main .main .content .img-round {
+    margin-left: 25px;
+}
+.productshow .header-main .main .content .img-round {
+    width: 64px;
+    height: 75px;
+}
+
+.singleCourse .img-round .img-1 {
+    right: -125px;
+}
+.singleCourse .img-round .img-2 {
+    left: 80px;
+}
+.singleCourse .img-round .img-3 {
+    left: 35px;
+}
+.singleCourse .img-round .img-4 {
+    left: -10px;
+}
+.singleCourse .img-round .img-5 {
+    left: -42px;
+}
+.productshow .header-main .main {
+    height: auto !important;
+}
+/*.singleCourse .course-type, .singleCourse .language, .singleCourse .session-count, .singleCourse .time {
+    display: none;
+}*/
+
+.azmoons-epizero .item-azmoon .box-azmoon {
+    position: absolute;
+    left: 30px;
+    top: -90px;
+    background-color: #233590;
+    padding: 7px 10px 5px 10px;
+    border-radius: 25px 5px 25px 5px;
+}
+
+.productshow .header-main .main .content-text .left .div-main .course-type,
+.productshow .header-main .main .content-text .left .div-main .language,
+.productshow .header-main .main .content-text .left .div-main .session-count,
+.productshow .header-main .main .content-text .left .div-main .time{
+    display: none;
+}
+
+.productshow .header-main .main {
+    background-size: contain;
+}
+.m-r-100-c {
+    margin-bottom: 20px;
+}
+.none-xs {
+    display:none;
+}
+.singleCourse .btn-dore-xs .cover {
+    width: 95px;
+}
+.c-fmcg-voucher-box--free-shipping {
+ 
+    width: 250px;
+}
+.g-m-p-j {
+    margin-bottom: 100px;
+}
+    .g-m-p-j .chosen-container .chosen-results {
+        max-height: 140px !important;
+    }
+
+
+.singleCourse .tab-pane .box-question .box-j img, .question-main .tab-pane .box-question .box-j img {
+ 
+    right: -13px;
+    top: -18px;
+}

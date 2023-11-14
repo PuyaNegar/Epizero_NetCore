@@ -1,0 +1,386 @@
+﻿@model WebViewModels.IdentitiesViewModels.StudentUserProfileViewModel
+@using Common.Extentions
+@{
+    ViewData["Title"] = " پروفایل  ";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+@section Scripts {
+ 
+    <script>
+
+ 
+        $(function () {
+            $('#navbarNavAltMarkup .navbar-nav').find('.active').removeClass('active');
+            $('#navbarNavAltMarkup .navbar-nav').children("li:nth-child(2)").addClass('active');
+            //=============================================================================
+            $('body').on('click', '#btncopyLink', function () {
+                var copyText = document.querySelector("#texturl");
+                copyText.select();
+                document.execCommand("copy");
+                $(function () {
+                    var $temp = $("<input id='A' type='text' value='#' />".replace(/#/g, $('.textlinkpage').text()));
+                    $("body").append($temp);
+                    $('#btncopyLink').addClass('copied');
+                    $('#btncopyLink').val('کپی شد');
+                    setTimeout(function () {
+                        $('#btncopyLink').removeClass('copied');
+                        $('#btncopyLink').val('کپی لینک')
+                    }, 2000)
+                });
+            });
+ 
+            //=========================================================
+            $(".persian-date").pDatepicker({ format: 'YYYY/MM/DD', initialValue: false, autoClose: true });
+
+            //==========================================================
+            $('#CitySelectBtn').click(function () {
+                openCitySelectorModal('AddBox', 'CityId', 'CityName');
+            });
+            //==========================================================
+            //$('body').on('change', '#LevelId', function () {
+            //    if ($(this).find(":selected").val() < 9)
+            //    {
+            //        $('.fileds').hide();
+            //        mainViewModel.infoProfile().FieldId = null;
+            //    } else
+            //    {
+            //        $('.fileds').show();
+            //    }
+            //});
+            //==========================================================
+            DataTransfer('/api/Identities/UserProfiles/ReadProfiles', 'Get', '', '',
+                function (f) {
+                    toastr.remove();
+                    mainViewModel.infoProfile(f.Value);
+                    PersonalPicPathSetImage();
+                    NationalCardPicPathSetImage();
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error(e.responseJSON.Message);
+                }
+            );
+            //==========================================================
+            $('.edit-account').submit(function () {
+                toastr.remove();
+                if ($(this).valid()) {
+                    mainViewModel.infoProfile().BirthDay = $('#BirthDay').val();
+                    DataTransfer('/api/Identities/UserProfiles/Update', 'post', ko.toJSON(mainViewModel.infoProfile()), '.loader', function (e) {
+                        toastr.success(e.Message);
+                    }, function (e) {
+                        toastr.error(e.responseJSON.Message);
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+}
+
+<style type="text/css">
+ 
+        .chosen-container .chosen-drop {
+        z-index: 999999;
+    }
+        .btn-success {
+ 
+        height: 40px;
+        font-size: 15px;
+        line-height: 15px;
+        margin-top: 0;
+    }
+    .profile input[type=text], .profile input[type=password], .profile select {
+        height: 40px;
+        font-size: 15px;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        border-top: 1px solid #c0c0c0;
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+
+    .btn-se {
+        height: unset !important;
+        font-size: 13px !important;
+        line-height: 15px !important;
+        margin-top: 8px !important;
+    }
+</style>
+@{ await Html.RenderPartialAsync("CitySelectorComponent.cshtml"); }
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> پروفایل من   </span>
+        </div>
+    </div>
+</div>
+<section class="profile">
+    <div class="container">
+        
+        <form class="edit-account">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-xs-12 pull-right">
+                    <div class="personal-pic">
+                        <div class="myAccount-content">
+                            <div class="col-sm-12" style="text-align:center">
+                                <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="PersonalPicPath"></label>
+                                <div class="form-group">
+                                    @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                   new WebPresentationLayer.ComponentModel.ImageUploader()
+                                   {
+                                       ButtonFarsiName = "آپلود تصویر پروفایل",
+                                       DefualuNullImagePath = "/assets/img/user.svg",
+                                       Name = "PersonalPicPath",
+                                       KnockoutExpressionString = "mainViewModel.infoProfile().PersonalPicPath",
+                                       MaxImageHeight = 600,
+                                       MaxImageWidth = 600,
+                                       MinImageHeight = 1,
+                                       MinImageWidth = 1,
+                                       MaxImageSize = 300,
+                                       HasDeleteBtn = false,
+                                       Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n   حداکثر حجم مجاز تصویر : 300 کیلوبایت"
+                                   })
+                                </div>
+                            </div>
+                            <span asp-validation-for="PersonalPicPath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-6 col-xs-12 pull-left">
+                    <div class="national-pic">
+                        <div class="myAccount-content">
+                            <div class="col-sm-12" style="text-align:center">
+                                <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="NationalCardPicPath"></label>
+                                <div class="form-group">
+                                    @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                   new WebPresentationLayer.ComponentModel.ImageUploader()
+                                   {
+                                       ButtonFarsiName = "آپلود عکس کارت ملی",
+                                       DefualuNullImagePath = "/assets/img/national_card.png",
+                                       Name = "NationalCardPicPath",
+                                       KnockoutExpressionString = "mainViewModel.infoProfile().NationalCardPicPath",
+                                       MaxImageHeight = 600,
+                                       MaxImageWidth = 600,
+                                       MinImageHeight = 1,
+                                       MinImageWidth = 1,
+                                       MaxImageSize = 300,
+                                       HasDeleteBtn = false,
+                                       Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n   حداکثر حجم مجاز تصویر : 300 کیلوبایت"
+                                   })
+                                </div>
+                            </div>
+                            <span asp-validation-for="NationalCardPicPath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <hr />
+                </div>
+            </div>
+            <div class="row m-b-20">
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="FirstName">نام</label>
+                        <input readonly asp-for="FirstName" type="text" placeholder="نام" required="" class="form-control" data-bind="value: infoProfile().FirstName">
+                        <span class="validation" asp-validation-for="FirstName"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="LastName">نام خانوادگی</label>
+                        <input readonly asp-for="LastName" type="text" placeholder="نام خانوادگی" required="" class="form-control" data-bind="value: infoProfile().LastName">
+                        <span class="validation" asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                 
+            </div>
+            <div class="row m-b-20">
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="FatherMobNo">شماره موبایل پدر</label>
+                        <input asp-for="FatherMobNo" type="text" placeholder=" شماره موبایل پدر" class="form-control" data-bind="value: infoProfile().FatherMobNo">
+                        <span class="validation" asp-validation-for="FatherMobNo"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="MotherMobNo">شماره موبایل مادر</label>
+                        <input asp-for="MotherMobNo" type="text" placeholder=" شماره موبایل مادر" class="form-control" data-bind="value: infoProfile().MotherMobNo">
+                        <span class="validation" asp-validation-for="MotherMobNo"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="NationalCode">کد ملی</label>
+                        <input asp-for="NationalCode" type="text" placeholder="کد ملی" class="form-control" data-bind="value: infoProfile().NationalCode">
+                        <span class="validation" asp-validation-for="NationalCode"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="BirthDay">تاریخ تولد</label>
+                        <input asp-for="BirthDay" readonly="readonly" type="text" placeholder="تاریخ تولد" class="persian-date form-control" data-bind="value: infoProfile().BirthDay">
+                        <span class="validation" asp-validation-for="BirthDay"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-b-20">
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="FavoriteJob">شغل مورد علاقه در آینده</label>
+                        <input asp-for="FavoriteJob" type="text" placeholder="شغل مورد علاقه در آینده" class="form-control" data-bind="value: infoProfile().FavoriteJob">
+                        <span class="validation" asp-validation-for="FavoriteJob"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="SchoolName">مدرسه</label>
+                        <input asp-for="SchoolName" type="text" placeholder="مدرسه" class="form-control" data-bind="value: infoProfile().SchoolName">
+                        <span class="validation" asp-validation-for="SchoolName"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label for="Gender">جنسیت<span class="required">*</span></label>
+                        <div class="select-box">
+                            <select asp-for="Gender" class="form-control" data-bind="value: infoProfile().Gender">
+                                <option value="1" selected="selected">مرد</option>
+                                <option value="0">زن</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Gender" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label for="SchoolTypeId">نوع مدرسه<span class="required">*</span></label>
+                        <div class="select-box">
+                            <select asp-for="SchoolTypeId" class="form-control" data-bind="value: infoProfile().SchoolTypeId">
+                                <option value="1"> دولتی </option>
+                                <option value="2">غیر انتفاعی </option>
+                                <option value="3">نمونه دولتی</option>
+                                <option value="4">شاهد و ایثارگران</option>
+                                <option value="5">استعدادهای درخشان</option>
+                                <option value="6">سایر موارد</option>
+
+                            </select>
+                        </div>
+                        <span asp-validation-for="SchoolTypeId" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-b-20">
+
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label for="IntroductionWithAcademyTypeId">نحوه آشنایی<span class="required">*</span></label>
+                        <div class="select-box">
+                            <select asp-for="IntroductionWithAcademyTypeId" class="form-control" data-bind="value: infoProfile().IntroductionWithAcademyTypeId">
+                                <option value="1">اس ام اس</option>
+                                <option value="2">معرفی دوستان</option>
+                                <option value="3">اینستاگرام</option>
+                                <option value="4">تلگرام</option>
+                                <option value="5">آپارات</option>
+                                <option value="6">جستجو در گوگل</option>
+                                <option value="7">اساتید</option>
+                                <option value="8">دیگر سایت ها</option>
+                                <option value="10">سایر موارد</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="IntroductionWithAcademyTypeId" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="Email">ایمیل</label>
+                        <input asp-for="Email" type="text" placeholder="ایمیل" class="form-control" data-bind="value: infoProfile().Email">
+                        <span class="validation" asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label for="FeildId">پایه تحصیلی<span class="required">*</span></label>
+                        <div class="select-box">
+                            <select asp-for="LevelId" class="form-control" data-bind="value: infoProfile().LevelId">
+                                <option value=""> لطفا انتخاب کنید ...</option>
+                                @foreach (var item in ViewBag.Levels)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <span asp-validation-for="LevelId" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r fileds">
+                    <div class="form-group">
+                        <label for="FeildId">رشته<span class="required">*</span></label>
+                        <div class="select-box">
+                            <select asp-for="FeildId" class="form-control" data-bind="value: infoProfile().FeildId">
+                                @*<option value=""> لطفا انتخاب کنید ...</option>*@
+                                @foreach (var item in ViewBag.Fields)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <span asp-validation-for="FeildId" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row m-b-20">
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="HomePhoneNumber">تلفن تماس منزل</label>
+                        <input asp-for="HomePhoneNumber" type="text" placeholder="تلفن تماس منزل" class="form-control" data-bind="value: infoProfile().HomePhoneNumber">
+                        <span class="validation" asp-validation-for="HomePhoneNumber"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 float-r">
+                    <div class="form-group">
+                        <label asp-for="CityId">شهر<span class="required">*</span></label>
+                        <div class="input-group">
+                            <input asp-for="CityId" type="hidden" class="form-control" data-bind="value: infoProfile().CityId" />
+                            <input asp-for="CityName" type="text" class="form-control" data-bind="value: infoProfile().CityName" />
+                            <span class="input-group-btn">
+                                <button id="CitySelectBtn" class="btn btn-primery select-btn" type="button">انتخاب</button>
+                            </span>
+                        </div>
+                        <span asp-validation-for="CityId" class="validate-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <label>لینک معرفی</label>
+                        <input id="texturl" style="direction:ltr" type="text" class="form-control left" data-bind="value:'@AppConfigProvider.FrontEndUrl()?IdentifierUserHashId=' +  infoProfile().UserHashId">
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12 flex m-t-25 pull-left">
+                    <input id="btncopyLink" type="button" class="btn btn-success" value="کپی لینک">
+                </div>
+
+            </div>
+            
+
+            <div class="btn-profile center m-b-50 m-t-30">
+                <div class="loaderBox">
+                    <div class="loader">
+                        <div class="icon-loader">
+                            <img src="~/assets/img/loader.svg" alt="ثبت تغییرات اطلاعات پروفایل" />
+                        </div>
+                    </div>
+                    <input type="submit" name="login" class="btn btn-warning" value="ثبت تغییرات">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</section>

@@ -1,0 +1,119 @@
+﻿@using Common.Functions;
+@model PanelViewModels.IdentitiesViewModels.LoginViewModel
+@{
+    Layout = null;
+}
+
+<style type="text/css">
+    .login-container .loginbox .loginbox-social .social-buttons {
+ 
+        padding: 5px 35px !important;
+ 
+    }
+</style>
+ 
+
+
+ 
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset="utf-8" />
+    <title>ورود به سیستم  </title>
+
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+
+ 
+    <link id="beyond-link" href="~/assets/css/beyond.min.css" rel="stylesheet" />
+ 
+    <link href="~/css/login.css" rel="stylesheet" />
+    <link href="~/css/canvas.css" rel="stylesheet" />
+ 
+
+</head>
+<!--Head Ends-->
+<!--Body-->
+<body class=" hero-wrap js-fullheight">
+    <div class="overlay"></div>
+    <div id="particles-js"></div>
+    <form class="login-container animated fadeInDown" style="margin: 5% auto;" asp-action="Login" method="post">
+        <div class="loginbox bg-white" style="border-radius: 10px;">
+            <div class="loginbox-title"> ورود به سیستم</div>
+            <div class="loginbox-social">
+                <div class="social-title ">سیستم مدیریت @AppConfigProvider.GetCompanyName()</div>
+                <div class="social-buttons">
+                   
+                     
+                    <a href="#" class=" ">
+
+                        <img width="60px" src="~/assets/img/3.png" /> 
+                    </a>
+                </div>
+            </div>
+            <div class="loginbox-or">
+                <div class="or-line"></div>
+                <div class="or">  <i class="glyphicon glyphicon-user"></i>  </div>
+            </div>
+            <div class="loginbox-textbox">
+                <input asp-for="Username" required type="text" class="form-control" placeholder="نام کاربری" />
+            </div>
+            <div class="loginbox-textbox">
+                <input asp-for="Password" required type="password" class="form-control" placeholder="رمز عبور" />
+            </div>
+
+            <div class="loginbox-textbox">
+                @if (ViewBag.EnableCaptcha == true)
+                {
+                    <img id="captchaImg" src="/Captcha/Get/" class="img-responsive" style="margin-bottom:10px;cursor:pointer;" title="جهت عوض کردن عکس روی این عکس کلیک کنید" />
+                    <center><div><span style="color:blueviolet;font-size:10px;">جهت عوض کردن عکس روی عکس کلیک کنید</span></div></center>
+                    <input type="text" asp-for="CaptchText" class="form-control" placeholder="متن تصویر را وارد کنید" required style="margin-top:5px;">
+                }
+            </div>
+            @*<div class="loginbox-forgot">
+                    <a href="default.htm">Forgot Password?</a>
+                </div>*@
+            <div class="loginbox-submit">
+                <button type="submit" class="btn btn-primary btn-block"> ورود </button>
+            </div>
+            @*<div class="loginbox-signup">
+                    <a href="register.html">Sign Up With Email</a>
+                </div>*@
+        </div>
+        <div class="logobox" style="height:auto !important;padding:10px;border-radius: 10px;">
+            <div style="text-align:center">
+                لطفا از آخرین نسخه مرورگرهای فایرفاکس و یا گوگل کروم استفاده کنید. جهت دانلود روی عکس هر مرورگر کلیک نمائید.
+            </div>
+            <div style="text-align:center; margin-top:10px;">
+                <a href=""><img src="~/assets/img/chrome.png" style="width:30px; height:30px;" /></a>
+                <a href=""><img src="~/assets/img/firefox.png" style="width:30px; height:30px;" /></a>
+            </div>
+        </div>
+    </form>
+
+    <!--Basic Scripts-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/js/canvas/particles.min.js"></script>
+    <script src="~/js/canvas/particle.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#captchaImg').click(function () {
+                $('#captchaImg').attr('src', '/Captcha/Get/' + Number.parseInt(Math.random() * 100000));
+            });
+        });
+    </script>
+
+</body>
+<!--Body Ends-->
+
+</html>

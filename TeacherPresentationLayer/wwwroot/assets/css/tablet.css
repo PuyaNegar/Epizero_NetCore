@@ -1,0 +1,45 @@
+.content-tbl-f .div-btn {width:100%}
+.box-money .box-mon{
+    margin-bottom: 15px;
+}
+.box-download .content0 .content-tbl-f .btn-dore-lg .cover{text-align: center}
+.Size {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 12px;
+    width: 216px;
+}
+
+.Size-btn {
+    width: auto;
+    margin: 0;
+    float: left;
+}
+
+.size-btn-s {
+    font-size: 12px !important;
+    margin-top: 5px;
+    float: none !important;
+}
+
+table {
+    margin-top: 10px;
+}
+
+.whide-lable {
+    width: 210px !important;
+}
+
+.margin-top-tb {
+    margin-top: 20px;
+}
+
+.detail .title {
+ 
+    line-height: 1.8;
+}
+
+.detail .text {
+ 
+    line-height: 1.8;
+}

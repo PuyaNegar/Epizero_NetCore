@@ -1,0 +1,192 @@
+﻿@model IEnumerable<PanelViewModels.IdentitiesViewModels.UserLoginLogsViewModel>
+@{
+    ViewData["Title"] = "اطلاعات ورود دانش آموزان";
+    ViewData["PageFarsiName"] = "اطلاعات ورود دانش آموزان";
+    string Area = "Identities";
+    string Controller = "UserLoginLogs";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.us = ko.observable({}); // تغییر وضغیت کاربری
+    MainViewModel.his = ko.observable({});
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/TrainingManagement/StudentCourseAndCourseMeetings/Read',
+        '',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#delete,#create').remove();
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        $('body').on('click', '.detailesBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            window.location.href = "/Identities/UserLoginLogsDetails/Index/" + id;
+        });
+        //=======================================================
+        $('body').on('click', '.userStatusBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
+            DataTransfer('/Identities/StudentUsers/GetActiveStatus/', '{"Id": "' + id + '"}', '.spinner',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.us(f.Value);
+                        $('#UserStatusModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#UserStatusModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //========================================================
+        $('#UserStatusForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Identities/StudentUsers/ChangeActiveStatus/', ko.toJSON(MainViewModel.us()), '#resultLoader',
+                    function (e) {
+                        toastr.remove();
+                        var f = e;
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#searchBtn').click();
+                            $('#UserStatusModal').modal('hide');
+                        }
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //**************************************************************************
+        $('#UserStatusModal').on('hidden.bs.modal', function () {
+            resetForm('UserStatusModal', null);
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.Btn-showSavabeg', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            var data = { Id: id }
+            DataTransfer('/Identities/UserLoginLogs/ReadLogHistories', ko.toJSON(data), '',
+                function (e) {
+                    toastr.remove();
+                    var f = e;
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.remove(); 
+                        MainViewModel.his(f.Value);
+                        $('#userLoginHistoriesModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#userLoginHistoriesModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-delete', function () {
+            var Id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            var count = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().DifferentBrowserLoginCount;
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = {
+                            StudentUserId : Id,
+                            LoginCount:count
+                        }
+                        DataTransfer('/Identities/UserLoginLogs/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    $('#reloadTableBtn').click();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script id="operands" type="text/html">
+    <button class="btn btn-success btn-xs detailesBtn" style="margin-right:5px; margin-top:2px; width:80px;float:right;" type="button"><i class="fa fa-remove" style="margin-left: 3px;"></i>جزئیات ورود</button>
+    <button class="btn btn-info btn-xs userStatusBtn" style="margin-right:5px; margin-top:2px; width:120px;float:right;" type="button"><i class="fa fa-remove" style="margin-left: 3px;"></i>تعیین وضعیت کاربری</button>
+    <button class="btn btn-warning btn-xs edit" style="margin-right:5px; margin-top:2px; width:80px;float:right;" type="button"><i class="fa fa-remove" style="margin-left: 3px;"></i>دوره ها</button>
+    <button class="btn btn-azure btn-xs Btn-showSavabeg" style="margin-right:5px; margin-top:2px; width:80px;float:right;" type="button"><i class="fa fa-remove" style="margin-left: 3px;"></i>سوابق</button>
+    <button class="btn btn-danger btn-xs btn-delete" style="margin-right:5px; margin-top:2px; width:80px;float:right;" type="button"><i class="fa fa-remove" style="margin-left: 3px;"></i>Reset</button>
+</script>
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;margin-top:2px;">
+        <button class="btn btn-info btn-xs detailesBtn" type="button" style="margin-right:2px; margin-top:2px; float:right;"><i class="fa fa-eye" style="margin-left: 1px;"></i>مشاهده جزئیات</button>
+    </div>
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-orderable="false" data-viewModel="UserName">نام کاربری</th>
+                                    <th data-orderable="false" data-viewModel="FullName">نام و نام خانوادگی</th>
+                                    <th data-orderable="false" data-viewModel="IsActiveName">وضعیت</th>
+                                    <th data-orderable="false" data-viewModel="DifferentBrowserLoginCount">تعداد دفعات ورود با مرورگر های مختلف</th>
+                                    <th style="width: 490px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{ 
+                        await Html.RenderPartialAsync("UserStatus.cshtml");
+                        await Html.RenderPartialAsync("StudentCourses.cshtml");
+                        await Html.RenderPartialAsync("UserLoginHistoriesModal.cshtml");
+                    }
+                </div>
+            </div> 
+        </div> 
+    </div>
+</div>
+
+
+

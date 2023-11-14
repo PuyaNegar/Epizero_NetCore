@@ -1,0 +1,192 @@
+.content-tbl-f .div-btn {
+    width: 100%
+}
+
+
+.box-calendar .width-d-15 {
+    width: 30%;
+}
+
+.box-money .box-mon {
+    margin-bottom: 15px;
+}
+
+.mohasebat {
+    height: unset;
+    display: unset;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.mohasebat .div-all {
+    display: block;
+}
+
+.mohasebat .div-all .balance {
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 0;
+}
+
+.mohasebat .div-all .total {
+
+    border: 1px solid #9ba4a9;
+    border-right: 1px solid #9ba4a9;
+    border-top-left-radius: unset;
+    border-top: none;
+    padding-right: unset;
+    padding-left: unset;
+}
+
+.mohasebat .div-all .total .item {
+    font-size: 12px;
+}
+
+.box-azmon .list-azmon .main .discount-lg {
+    height: 26px;
+    width: 57px;
+    padding-top: 4px;
+}
+
+.box-azmon .list-azmon .main .discount-lg {
+
+    margin-top: -29px;
+    margin-left: 7px;
+}
+
+.box-azmon .list-azmon .main .btn-lg {
+    margin-left: 88px;
+    margin-top: -27px;
+    height: 26px;
+    padding-top: 2px;
+}
+
+.box-azmon .list-azmon .main .title-lg {
+    padding-left: 18px;
+
+}
+
+.box-download .content0 .content-tbl-f .as-a-t {
+    width: 100%;
+}
+
+.box-download .content0 .content-tbl-f .btn-dore-lg {
+    width: 100%;
+}
+.box-download .content0 .content-tbl-f .btn-dore-lg .cover{margin-bottom: 20px;text-align: center}
+
+
+
+.loginmodal-container {
+    max-width: 320px;
+}
+
+.Size {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 12px;
+    width: 216px;
+}
+
+.Size-btn {
+    width: auto;
+    margin: 0px !important;
+    float: left;
+}
+
+.Size-12 {
+    font-size: 10px;
+}
+
+.size-btn-s {
+    font-size: 14px !important;
+    margin-top: 5px;
+    float: none !important;
+}
+
+table {
+    margin-top: 10px;
+}
+
+.whide-lable {
+    width: 100px !important;
+}
+
+.margin-top-tb {
+    margin-top: 20px;
+}
+
+
+.list-student .btn-r {
+    margin-right:0;
+    font-size:13px;
+}
+.list-student .txt-r {
+
+ width:100%;
+}
+.list-student .btn-r-0 {
+    margin-bottom:25px;
+    margin-top:7px;
+}
+.list-student {
+    margin-top: 40px;
+}
+
+.header-main .options-site {
+    margin-left: 80px;
+}
+.m-b-r-40 {
+    margin-bottom: 40px;
+}
+.courese-area .table-responsive {
+    margin-top: 30px
+}
+.online-classes .date {
+    top: 15px;
+}
+.header-main .logo-site {
+    width:100%;
+}
+.header-main .navbar-epizero {
+    top: 20px;
+    left: 20px;
+}
+.list-student .form-group {
+    margin-bottom: 15px;
+}
+.logo-site {
+    margin-bottom: 12px;
+}
+
+.answer-question-teacher .box-question .q-text p,
+.answer-question-teacher .box-question .q-text p {
+    min-width: unset;
+}
+.answer-question-teacher .box-question .box-j p,
+.answer-question-teacher .box-question .box-j p {
+    min-width: unset;
+}
+.answer-question-teacher .box-question .all-a-box, 
+.answer-question-teacher .box-question .all-a-box {
+    margin-right: 13px;
+}
+    .answer-question-teacher .box-question .all-a-box .box-title .title, .answer-question-teacher .box-question .all-a-box .box-title .title {
+ 
+        padding: 1px 15px 5px 15px;
+    }
+
+.detail {
+ 
+    margin-top: 20px;
+}
+.detail .title {
+    font-size: 13px;
+    line-height: 1.8;
+ 
+}
+
+.detail .text {
+    font-size: 13px;
+    line-height: 1.8;
+ 
+}

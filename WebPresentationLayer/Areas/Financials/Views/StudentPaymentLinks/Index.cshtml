@@ -1,0 +1,163 @@
+﻿
+@{
+    var StudentPaymentLinks = (List<WebViewModels.FinancialsViewModels.StudentPaymentLinksViewModel>)ViewBag.StudentPaymentLinks;
+
+    ViewData["Title"] = "لینک های پرداخت";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    int i = 0;
+}
+<script type="text/javascript">
+    $(function () {
+        $('body').on('click', '#paymentBtn', function () {
+            DataTransfer('/api/Financials/PayPingStudentPaymentLink/GetBankPaymentUrl', 'post', ko.toJSON({ UseCredit: $('#useCredit').prop('checked') }), '.wrapper-parent', function (e) {
+                window.location.href = e.Value.PaymentUrl;
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        });
+    });
+</script>
+<style type="text/css">
+    .transaction {
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+
+        .transaction .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .transaction .info .title {
+            font-size: 17px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .transaction .info .text {
+            font-size: 15px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .transaction .info .linkcharg {
+            line-height: 0px;
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+            .transaction .info .linkcharg:hover {
+            }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> لینک های پرداخت  </span>
+        </div>
+    </div>
+</div>
+@if (StudentPaymentLinks.Any())
+{
+
+ 
+    <section class="cart">
+        <div class="container">
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="center">#</th>
+                            <th class="center"> دانش آموز</th>
+                            <th class="center"> دوره</th>
+                            <th class="center">مبلع (تومان)</th>
+                            <th class="center">وضعیت پرداخت</th>
+                            @*<th class="center">عملیات</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in StudentPaymentLinks)
+                        {
+                            <tr>
+                                <th class="center" scope="row">@(++i)</th>
+                                <td class="center">@item.StudentFullName</td>
+                                <td class="center">@item.CourseName</td>
+                                <td class="center">@string.Format("{0:N0}", item.AmountPayable) </td>
+                                <td class="center">@item.IsPaidName</td>
+                                @*<td class="center">
+                                    <a href="@item.Id" class="btn btn-success enterClassBtn"> پرداخت از کیف پول</a>
+                                </td>*@
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+        <div class="container">
+            <div class="col-md-12 col-xs-12">
+                <hr>
+            </div>
+        </div>
+
+
+
+        <div class="container">
+            <div class="row m-b-50">
+                <div class="col-md-6 col-sm-7 col-xs-12 pull-right">
+                    <div class="factor">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (ViewBag.Balance != 0)
+                            {
+                                <div class="m-b-15">
+                                    <label class="checkbox">
+                                        <span class="title-bag">استفاده از کیف پول : </span>
+                                        <input id="useCredit" type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+
+                                    <span class="numbric"> @string.Format("{0:N0}", ViewBag.Balance) تومان</span>
+                                </div>
+                            }
+
+                        }
+                         
+                        <div class="row m-b-m-20">
+                            <div class=" pull-right m-r-40">
+                                <span class="title  bold">مبلغ قابل پرداخت : </span>
+                            </div>
+                            <div class="  ">
+                                <span class="numbric">@string.Format("{0:N0}", StudentPaymentLinks.Sum(x => x.AmountPayable)) تومان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-5 col-xs-12 pull-left m-t-35">
+                    <div>
+                        <div class="loaderBox">
+                            <div class="loader" wfd-invisible="true"><div class="icon-loader"><img src="/assets/img/loader.svg" alt="عملیات پرداخت" title="عملیات پرداخت"></div></div>
+                            <input id="paymentBtn" type="submit" class="btn btn-success pardakht" value="عملیات پرداخت"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+}
+else
+{
+    <div class="box-empty">
+        <div class="empty">
+            <img src="~/assets/img/box-empty.svg" alt="لینک پرداختی برای شما ثبت نشده است" title="لینک پرداختی برای شما ثبت نشده است" />
+            <p>  لینک پرداختی برای شما ثبت نشده است.</p>
+        </div>
+    </div>
+}

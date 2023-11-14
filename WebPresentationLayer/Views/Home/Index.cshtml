@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "مدرسه آنلاین اپیزرو| کلاس آنلاین کنکور و متوسطه";
+}
+@using WebBusinessLogicLayer.BusinessComponents.ContentsComponents
+@{
+    var result = AboutUsComponent.Find();
+}
+@section MetaTag{
+    <meta name="description" content="@Html.Raw(result.MetaDescription)" />
+    <meta property="og:description" content=" @Html.Raw(result.MetaDescription)" />
+}
+
+
+
+
+<style type="text/css">
+    #teachersModal .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background-color: #dddd;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+    #teachersModal {
+        overflow:hidden;
+    }
+       
+       
+</style>
+<script type="text/javascript">
+    $(function () {
+
+       
+
+    });
+
+</script>
+<main>
+ 
+    @{ await Html.RenderPartialAsync("_HomePageNotificationPartial");}
+    @{ await Html.RenderPartialAsync("_SlidersPartial");}
+    @{ await Html.RenderPartialAsync("_LevelGroupsPartial");}
+    @{
+        await Html.RenderPartialAsync("_CounterPartial");
+    }
+    @{ await Html.RenderPartialAsync("_CoursePartial");}
+    @{ await Html.RenderPartialAsync("_OnlineExamPartial");}
+    @{ await Html.RenderPartialAsync("_TeachersPartial");}
+    @{ await Html.RenderPartialAsync("_EpzirpLinkPartial");}
+
+
+    @{  await Html.RenderPartialAsync("_ConsultantsPartial"); }
+
+   @* @{ await Html.RenderPartialAsync("_BlogsPartial");}*@
+</main>
+
+
+

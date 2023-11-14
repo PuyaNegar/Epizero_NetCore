@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "امور مالی";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+
+<style type="text/css">
+    .transaction {
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+
+        .transaction .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> امور مالی </span>
+        </div>
+    </div>
+</div>
+<section class="transaction">
+    <div class="row">
+        <div class="col-md-12  tab-main-product-show">
+            <ul class="nav nav-tabs">
+                <li class="centered active"><a data-toggle="tab" href="ProductShow.htm#menu3" aria-expanded="false">کیف پول</a></li>
+                <li class="centered "><a data-toggle="tab" href="ProductShow.htm#menu0" aria-expanded="false">تراکنش آنلاین</a></li>
+                <li class="centered"><a data-toggle="tab" href="ProductShow.htm#menu1" aria-expanded="true">صورت های مالی</a></li>
+                <li class="centered"><a data-toggle="tab" href="ProductShow.htm#menu2" aria-expanded="true">تراکنش های اپیزرو کوین</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div id="menu3" class="tab-pane fade active in">
+                    <div class="container">
+                        <div class="row">
+                            @{
+                                await Html.RenderPartialAsync("_CerditPartial.cshtml");
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div id="menu0" class="tab-pane fade ">
+                    <div class="container">
+                        <div class="row">
+                            @{
+                                await Html.RenderPartialAsync("_TransactinsPartial.cshtml");
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                    @{
+                        await Html.RenderPartialAsync("_FinancialSummaryPartial.cshtml");
+                    }
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                    @{
+                        await Html.RenderPartialAsync("_StudentUserScores.cshtml");
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

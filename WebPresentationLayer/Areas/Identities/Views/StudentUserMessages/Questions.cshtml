@@ -1,0 +1,68 @@
+﻿@{
+ 
+}
+<div id="menu3" class="tab-pane">
+    <div class="container">
+
+        <div class="add-q-btn">
+
+
+            <a href="#add-q-box" class="btn-a-i add-a-q btn btn-danger">
+                <i class="fa fa-plus"></i>
+                اگر سوالی دارید بپرسید
+            </a>
+
+        </div>
+
+        <!-- ko if: mainViewModel.studentUserMessages().length > 0-->
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="box-question">
+                    <!-- ko foreach: studentUserMessages-->
+                    <div class="q-text">
+                        <div class="q-title">
+                            <div class="title">
+                                <span>وضعیت : </span> <span style="color: #a26b6b" data-bind="text: IsAnswered ? 'پاسخ داده شده' : 'در انتظار پاسخ' "> </span>
+                                /
+                                <span>تاریخ : </span> <span data-bind="text: RegDateTime"> </span>
+                            </div>
+                        </div>
+                        <div class="btn-txt-j">
+                            <p data-bind="text : QuestionText"></p>
+
+                        </div>
+                    </div>
+
+                    <div class="box-answer" data-bind="if: IsAnswered">
+                        <div class="all-a-box">
+                            <div class="box-title">
+                                <div class="title">
+                                    <span data-bind="text :  'پاسخ توسط' + '(' + AnsweredUserFullName + ')'">پاسخ توسط(مدیر سیستم)</span>
+                                    /
+                                    <span>تاریخ :</span> <span data-bind="text : AnsweredDateTime "> </span>
+                                </div>
+                            </div>
+                            <div class="box-j">
+                                <img src="/assets/img/elemans/check-on.svg" alt="متن سوال پاسخ داده شده  " title="">
+                                <p data-bind="text : AnsweredQuestionText"> </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /ko-->
+
+                </div>
+            </div>
+        </div>
+        <!-- /ko-->
+        <!-- ko ifnot: mainViewModel.studentUserMessages().length > 0-->
+
+        <div class="box-empty">
+            <div class="empty">
+                <img src="~/assets/img/box-empty.svg" alt="پرسش و پاسخی " />
+                <p>پرسش و پاسخی برای   شما ثبت نشده است .</p>
+            </div>
+        </div>
+        <!-- /ko-->
+    </div>
+</div>

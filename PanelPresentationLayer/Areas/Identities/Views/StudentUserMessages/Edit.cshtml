@@ -1,0 +1,67 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.IdentitiesViewModels.StudentUserMessagesViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.StudentUserFullName"></label>
+                                <input readonly="readonly" asp-for="Edit.StudentUserFullName" class="form-control" data-bind="value: e().StudentUserFullName">
+                                <span asp-validation-for="Edit.StudentUserFullName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.RegDateTime"></label>
+                                <input readonly="readonly" asp-for="Edit.RegDateTime" class="form-control" data-bind="value: e().RegDateTime">
+                                <span asp-validation-for="Edit.RegDateTime" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Edit.AnsweredDateTime"></label>
+                                <input readonly="readonly" asp-for="Edit.AnsweredDateTime" class="form-control" data-bind="value: e().AnsweredDateTime">
+                                <span asp-validation-for="Edit.AnsweredDateTime" class="danger"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.QuestionText"></label>
+                                <textarea rows="3" readonly="readonly" asp-for="Edit.QuestionText" class="form-control" data-bind="value: e().QuestionText"> </textarea>
+                                <span asp-validation-for="Edit.QuestionText" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.AnsweredQuestionText"></label>
+                                <textarea rows="3" asp-for="Edit.AnsweredQuestionText" class="form-control" data-bind="value: e().AnsweredQuestionText"> </textarea>
+                                <span asp-validation-for="Edit.AnsweredQuestionText" class="danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

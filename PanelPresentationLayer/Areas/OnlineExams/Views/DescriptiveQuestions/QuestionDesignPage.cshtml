@@ -1,0 +1,237 @@
+﻿@using PanelViewModels.OnlineExamsViewModels
+@model PanelViewModels.OnlineExamsViewModels.DescriptiveQuestionsViewModel
+@using Common.Enums;
+@{
+    Layout = "_QuestionsDesignerLayout";
+    ViewBag.Title = ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create) ? "افزودن سوال تشریحی" : "ویرایش سوال تشریحی";
+    var dtoModel = (DescriptiveQuestionsViewModel)ViewBag.Data;
+    var Id = (QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create ? 0 : dtoModel.Id;
+    var Url = ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create ? "/OnlineExams/DescriptiveQuestions/Add" : "/OnlineExams/DescriptiveQuestions/Update");
+}
+<script type="text/javascript">
+
+        $(function () {
+
+            $("#LessonId").change(function () {
+                CreateComboLoader("/OnlineExams/DescriptiveQuestions/GetLessonTopics/",
+                    "#LessonTopicId",
+                    '',
+                    "Value",
+                    "Text",
+                    $(this).val(),
+                    true,
+                    function () {
+                        @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+                        {
+                            <text>
+                                $('#LessonTopicId').val('@Html.Raw(dtoModel.LessonTopicId)').change();
+                            </text>
+                        }
+                    },
+                    null);
+            });
+
+        //************************************************************************
+             @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create)
+             {   <text>
+                 $('#ResponseTime').val('60').change();
+                 </text>
+             }
+        //************************************************************************
+
+        @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+        {
+            <text>
+        $('#LessonTopicName').val('@Html.Raw(dtoModel.LessonTopicName)').change();
+        $('#ResponseTime').val('@Html.Raw(dtoModel.ResponseTime)').change();
+        $('#Source').val('@Html.Raw(dtoModel.Source)').change();
+        $('#LessonId').val('@dtoModel.LessonId').change();
+
+        $('#DifficultyLevelType').val('@Html.Raw((int)dtoModel.DifficultyLevelType)').change();
+            </text>
+        }
+        $('#GroupSelectBtn').click(function () {
+            openLessonTopicSelectorModal('', 'LessonTopicId', 'LessonTopicName');
+        });
+        //************************************************************************
+        $('body').on('click', '.cancelBtn', function () {
+            window.location.href = "/OnlineExams/DescriptiveQuestions/Index/" + $('#LessonId').val();
+        });
+        //************************************************************************
+            $('#questionsDescriptiveForm').submit(function () {
+            if ($(this).valid()) {
+                toastr.remove();
+                var data = {
+                    Id: @Id ,
+                    QuestionId: 0,
+                    LessonTopicId: $('#LessonTopicId').val(),
+                    ResponseTime: $('#ResponseTime').val(),
+                    LessonId: $('#LessonId').find(":selected").val(),
+                    DifficultyLevelType: $('#DifficultyLevelType').val(),
+                    Source: $('#Source').val(),
+                    QuestionContext: CKEDITOR.instances.QuestionContext.getData(),
+                    QuestionAnswerContext: CKEDITOR.instances.QuestionAnswerContext.getData(),
+                    QuestionContext_Html: $('#cke_QuestionContext').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                    QuestionAnswerContext_Html: $('#cke_QuestionAnswerContext').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                };
+                var url = '@Url';
+                DataTransfer(url, ko.toJSON(data), '#resultLoader', function (e) {
+                    toastr.remove();
+                    if (!e.IsSuccess) {
+                        toastr.error(e.Message);
+                    } else {
+                        toastr.success(e.Message);
+                        setTimeout(function () { window.location.href = "/OnlineExams/DescriptiveQuestions/Index/" + $('#LessonId').val();}, 1000);
+                    }
+                }, function (e) {
+                    toastr.error('خطا در ارتباط با سرور');
+                });
+            }
+            return false;
+            });
+            $("#LessonId").change();
+            $('body').on('click', '.returnToQuestionBtn', function () {
+                $('.cancelBtn').click();
+            });
+    });
+</script>
+@if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+{
+    <script id="questionContextHolder" type="text/html">
+        @Html.Raw(dtoModel.QuestionContext)
+    </script>
+    <script id="questionAnswerContextHolder" type="text/html">
+        @Html.Raw(dtoModel.QuestionAnswerContext)
+    </script>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption"> اطلاعات سوال تشریحی</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <form id="questionsDescriptiveForm" role="form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group reletive">
+                                <label for="LessonId">نام درس</label>
+                                <select id="LessonId" class="form-control">
+                                    @foreach (var item in (List<LessonsViewModel>)ViewBag.Lessons)
+                                    {
+                                        <option value="@item.Id">@(item.Name)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 hidden-xs hidden-sm">
+                            <div class="returnToQuestionBtn form-group">
+                                <a id="returnToQuestionBtn" class="btn btn-default"> <span class="glyphicon glyphicon-backward" aria-hidden="true"></span> بازگشت به صفحه سوالات تشریحی </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group reletive">
+                                <label for="LessonTopicId">نام سرفصل</label>
+                                <select id="LessonTopicId" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="ResponseTime"></label>
+                                <input type="number" asp-for="ResponseTime" class="form-control">
+                                <span asp-validation-for="ResponseTime" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="DifficultyLevelType"></label>
+                                <select asp-for="DifficultyLevelType" class="form-control">
+                                    <option value="1">ساده</option>
+                                    <option value="2">متوسط</option>
+                                    <option value="3">دشوار</option>
+                                </select>
+                                <span asp-validation-for="DifficultyLevelType" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Source"></label>
+                                <input class="form-control" asp-for="Source">
+                                <span asp-validation-for="Source" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr class="col-12" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>متن سوال</label>
+                                <textarea asp-for="QuestionContext" rows="10" cols="80">
+                                   
+                                </textarea>
+                                <span asp-validation-for="QuestionContext" class="danger"></span>
+                                <hr />
+                                <label>متن پاسخ (اختیاری)</label>
+                                <textarea asp-for="QuestionAnswerContext" rows="10" cols="80">
+                                  
+                                </textarea>
+                                <span asp-validation-for="QuestionAnswerContext" class="danger"></span>
+                                <div>
+                                    <script>
+                                        var roxyFileman = '/FileManager/Index';
+                                        var config = {
+                                            filebrowserBrowseUrl: roxyFileman,
+                                            on: {
+                                                instanceReady: function (ev) {
+                                                    document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                                    ev.editor.on('focus', function (e) {
+                                                        document.getElementById(ev.editor.id + '_top').style.display = 'block';
+                                                    });
+                                                    ev.editor.on('blur', function (e) {
+                                                        document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                                    });
+                                                }
+                                            }
+                                        };
+                                       CKEDITOR.replace('QuestionContext', config);
+                                       CKEDITOR.replace('QuestionAnswerContext', config);
+                                       @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+                                       {
+                                        <text>
+                                        CKEDITOR.instances.QuestionContext.setData($('#questionContextHolder').html());
+                                        CKEDITOR.instances.QuestionAnswerContext.setData($('#questionAnswerContextHolder').html());
+                                        </text>
+                                       }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-sm cancelBtn" data-dismiss="modal">انصراف</button>
+                                <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @{
+        // await Html.RenderPartialAsync("~/Views/Component/LessonTopicSelectorComponent.cshtml");
+    }
+</div>

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<PanelViewModels.FinancialsViewModels.SalesPartnerUserSharesViewModel>
+@{
+    ViewData["Title"] = "سهم همکار فروش";
+    ViewData["PageFarsiName"] = "سهم همکار فروش";
+    string Area = "Financials";
+    string Controller = "SalesPartnerUserShares";
+}
+<script>
+    $(function () {
+        $('#delete, #create').remove();
+    });
+</script>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script id="operands" type="text/html">
+    <button class="btn btn-info btn-xs edit" type="button" style="margin-right:2px; margin-top:2px;  float:right;"><i class="fa fa-eye" style="margin-left: 1px;"></i>  مشاهده جزئیات </button>
+</script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#SalePartnerSelectorBtn').click(function () {
+            $('#SalePartnerSelectorModal').modal({ backdrop: 'static', keyboard: false });
+            $('#SalePartnerSelectorModal').modal('show');
+        }); 
+        //===============================================
+        $('#applySelectedSalesPartnerUser').click(function () {
+            if (IsNullOrEmptyString($('#Selected_SalesPartnerUserId').val())) {
+                toastr.remove();
+                toastr.error('هیچ نماینده فروشی را انتخاب نکرده اید');
+                return;
+            }
+            $('#selectedSalesPartnerUserName').html($('#ComboBoxSalesPartnerUserChosen > .ComboBoxContainer-ul > .ComboBoxContainer-li > span').html());
+            MainViewModel.fe().UserId = $('#Selected_SalesPartnerUserId').val();
+            $('#applyFilter').click();
+            $('#SalePartnerSelectorModal').modal('hide');
+        }); 
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-warning">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>نماینده فروش : </label>
+                                        <span id="selectedSalesPartnerUserName" style="font-weight: bold;margin-left: 30px;"> انتخاب نشده </span>
+                                        <button id="SalePartnerSelectorBtn" style=" margin-left:30px;" type="button" class="btn btn-primary btn-sm">انتخاب نماینده فروش</button>
+                                        <input id="applyFilter" type="button" style="display:none;" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="DiscountCode">کد</th>
+                                    <th data-viewModel="StudentFullName">دانش آموز</th>
+                                    <th data-viewModel="SalesPartnerShareTypeName">نوع کد تخفیف</th>
+                                    <th data-viewModel="SalePartnerAmountOrPercent" data-thousandSeparator="true">مبلغ/درصد</th>
+                                    <th data-viewModel="SalePartnerIsPrePayment">نوع محاسبه</th>
+                                    <th data-viewModel="LessonsUsedCount">تعداد درس استفاده شده</th>
+                                    <th data-viewModel="SumOfSalePartnerShares" data-thousandSeparator="true">سهم همکار فروش</th>
+                                    <th style="width: 140px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("SalesPartnerUserSelect.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

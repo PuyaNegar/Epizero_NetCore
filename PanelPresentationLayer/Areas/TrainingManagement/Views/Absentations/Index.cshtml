@@ -1,0 +1,190 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.AbsentationsViewModel>
+@{
+    ViewData["Title"] = "لیست حضور غیاب ها";
+    ViewData["PageFarsiName"] = "لیست حضور غیاب ها";
+    string Area = "TrainingManagement";
+    string Controller = "Absentations";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+ 
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/ReadByCourseMeeting/',
+        '',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', false);
+    $(function () {
+       isDefaultCreateBtn = false;
+        GenerateReturnBtn();
+        $('#CourseMeetings').change(function () {
+            $('#applyFilter').click();
+        });
+        $('#CourseMeetings').change();
+        //==========================================================
+        $('body').on('change', '.checkbox-all', function () {
+            $(".itemcheckbox").prop('checked', $(this).is(":checked")); 
+            for (i = 0; MainViewModel.e().StudentsAbsentationState.length; i++) {
+                MainViewModel.e().StudentsAbsentationState[i].IsPresent = $(this).is(":checked");
+            }
+        });
+        //==========================================================
+        $('body').on('change', '.add-checkbox-all', function () {
+            $(".itemcheckbox").prop('checked', $(this).is(":checked"));
+            for (i = 0; MainViewModel.c().StudentsAbsentationState.length; i++) {
+                MainViewModel.c().StudentsAbsentationState[i].IsPresent = $(this).is(":checked");
+            }
+        });
+        //==========================================================
+        $('#create').click(function () {
+            var id = $('#CourseMeetings').val();
+            if (id == null) {
+                toastr.remove();
+                toastr.error('جلسه اننخاب نشده است');
+                return;
+            }
+            DataTransfer('/TrainingManagement/Absentations/ReadForAdd?CourseMeetingId=' + id, '', '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.c(f.Value);
+                        if (f.Value.IsAbsentationsDone == 1) {
+                            toastr.error('حضور غیاب برای امروز انجام شده است لطفا برای تغییر از بخش ویرایش اقدام نمایید');
+                        } else {
+                        $('#AddBox').modal({ backdrop: 'static', keyboard: false });
+                        $('#AddBox').modal('show');
+                        }
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+         //=======================================================================================
+        $('body').on('click', '.viewAbsentationBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            var date = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Date;
+            DataTransfer('/TrainingManagement/Absentations/ReadForUpdate?CourseMeetingId=' + id + '&Date=' + date, '', '.spinner',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.e(f.Value);
+                        $('#EditBox').modal({ backdrop: 'static', keyboard: false });
+                        $('#EditBox').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+
+
+        $('#EditForm button[type=submit]').click(function () {
+            $('#edit_absentations_table .itemcheckbox').change();
+        });
+
+        //$('#aaaa').click(function () {
+        //    var data = {
+        //        Id: MainViewModel.e().Id,
+        //        CourseMeetingId: $('#CourseMeetings').val(),
+        //        StudentUserIds : [] ,
+        //    }
+        //    for (i = 0; i < $('#edit_absentations_table .itemcheckbox:checked').length; i++) {
+        //        data.StudentUserIds.push($('#edit_absentations_table .itemcheckbox:checked').eq(i).attr('data-studentuserid'));
+        //    }
+
+
+
+        //    alert(JSON.stringify(data));
+        //});
+
+        //=======================================================================================
+        $('#EditBox').on('hidden.bs.modal', function () {
+            $('.checkbox-all').prop('checked', false);
+        });
+        $('#AddBox').on('hidden.bs.modal', function () {
+            $('.add-checkbox-all').prop('checked', false);
+        });
+        //$('#editBtn').click(function () {
+        //    alert(ko.toJSON(MainViewModel.e()));
+        //});
+
+        //$('#addBtn').click(function () {
+        //    alert(ko.toJSON(MainViewModel.c()));
+        //});
+    });
+</script>
+<script id="operands" type="text/html">
+    <button class="btn btn-info btn-xs viewAbsentationBtn" type="button" style="margin-right:5px; margin-top:2px;width:120px; float:right;"><i class="fa fa-pencil" style="margin-left: 1px;"></i>جزئیات حضور غیاب</button>
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="margin-bottom: 0; color: #a86363; font-size: 14px !important; padding: 7px;" class="form-group">
+                                    <span class="glyphicon glyphicon-time alert-info-icon"></span> حضور غیاب دانش آموزان مربوط به دوره    <span class="alert-info-text"> @(ViewBag.CourseName)   </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="form-group reletive">
+                                    <label for="ProductCategory">جلسات</label>
+                                    <select id="CourseMeetings" class="form-control" data-bind="value: fe().CourseMeetingId">
+                                        @foreach (var item in ViewBag.CourseMeetings)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;"></th>
+                                    <th data-viewModel="Date" data-orderable="false">تاریخ حضور غیاب</th>
+                                    <th style="width: 180px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

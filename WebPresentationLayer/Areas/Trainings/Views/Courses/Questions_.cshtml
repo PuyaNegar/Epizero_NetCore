@@ -1,0 +1,92 @@
+﻿@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+<section class="question-sec">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="faq-description">
+                    <section class="faq-container">
+                        <div class="faq-one">
+                            <h1 class="faq-page">پرسش و پاسخ @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? " دوره " : " آزمون ")</h1>
+
+                            <div class="faq-body">
+                                <div class="question-m">
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="box-q">
+                                                <div class="q-top">
+                                                    <div class="q-img">
+                                                        <img src="~/assets/img/logo/logo.png" />
+                                                    </div>
+                                                    <div class="q-name">
+                                                        <span>نازنین محمودی می پرسد :</span>
+                                                    </div>
+                                                </div>
+                                                <div class="q-bottom">
+                                                    <div class="q-text">
+                                                        <p>
+                                                            فاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-xs-12">
+                                       
+                                            <div class="box-q align-items-end">
+                                              
+                                                 
+                                                    <div class="">
+                                                        <div class="q-top">
+                                                            <div class="q-img">
+                                                                <img src="~/assets/img/logo/logo.png" />
+                                                            </div>
+                                                            <div class="q-name">
+                                                                <span>استاد آتش پز پاسخ داد</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="q-bottom">
+                                                        <img src="/assets/img/elemans/check-on.svg">
+                                                            <div class="q-text">
+                                                                <p>لکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                          
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="add-q-e">
+                                                <div class="add-q-btn">
+                                                    @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse || Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any())
+                                                    {
+                                                        <a href="#add-q-box" class="btn-a-i add-a-q btn btn-danger">
+
+                                                            سوال خود را بپرسید
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <hr class="hr-line">
+                    </section>
+                    <section class="faq-container-bottom ">
+                        <div class="more-setion-bo">
+                            <span>  برای مشاهده پرسش و پاسخ <span> @(Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training ? "  دوره  " : "  آزمون  ")</span> کلیک کنید</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

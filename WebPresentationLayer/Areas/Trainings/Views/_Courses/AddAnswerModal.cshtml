@@ -1,0 +1,113 @@
+﻿@model WebViewModels.TrainingsViewModels.AddCourseStudentQuestionAnswersViewModel
+
+<div class="modal fade" id="addAnswerModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ارسال پاسخ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="addQuestion" id="addAnswerForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="AnswerContext"></label>
+                                <textarea asp-for="AnswerContext" rows="3" type="text" class="form-control" data-bind="value:questionAnswerAdd().AnswerContext"></textarea>
+                                <span class="validation" asp-validation-for="AnswerContext"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                            <div class="personal-pic">
+                                <div class="myAccount-content">
+                                    <div style="text-align:center">
+                                        <div class="form-group">
+                                            @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                            new WebPresentationLayer.ComponentModel.ImageUploader()
+                                            {
+                                            ButtonFarsiName = "انتخاب تصویر",
+                                            DefualuNullImagePath = "/assets/img/DefaultFlag.svg",
+                                            Name = "AnswerPicPath",
+                                            KnockoutExpressionString = "mainViewModel.questionAnswerAdd().AnswerPicPath",
+                                            MaxImageHeight = 3000,
+                                            MaxImageWidth = 3000,
+                                            MinImageHeight = 1,
+                                            MinImageWidth = 1,
+                                            MaxImageSize = 20480,
+                                            HasDeleteBtn = false,
+                                            //Description = "   حداکثر حجم مجاز تصویر : 300 کیلوبایت"
+                                            })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                                new WebPresentationLayer.ComponentModel.FileUploader()
+                                {
+                                ButtonFarsiName = "انتخاب فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.svg",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "AnswerFilePath",
+                                KnockoutExpressionString = "mainViewModel.questionAnswerAdd().AnswerFilePath",
+                                HasDeleteBtn = false,
+                                MaxFileSize = 20480,
+                                //Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+                                })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row audio-div">
+                        <div class="col-md-12">
+                            <div class="audio-record">
+                                <button class="removeButton" type="button" id="answer_removeButton">
+                                    حذف ضبط <i class="fa fa-remove" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" id="answer_stopButton" class="inactive stopButton">
+                                    توقف ضبط <i class="fa fa-stop" aria-hidden="true"></i>
+                                </button>
+                                <button class="recordButton" type="button" id="answer_recordButton">
+                                    شروع ضبط <i class="fa fa-microphone" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="playback">
+                                <audio src="" controls id="answer_audioplayback" class="hidden audio-playback"></audio>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+                                <button type="submit" style=" height: 25px; margin-top: 7px; padding-top: 3px;" class="btn btn-warning btn-sm">
+                                    ثبت پاسخ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

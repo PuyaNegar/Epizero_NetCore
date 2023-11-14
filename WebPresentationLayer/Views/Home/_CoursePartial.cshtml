@@ -1,0 +1,151 @@
+﻿
+@using WebViewModels.ContentsViewModels
+@{
+    var CoursePromos = (List<CoursePromoSectionsViewModel>)ViewBag.Data.CoursePromoSections;
+    var i = 2;
+}
+@if (CoursePromos.Any())
+{
+    @foreach (var item in CoursePromos)
+    {
+
+        <section class="title-color">
+            <div class="container SearchPAll">
+                <div class="split-c">
+                    <hr class="hr" />
+                    <h2 class="pad-line-s split-liner">
+                        @item.Title
+                    </h2>
+                </div>
+            </div>
+            <div class="container-fluid new-course">
+                <div class="row">
+                    <div style="clear:both;"></div>
+                    <div class="swiper-container swiper-teach">
+                        <div class="swiper-wrapper">
+                            @foreach (var coursePromos in item.CoursePromos)
+                            {
+                                <div class="swiper-slide">
+                                    <a>
+                                        <div data-aos="fade-right" class="col-md-12 col-sm-12 col-xs-12 main-new-course">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                                <div class="div-main-img">
+                                                    @if (string.IsNullOrEmpty(coursePromos.LogoPicPath))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(coursePromos.BannerPicPath))
+                                                        {
+                                                            <a title="@coursePromos.Name" href="/Trainings/Courses/Index?CoursesId=@coursePromos.Id">
+
+                                                                <img title="@coursePromos.Name" alt="@coursePromos.Name" src="@coursePromos.BannerPicPath" />
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a title="@coursePromos.Name" href="/Trainings/Courses/Index?CoursesId=@coursePromos.Id">
+
+                                                                <img title="@coursePromos.Name" alt="@coursePromos.Name" src="~/assets/img/2020-10-10-03-44-15pm-adabiat6.png" />
+                                                            </a>
+                                                        }
+                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        <a title="@coursePromos.Name" href="/Trainings/Courses/Index?CoursesId=@coursePromos.Id">
+                                                            <img title="@coursePromos.Name" alt="@coursePromos.Name" src="@coursePromos.LogoPicPath">
+                                                        </a>
+                                                    }
+                                                </div>
+
+                                                <div class="div-title-content">
+                                                    <a title="@coursePromos.Name" href="/Trainings/Courses/Index?CoursesId=@coursePromos.Id">
+                                                        @coursePromos.Name
+                                                    </a>
+                                                    <br />
+                                                    <span>
+                                                        @coursePromos.TeacherFullName
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    @if (coursePromos.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Any())
+                                                    {
+                                                        @foreach (var isIndexteacher in coursePromos.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                                                        {
+                                                            <div class="div-img-small1">
+                                                                @if (string.IsNullOrEmpty(coursePromos.TeacherPersonalPicPath))
+                                                                {
+                                                                    <a href="/Contents/TeacherIntroductions?teacherId=@isIndexteacher.TeacherUserId"> <img src="~/assets/img/logo.png" alt="@isIndexteacher.TeacherFullName" title="@coursePromos.TeacherFullName" /></a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="/Contents/TeacherIntroductions?teacherId=@isIndexteacher.TeacherUserId"> <img title="@isIndexteacher.TeacherFullName" alt="@isIndexteacher.TeacherFullName" src="@isIndexteacher.PersonalPicPath" /></a>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="div-img-small1">
+                                                            @if (string.IsNullOrEmpty(coursePromos.TeacherPersonalPicPath))
+                                                            {
+                                                                <a href="/Contents/TeacherIntroductions?teacherId=@coursePromos.TeacherUserId"> <img src="~/assets/img/logo.png" alt="@coursePromos.TeacherFullName" title="@coursePromos.TeacherFullName" /></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="/Contents/TeacherIntroductions?teacherId=@coursePromos.TeacherUserId"> <img title="@coursePromos.TeacherFullName" alt="@coursePromos.TeacherFullName" src="@coursePromos.TeacherPersonalPicPath" /></a>
+                                                            }
+                                                        </div>
+                                                    }
+
+
+
+                                                    @foreach (var teacher in coursePromos.CourseDedicatedTeachers.Where(c => !c.IsIndexTeacher).Take(3))
+                                                    {
+                                                        <div class="div-img-small@(i)">
+                                                            @if (string.IsNullOrEmpty(teacher.PersonalPicPath))
+                                                            {
+                                                                <a href="/Contents/TeacherIntroductions?teacherId=@teacher.TeacherUserId"><img src="~/assets/img/logo.png" alt="@teacher.TeacherFullName" title="@teacher.TeacherFullName" /></a>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="/Contents/TeacherIntroductions?teacherId=@teacher.TeacherUserId"><img title="@teacher.TeacherFullName" alt="@teacher.TeacherFullName" src="@teacher.PersonalPicPath" /></a>
+                                                            }
+                                                        </div>
+                                                        i++;
+                                                    }
+                                                    @{i = 2;}
+                                                </div>
+
+                                                <div data-academyProductTypeId="1" data-academyProductId="@coursePromos.Id" data-toggle="tooltip" data-placement="bottom" title="افزودن به سبد" class="cart-btn div-cart-main">
+                                                    <img src="/assets/img/sabab1.png" alt="افزودن به سبد خرید  @coursePromos.Name" />
+                                                    <div class="box"></div>
+                                                </div>
+                                                @if (coursePromos.DiscountPercent != 0)
+                                                {
+                                                    <div class="discount">
+                                                        %@string.Format("{0:N0}", coursePromos.DiscountPercent)
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination-teach"></div>
+                        <!-- Add Arrows -->
+                        @*<div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>*@
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+
+

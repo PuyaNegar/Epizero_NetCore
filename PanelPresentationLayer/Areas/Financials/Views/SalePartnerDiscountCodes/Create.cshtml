@@ -1,0 +1,222 @@
+﻿@model PanelViewModels.FinancialsViewModels.DiscountCodesViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="alert alert-warning">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="NumberOfGeneration"></label>
+                                            <input type="number" min="1" max="100" asp-for="NumberOfGeneration" class="form-control" data-bind="value: c().NumberOfGeneration">
+                                            <span asp-validation-for="NumberOfGeneration" class="danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="CodeStartWith"></label>
+                                            <input asp-for="CodeStartWith" class="form-control" data-bind="value: c().CodeStartWith">
+                                            <span asp-validation-for="CodeStartWith" class="danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="CodeRandomCharacter"></label>
+                                            <select asp-for="CodeRandomCharacter" class="form-control" data-bind="value: c().CodeRandomCharacter">
+                                                <option value="2">2 حرفی</option>
+                                                <option value="3">3 حرفی</option>
+                                                <option value="4">4 حرفی</option>
+                                            </select>
+                                            <span asp-validation-for="CodeRandomCharacter" class="danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="CodeEndWith"></label>
+                                            <input asp-for="CodeEndWith" class="form-control" data-bind="value: c().CodeEndWith">
+                                            <span asp-validation-for="CodeEndWith" class="danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="DiscountCodeTypeId"></label>
+                                <select asp-for="DiscountCodeTypeId" class="form-control dddd" data-bind="value: c().DiscountCodeTypeId">
+                                    <option value="1">مبلغ</option>
+                                    <option value="2">درصد</option>
+                                </select>
+                                <span asp-validation-for="DiscountCodeTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="AmountOrPercent"></label>
+                                <input type="text" asp-for="AmountOrPercent" class="form-control currency" data-bind="value: c().AmountOrPercent">
+                                <span asp-validation-for="AmountOrPercent" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input type="text" asp-for="Name" class="form-control" data-bind="value: c().Name">
+                                <span asp-validation-for="Name" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="MaxDiscountAmount"></label>
+                                <input type="text" asp-for="MaxDiscountAmount" class="form-control currency" data-bind="value: c().MaxDiscountAmount">
+                                <span asp-validation-for="MaxDiscountAmount" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option value="1"> فعال</option>
+                                    <option value="2"> غیرفعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsUseableForDiscountAcademyProduct"></label>
+                                <select asp-for="IsUseableForDiscountAcademyProduct" class="form-control" data-bind="value: c().IsUseableForDiscountAcademyProduct">
+                                    <option value="1"> فعال</option>
+                                    <option value="2"> غیرفعال</option>
+                                </select>
+                                <span asp-validation-for="IsUseableForDiscountAcademyProduct" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="StartDate"></label>
+                                <input data-mask="9999/99/99" asp-for="StartDate" class="form-control" data-bind="value: c().StartDate">
+                                <span asp-validation-for="StartDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="EndDate"></label>
+                                <input asp-for="EndDate" class="form-control" data-bind="value: c().EndDate">
+                                <span asp-validation-for="EndDate" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="NumberOfStudentCanBeUse"></label>
+                                <input asp-for="NumberOfStudentCanBeUse" class="form-control" data-bind="value: c().NumberOfStudentCanBeUse">
+                                <span asp-validation-for="NumberOfStudentCanBeUse" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="NumberOfTotalUse"></label>
+                                <input asp-for="NumberOfTotalUse" class="form-control" data-bind="value: c().NumberOfTotalUse">
+                                <span asp-validation-for="NumberOfTotalUse" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="SalePartnerUserId"></label>
+                                <select asp-for="SalePartnerUserId" class="form-control" data-bind="value: c().SalePartnerUserId">
+                                    <option value="">لطفاً انتخاب کنید</option>
+                                    @foreach (var item in ViewBag.SalesPartnerUsers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="SalePartnerUserId" class="danger"></span>
+                            </div>
+                        </div>
+                         
+                    </div>
+                    <div class="row">
+                       
+                        @*<div class="col-md-4 col-xs-12">
+            <div class="form-group">
+                <label asp-for="SalesPartnerShareTypeId"></label>
+                <select asp-for="SalesPartnerShareTypeId" class="form-control" data-bind="value: c().SalesPartnerShareTypeId">
+                    <option value="1">مبلغ</option>
+                    <option value="2">درصد</option>
+                </select>
+                <span asp-validation-for="SalesPartnerShareTypeId" class="danger"></span>
+            </div>
+        </div>*@
+                        @*<div class="col-md-4 col-xs-12">
+            <div class="form-group">
+                <label asp-for="SalePartnerAmountOrPercent"></label>
+                <input type="text" asp-for="SalePartnerAmountOrPercent" class="form-control currency" data-bind="value: c().SalePartnerAmountOrPercent">
+                <span asp-validation-for="SalePartnerAmountOrPercent" class="danger"></span>
+            </div>
+        </div>*@
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="CourseIds"></label>
+                                <select multiple asp-for="CourseIds" class="form-control" data-bind="value: c().CourseIds" data-placeholder="انتخاب کنید ...">
+                                    @foreach (var item in ViewBag.Courses)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CourseIds" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="CourseMeetingIds"></label>
+                                <select multiple asp-for="CourseMeetingIds" class="form-control" data-bind="value: c().CourseMeetingIds" data-placeholder="انتخاب کنید ...">
+                                    @foreach (var item in ViewBag.CourseMeetings)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CourseMeetingIds" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                                <span asp-validation-for="Description" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div> 
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

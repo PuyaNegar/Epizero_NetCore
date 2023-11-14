@@ -1,0 +1,230 @@
+﻿@model WebViewModels.IdentitiesViewModels.StudentUserProfileViewModel
+@using Common.Extentions
+@{
+    ViewData["Title"] = "سوالات من";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+<style type="text/css">
+
+
+    .singleCourse-q .split-c {
+        width: 100%;
+        position: relative;
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 30px;
+    }
+
+    .singleCourse-q .pageall a:hover, .singleCourse-q .productshow a:hover {
+        color: #233591;
+    }
+
+    .singleCourse-q .split-c .hr {
+        border-top: 2px solid #eee;
+        width: 100%;
+        position: absolute;
+        top: 1px;
+        z-index: -1;
+    }
+
+    .singleCourse-q .pad-line-s {
+        padding: 5px 10px 7px 10px;
+    }
+
+    .singleCourse-q .split-liner {
+        height: 40px;
+        font-weight: bold;
+        color: #fff;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        border-radius: 20px;
+    }
+
+    .singleCourse-q .productshow .header-main .main .row {
+        display: block;
+    }
+
+    .flex-row {
+        display: flex;
+        justify-content: center;
+    }
+
+    .singleCourse .dis-tbl-row .price .discount-price span::after {
+        top: 20px !important;
+    }
+
+    .singleCourse .price {
+        position: relative;
+        padding-top: 5px;
+    }
+
+        .singleCourse .price .discount-price {
+            position: absolute;
+            top: -7px;
+            right: 0;
+            color: #888;
+            display: block;
+            width: 100%;
+        }
+
+            .singleCourse .price .discount-price span {
+                display: inline-block;
+                position: relative;
+            }
+
+                .singleCourse .price .discount-price span::after {
+                    content: '';
+                    display: block;
+                    width: 100%;
+                    position: absolute;
+                    border: 1px solid red;
+                    transform: rotate(-7deg);
+                    top: 14px;
+                }
+
+    .box-answer-s {
+        display: none;
+    }
+
+    .singleCourse .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background-color: #dddd;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .singleCourse .close {
+        float: left;
+    }
+
+    .singleCourse .modal-title {
+        float: right;
+    }
+
+
+    .singleCourse .btn-txt-j {
+        position: relative;
+    }
+
+        .singleCourse .btn-txt-j .btn-j-j {
+         /*   position: absolute;
+            left: 15px;
+            bottom: 4px;*/
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            padding: 4px 15px 5px 15px;
+        }
+
+            .singleCourse .btn-txt-j .btn-j-j i {
+                vertical-align: middle;
+            }
+
+    .carousel-control {
+        position: absolute;
+        top: 50%;
+        bottom: unset;
+    }
+
+        .carousel-control.left {
+            background-image: unset !important;
+        }
+
+        .carousel-control.right {
+            background-image: unset !important;
+        }
+
+    .btn-dore-lg a {
+        display: inline-flex;
+    }
+
+    .btn-dore-lg .cover {
+        padding-left: 15px;
+        height: 32px;
+        padding-right: 10px;
+    }
+
+    .btn-dore-lg {
+        float: left;
+        width: 15%;
+        text-align: right;
+    }
+
+    .content-tbl-f {
+        overflow: hidden;
+    }
+
+    .r-btn {
+        border-radius: 15px;
+        background-color: #e83674;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px;
+        font-weight: bold;
+        color: #fff;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+</style>
+@section Scripts {
+
+    <script>
+        $(function () {
+            function readMessage() {
+                DataTransfer('/api/Identities/StudentUserMessages/Read', 'Get', '', '',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.studentUserMessages(f.Value);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+         
+            readMessage();
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.add-a-q', function () {
+                $('#addQuestionModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addQuestionModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addQuestionForm').submit(function () {
+                if ($(this).valid()) {
+                    var data = {
+                         QuestionText: mainViewModel.questionAdd().Context
+                    };
+                    DataTransfer('/api/Identities/StudentUserMessages/AddQuestion', 'post', ko.toJSON(data), '.wrapper-parent',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            $('#Context').val('');
+                            readMessage();
+                            $('#addQuestionModal').modal('hide');
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+        });
+    </script>
+}
+
+<section class="singleCourse singleCourse-q">
+    <div class="container">
+        <div class="productshow">
+            @{ await Html.RenderPartialAsync("Questions.cshtml"); }
+        </div>
+    </div>
+ 
+    @{ await Html.RenderPartialAsync("AddQuestionModal.cshtml"); }
+
+
+</section>

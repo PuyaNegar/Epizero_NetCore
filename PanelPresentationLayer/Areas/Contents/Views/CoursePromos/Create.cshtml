@@ -1,0 +1,61 @@
+﻿@model PanelViewModels.ContentsViewModels.CoursePromosViewModel
+@using PanelPresentationLayer.ComponentModel
+@{
+    var Options = new ComboBoxOptions()
+    {
+        Url = "/TrainingManagement/Courses/Read/",
+        ComboBoxName = "UserChosen",
+        IsMultiSelect = true,
+        ComboBoxDataColumn = new List<ComboBoxDataColumn>() {
+        new ComboBoxDataColumn() { ColumnTitle = "شناسه"  , ColumnName="Id" , IsVisible=false , IsSearchable=false } ,
+        new ComboBoxDataColumn() { ColumnTitle = "دوره"  , ColumnName="Name" , IsSearchable= true } ,
+         new ComboBoxDataColumn() { ColumnTitle = "مدرس"  , ColumnName="TeacherFullName" , IsSearchable= true } ,
+ },
+        ValueField = "Id",
+        TextField = "Name",
+        TargetValueInputId = "CourseIds"
+    };
+}
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label asp-for="CourseIds"></label>
+                                <input asp-for="CourseIds" class="form-control" data-bind="value: c().CourseIds" style="display:none;">
+                                @await Html.PartialAsync("~/Views/Component/ChosenCombobox.cshtml", Options)
+                                <span asp-validation-for="CourseIds" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="ComboBoxSection">
+                        <label asp-for="CoursePromoSectionGroupId">سکشن تبلیغاتی</label>
+                        <select asp-for="CoursePromoSectionGroupId" class="form-control" data-bind="value : c().CoursePromoSectionGroupId">
+                            @foreach (var item in ViewBag.PromoSections)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CoursePromoSectionGroupId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Inx"></label>
+                        <input asp-for="Inx" class="form-control" data-bind="value: c().Inx" type="text">
+                        <span asp-validation-for="Inx" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

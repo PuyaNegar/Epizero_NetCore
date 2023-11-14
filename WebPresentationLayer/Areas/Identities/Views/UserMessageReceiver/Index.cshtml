@@ -1,0 +1,325 @@
+﻿@{
+    ViewData["Title"] = " پیام دریافتی ";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    var UserMessages = (List<WebViewModels.IdentitiesViewModels.UserMessagesViewModel>)ViewBag.UserMessages;
+    var tags = ViewBag.Tags;
+
+}
+
+<style type="text/css">
+    .d-inline {
+        display:inline-block;
+    }
+    .close {
+        float:left;
+    }
+    #message-text img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto !important;
+        height: auto !important;
+    }
+    .list-student .border-i {
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        padding: 15px;
+        background-color: #9f9aaa;
+    }
+
+    .chosen-container-multi .chosen-choices {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+       /*  height: 34px;*/
+    }
+
+        .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+            margin: 5px 0;
+        }
+
+    .message-p .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background-color: #dddd;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .modal-body .p-descroiption {
+        padding: 35px;
+        line-height: 2;
+        text-align: justify;
+    }
+ 
+</style>
+@section scripts{
+    <script>
+        $(function () {
+     
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            rebulidChosen("#MessageTagsId");
+             //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            $(".persian-date").pDatepicker({ format: 'YYYY/MM/DD', initialValue: false, autoClose: true });
+            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            function ReadMessage() {
+                var data =
+                {
+                    StartDate: $('#startDate').val(),
+                    EndDate: $('#endDate').val(),
+                    TagIds: $('#MessageTagsId').val()
+                };
+                DataTransfer('/api/Identities/UserMessageReceiver/Read', 'Post', JSON.stringify(data), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.infoUserMessage(f.Value);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            //=======================================================
+            $('body').on('click', '#btnFilter', function () {
+                var data =
+                {
+                    StartDate: $('#startDate').val(),
+                    EndDate: $('#endDate').val(),
+                    TagIds: $('#MessageTagsId').val()
+                };
+              
+                DataTransfer('/api/Identities/UserMessageReceiver/Read', 'Post', JSON.stringify(data), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.infoUserMessage(f.Value);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+                //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+
+            });
+            //=======================================================
+            function CountUnReadMessage() {
+                DataTransfer('/api/Identities/UserMessageReceiver/CountUnreadMessage', 'Get', '', '', function (e) {
+                    if (e.Value == 0) {
+                        $('.count-i').html('');
+                        $('.count-t').html(0);
+                    } else {
+                        $('.count-i').html('(' + e.Value + ')');
+                        $('.count-t').html(e.Value);
+                    }
+                }, function (e) {
+
+                });
+            }
+            CountUnReadMessage();
+            //======================================================
+            $('body').on('click', '.btnmodal', function () {
+                var id = $(this).attr('data-Id');
+                var data = { Id: id };
+                function findPurpose(a) {
+                    return $.grep(mainViewModel.infoUserMessage(), function (n, i) {
+                        return n.Id == a;
+                    });
+                };
+                $('#message-text').html(findPurpose(id)[0].Message)
+
+                $('#message').modal({ backdrop: 'static', keyboard: false });
+                $('#message').modal('show');
+                DataTransfer('/api/Identities/UserMessageReceiver/Update', 'post', ko.toJSON(data), '.wrapper-parent', function (e) {
+                    CountUnReadMessage();
+                    ReadMessage();
+                }, function (e) {
+                    toastr.error(e.responseJSON.Message);
+                });
+
+            });
+            ReadMessage();
+        });
+    </script>
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> پیام دریافتی </span>
+        </div>
+    </div>
+</div>
+
+<section class="list-student g-m-p-j">
+    <div class="container">
+
+        <div class="border-i">
+
+            <div class="form-group">
+                <div class="select-box">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label>  از تاریخ</label>
+                                <input id="startDate" type="text" placeholder="از تاریخ" class="persian-date form-control" >
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label>  تا تاریخ</label>
+                                <input id="endDate" type="text" placeholder="تا تاریخ" class="persian-date form-control"  >
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label>تگ ها</label>
+                                <select id="MessageTagsId" class="form-control" data-placeholder="تگ‌ها را انتخاب کنید" multiple>
+                                    @foreach (var item in tags)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label style="visibility:hidden">فیلتر</label>
+                                <input id="btnFilter" type="button" value="فیلتر" class="btn btn-warning btn-block">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <input class="none" type="button" id="applyFilter" value="apply" />
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+<section class="box-menu message-p">
+    <div class="container">
+        <!-- ko if: mainViewModel.infoUserMessage().length != 0-->
+        <div class="legend col-md-12">
+            <div class="title-o">
+                <i class="fa fa-envelope-o"></i>
+                <span class="count-main">
+                    صندوق پیام
+                    <span class="count-i"></span>
+                </span>
+            </div>
+            <div class="col-md-12 hidden-xs">
+
+                <div class="col-md-12 title-tbl-div">
+                    <div class="float-r width-d-5 text-alight-r min-height-1">
+                    </div>
+
+                    <div class="float-r width-d-25 text-align-r f-size-14 bold">
+                        عنوان
+                    </div>
+
+
+                    <div class="float-r width-d-25 text-align-r f-size-14 min-height-1 bold">
+                        تاریخ دریافت
+                    </div>
+
+                    <div class="float-r width-d-15  text-align-c">
+                    </div>
+
+                    <div class="float-l width-d-13  text-align-r">
+                    </div>
+
+                    <div class="float-l width-d-5  text-align-l">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ko foreach: mainViewModel.infoUserMessage() -->
+            <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+
+                    <div class="w-f-ms  float-r width-d-5 text-align-r">
+                        <!-- ko if: ReadDateTime != null-->
+                        <img src="~/assets/img/elemans/check-on.svg" class="width-px-20" alt="پیام دریافتی دانش آموز " />
+                        <!-- /ko -->
+                        <!-- ko ifnot: ReadDateTime != null-->
+                        <img src="~/assets/img/elemans/check.svg" class="width-px-20" alt="پیام دریافتی دانش آموز " />
+                        <!-- /ko -->
+                    </div>
+
+                    <div class="float-r w-f-ms-k  width-d-25 text-align-r bold f-size-13" alt="عنوان پیام دریافتی دانش آموز ">
+                        <span data-bind="text:Title"></span>
+                    </div>
+
+
+
+                    <div class="float-r w-m-100-f width-d-25 text-align-r f-size-13 min-height-1">
+                        <span data-bind="text:RegDateTime"></span>
+                    </div>
+
+                    <div class="btn-dore-lg btn-d-d">
+                        <!-- ko if: ReadDateTime != null-->
+                        <a data-bind="attr: { 'data-Id' : Id}" class="btnmodal">
+                            <div class="cover center">
+                                <span class="date">مشاهده پیام</span>
+                            </div>
+                        </a>
+                        <!-- /ko -->
+                        <!-- ko ifnot: ReadDateTime != null-->
+                        <a data-bind="attr: { 'data-Id' : Id}" class="btnmodal">
+                            <div style="background-color:#aee18a" class="cover center">
+                                <span class="date">مشاهده پیام</span>
+                            </div>
+                        </a>
+                        <!-- /ko -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- /ko-->
+        </div>
+        <!--/ko-->
+        <!-- ko ifnot: mainViewModel.infoUserMessage().length != 0-->
+        <div class="box-empty">
+            <div class="empty">
+                <img src="~/assets/img/box-empty.svg"  alt="پیام دریافتی" />
+                <p>پیامی برای شما ثبت نشده است .</p>
+            </div>
+        </div>
+        <!--/ko-->
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="message" aria-labelledby="myexample">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title d-inline" id="exampleModalLabel">متن پیام</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="p-descroiption">
+                        <p id="message-text">
+
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

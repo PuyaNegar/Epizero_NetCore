@@ -1,0 +1,196 @@
+﻿@model IEnumerable<PanelViewModels.IdentitiesViewModels.StudentUsersViewModel>
+@{
+    ViewData["Title"] = "دانش آموزان";
+    ViewData["PageFarsiName"] = "دانش آموزان";
+    string Area = "Identities";
+    string Controller = "StudentUsers";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.ch = ko.observable({});// تغییر رمز کاربری
+    MainViewModel.studentCourse = ko.observable({}); 
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#delete').remove();
+        $('#IsConfirm').change(function () {
+            $('#applyFilter').click();
+        });
+        //***************************************************************************
+        $('#CitySelectBtn').click(function () {
+            openCitySelectorModal('AddBox', 'CityId', 'CityName');
+        });
+        //***************************************************************************
+        $('#EditCitySelectBtn').click(function () {
+            openCitySelectorModal('EditBox', 'Edit_CityId', 'Edit_CityName');
+        });
+    
+        //***************************************************************************
+        EditBoxModelOnShow = function () {
+
+            EditPersonalPicPathSetImage();
+            EditNationalCardPicPathSetImage();
+        }
+        //***************************************************************************
+        $('#AddBox').on('hidden.bs.modal', function () {
+            PersonalPicPathResetImage();
+            NationalCardPicPathResetImage();
+        });
+        //***************************************************************************
+        $('#EditBox').on('hidden.bs.modal', function () {
+            EditNationalCardPicPathResetImage();
+            EditPersonalPicPathResetImage();
+        });
+        //***************************************************************************
+        $('body').on('change', '#LevelId', function () {
+            if ($(this).find(":selected").val() < 9) {
+                $('.fileds').hide();
+                MainViewModel.c().FieldId = null;
+            } else {
+                $('.fileds').show();
+            }
+        });
+        //***************************************************************************
+        $('body').on('change', '#Edit_LevelId', function () {
+            if ($(this).find(":selected").val() < 9 && MainViewModel.e().LevelId != null) {
+                $('.fileds').hide();
+                MainViewModel.e().FieldId = null;
+            } else {
+                $('.fileds').show();
+            }
+        });
+        //***************************************************************************
+        $('body').on('click', '.changePasswordBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
+            MainViewModel.ch().UserId = id;
+            $('#ChangePassword_Username').val($('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().UserName).change();
+            $('#ChangePasswordModal').modal({ backdrop: 'static', keyboard: false });
+            $('#ChangePasswordModal').modal('show');
+        });
+        //***************************************************************************
+        $('#ChangePasswordForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Identities/StudentUsers/ChangePassword/', ko.toJSON(MainViewModel.ch()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#ChangePasswordModal').modal('hide');
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //**************************************************************************
+        $('#ChangePasswordModal').on('hidden.bs.modal', function () {
+            resetForm('ChangePasswordModal', function () { MainViewModel.ch({}); });
+        });
+        //**************************************************************************
+        $('body').on('click', '.coursesBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
+            DataTransfer('/TrainingManagement/StudentCourseAndCourseMeetings/Read', ko.toJSON({ Id: id }), '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else { 
+                        MainViewModel.studentCourse(f.Value);
+                        $('#StudentCourseBox').modal('show');
+                    }
+                },
+                function () {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //*****************************************************
+        $('body').on('click', '.loginToSiteBtn', function () {
+          
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            DataTransfer('/Identities/StudentUsers/GetSiteLoginToken/', '{"Id": "' + id + '"}', '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+
+                        window.open(f.Value, '_blank');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+      
+    });
+</script>
+ 
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;margin-top:2px;">
+        <button class="btn btn-info btn-xs edit" type="button" style="margin-right:2px; margin-top:2px;  width:70px;float:right;"><i class="fa fa-pencil" style="margin-left: 1px;"></i>ویرايش</button>
+        <button class="btn btn-default btn-xs changePasswordBtn" type="button" style="margin-right:6px; margin-top:2px;  width:70px;float:right;"><i class="fa fa-pencil" style="margin-left: 1px;"></i>تغيير رمز </button>
+        <button class="btn btn-danger btn-xs coursesBtn" type="button" style="margin-right:6px; margin-top:2px;  width:70px;float:right;"><i class="fa fa-pencil" style="margin-left: 1px;"></i>دوره ها</button>
+        <button class="btn btn-warning btn-xs loginToSiteBtn" style="margin-right:5px; margin-top:2px;float:right;" type="button"><i class="fa fa-refresh" style="margin-left: 3px;"></i>ورود به سایت</button>
+    </div>
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange"  data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="UserName">نام کاربری</th>
+                                    <th data-viewModel="FullName">نام نام خانوادگی</th>
+                                    <th data-viewModel="Email">ایمیل</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                    <th style="width: 370px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("ChangePassword.cshtml");
+                        await Html.RenderPartialAsync("~/Views/Component/CitySelectorComponent.cshtml");
+                        await Html.RenderPartialAsync("StudentCourses.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

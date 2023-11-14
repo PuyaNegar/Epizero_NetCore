@@ -1,0 +1,69 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.CourseDescriptionVideosViewModel>
+@{
+    ViewData["Title"] = "فیلم توضیحات دوره";
+    ViewData["PageFarsiName"] = "فیلم توضیحات دوره";
+    string Area = "TrainingManagement";
+    string Controller = "CourseDescriptionVideos";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/' + @ViewBag.CourseId,
+       '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+      $(function () {
+        GenerateReturnBtn();
+        //================================
+        AddBoxModalOnShow = function () {
+            MainViewModel.c().CourseId = '@ViewBag.CourseId';
+        }
+        //=================================
+         EditBoxModelOnShow = function () {
+             MainViewModel.e().CourseId = '@ViewBag.CourseId';
+        }})
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="CourseName">دوره</th>
+                                    <th data-viewModel="Title">عنوان</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                    <th data-viewModel="Inx">اولویت</th>
+                                    <th style="width: 140px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "مدرسه آنلاین اپیزرو";
+}
+<style type="text/css">
+    header, footer, .close {
+        display: none;
+    }
+</style>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#loginModal').modal({ backdrop: 'static', keyboard: false });
+            $('#loginModal').modal('show');
+        });
+    </script>
+}

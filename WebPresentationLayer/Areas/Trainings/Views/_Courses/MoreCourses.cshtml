@@ -1,0 +1,68 @@
+﻿@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+<div id="menu4" class="tab-pane fade flex-row ">
+    @if (Courses.SimilarCoures.Any())
+    {
+        <div class="container">
+            @foreach (var similarCourse in Courses.SimilarCoures)
+            {
+                <div data-aos="fade-right" class="col-md-3 col-sm-3 col-xs-12 main-new-course">
+                    <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                        <div class="div-main-img">
+                            @if (string.IsNullOrEmpty(similarCourse.LogoPicPath))
+                            {
+                                if (!string.IsNullOrEmpty(similarCourse.BannerPicPath))
+                                {
+                                    <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                        <img title="@similarCourse.Name" alt="@similarCourse.Name" src="@similarCourse.BannerPicPath" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                        <img title="@similarCourse.Name" alt="@similarCourse.Name" src="~/assets/img/2020-10-10-03-44-15pm-adabiat6.png" />
+                                    </a>
+
+                                }
+
+                            }
+                            else
+                            {
+                                <a title="@similarCourse.Name" href="/Trainings/Courses/Index?CoursesId=@similarCourse.Id">
+                                    <img alt="@similarCourse.Name" title="@similarCourse.Name" src="@similarCourse.LogoPicPath">
+                                </a>
+                            }
+                        </div>
+
+                        <div class="div-title-content">
+                            @similarCourse.Name <br>
+                            <span>
+                                @similarCourse.TeacherFullName
+                            </span>
+                        </div>
+                        <div class="div-img-small">
+                            @if (string.IsNullOrEmpty(similarCourse.TeacherPersonalPicPath))
+                            {
+                                <img src="~/assets/img/logo.png" alt="@similarCourse.TeacherFullName" title="@similarCourse.TeacherFullName" />
+                            }
+                            else
+                            {
+                                <img alt="@similarCourse.TeacherFullName" title="@similarCourse.TeacherFullName" src="@similarCourse.TeacherPersonalPicPath">
+                            }
+
+                        </div>
+                        <div data-academyProductTypeId="1" data-academyProductId="@similarCourse.Id" data-toggle="tooltip" data-placement="bottom" title="افزودن به سبد" class="cart-btn div-cart-main">
+                            <img src="/assets/img/sabab1.png" alt="اطلاعات بیشتر دوره">
+                            <div class="box"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+        <div style="clear:both;"></div>
+
+    }
+</div>

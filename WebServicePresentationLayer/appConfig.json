@@ -1,0 +1,16 @@
+{
+  "connectionString": "Data Source=185.55.224.44;Initial Catalog=PunasCo_epizeroDevelope;UID=PunasCo_USR;PWD=abc_123",
+  "appFilePath": "C:\\NebulaFiles",
+  "smsApiKey": "",
+  "payPingToken": "",
+  "panelUrl": "",
+  "applicationUrl": "http://localhost:51530",
+  "jwtTokenKey": "F6B68E76-E0A3-4984-A063-739906C374E0",
+  "cdnUrl": "http://89.32.249.109:8282",
+  "frontEndUrl": "http://localhost:1337",
+  "timeZone": "Iran Standard Time",
+  "calendarType": 1,
+  "onlineClassPlanId": "5f5c3f4df4847f3ee44db33b",
+  "onlineClassLogoutUrl": "http://localhost:58400",
+  "schoolName": "„œ—”Â ”Â«œ"
+}

@@ -1,0 +1,265 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " لیست حضور و غیاب |  مدرسه آنلاین اپیزرو";
+    var courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+}
+
+<script type="text/javascript">
+
+
+    $(function () {
+
+        $(".persian-date").pDatepicker({ format: 'YYYY/MM/DD', initialValue: false, autoClose: true });
+        $('#CourseMeetings').change(function () {
+            $('#applyFilter').click();
+        });
+        $('#CourseMeetings').change();
+        //==========================================================
+        $('body').on('change', '.checkbox-all', function () {
+            $(".itemcheckbox").prop('checked', $(this).is(":checked"));
+            for (i = 0; mainViewModel.updateAbsentationStudents().StudentsAbsentationState.length; i++) {
+                mainViewModel.updateAbsentationStudents().StudentsAbsentationState[i].IsPresent = $(this).is(":checked");
+            }
+        });
+        //==========================================================
+        $('body').on('change', '.add-checkbox-all', function () {
+            $(".itemcheckbox").prop('checked', $(this).is(":checked"));
+            for (i = 0; mainViewModel.addAbsentationStudents().StudentsAbsentationState.length; i++) {
+                mainViewModel.addAbsentationStudents().StudentsAbsentationState[i].IsPresent = $(this).is(":checked");
+            }
+        });
+        //==========================================================
+        $('#create').click(function () {
+            var courseMeetingId = mainViewModel.addAbsentationStudents().CourseMeetingId;
+            if (mainViewModel.addAbsentationStudents().CourseMeetingId == null) {
+                toastr.remove();
+                toastr.error('جلسه اننخاب نشده است');
+                return;
+            }
+            DataTransfer('/Trainings/Absentations/ReadForAdd?CourseMeetingId=' + courseMeetingId, 'get', '', '.wrapper-parent',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        mainViewModel.addAbsentationStudents(f.Value);
+                        if (f.Value.IsAbsentationsDone == 1) {
+                            toastr.error('حضور غیاب برای امروز انجام شده است لطفا برای تغییر از بخش ویرایش اقدام نمایید');
+                        } else {
+                            $('#AddBox').modal({ backdrop: 'static', keyboard: false });
+                            $('#AddBox').modal('show');
+                        }
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+
+        //=======================================================================================
+        $('body').on('click', '.viewAbsentationBtn', function () {
+            var id = $(this).attr('data-Id');
+            var date = $(this).attr('data-date');
+               
+            DataTransfer('/Trainings/Absentations/ReadForUpdate?CourseMeetingId=' + id + '&Date=' + date, 'get', '', '.wrapper-parent',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(e.responseJSON.Message);
+                    } else {
+                        mainViewModel.updateAbsentationStudents(f.Value);
+                        $('#EditBox').modal({ backdrop: 'static', keyboard: false });
+                        $('#EditBox').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+
+
+        $('#EditForm button[type=submit]').click(function () {
+            $('#edit_absentations_table .itemcheckbox').change();
+        });
+
+
+        //=======================================================================================
+        $('#EditBox').on('hidden.bs.modal', function () {
+            $('.checkbox-all').prop('checked', false);
+        });
+        $('#AddBox').on('hidden.bs.modal', function () {
+            $('.add-checkbox-all').prop('checked', false);
+        });
+        //===========================================
+        //===========================================
+        $('#courseMeetingsComboBox').change(function () {
+            sendDataToServer($(this).val());
+        });
+
+        $('#coursesComboBox').change(function () {
+            $('#courseMeetingsComboBox').find('option').hide();
+            $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').show();
+            var courseMeetingId = $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').eq(0).attr('value');
+            $('#courseMeetingsComboBox').val(courseMeetingId).change();
+        });
+        $('#coursesComboBox').change();
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        function sendDataToServer(courseMeetingId) {
+            mainViewModel.addAbsentationStudents().CourseMeetingId = courseMeetingId;
+
+            if (courseMeetingId == null) {
+                mainViewModel.absentationStudents([]);
+                return;
+            }
+            DataTransfer('/api/Trainings/Absentations/ReadByCourseMeeting?courseMeetingId=' + courseMeetingId, 'get', '', '.wrapper-parent',
+                function (e) {
+                mainViewModel.absentationStudents(e.Value);
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        }
+ 
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('#EditForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Trainings/Absentations/Update', 'post', ko.toJSON(mainViewModel.updateAbsentationStudents()), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        $('#EditBox').modal('hide');
+                        mainViewModel.updateAbsentationStudents({});
+ 
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            return false;
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('#AddForm').submit(function () {
+            
+            if ($(this).valid()) {
+                mainViewModel.addAbsentationStudents().Date = $('.toDate').val();
+                DataTransfer('/Trainings/Absentations/Add', 'post', ko.toJSON(mainViewModel.addAbsentationStudents()), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        $('#AddBox').modal('hide');
+                        mainViewModel.addAbsentationStudents({});
+                        $('#courseMeetingsComboBox').change();
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            return false;
+        });
+    });
+</script>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> لیست حضور و غیاب </span>
+        </div>
+    </div>
+</div>
+<section class="list-student">
+    <div class="container">
+        @if (courses.Count() > 0)
+        {
+        <div class="border-i">
+
+            <div class="col-md-4 col-xs-12 pull-right">
+                <div class="form-group">
+                    <div class="select-box">
+                        <select id="coursesComboBox" class="form-control">
+                            @foreach (var course in courses)
+                            {
+                                <option value="@course.Id">@course.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12 pull-right">
+                <div class="form-group">
+                    <div class="select-box">
+                        <select id="courseMeetingsComboBox" class="form-control">
+                            @foreach (var course in courses)
+                            {
+                                foreach (var courseMeeting in course.CourseMeetings)
+                                {
+                                    <option data-courseId="@course.Id" value="@courseMeeting.Id">@courseMeeting.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="btn-r-0">
+                    <button id="create" type="button" class="btn btn-warning btn-r"><i class="fa fa-plus"></i> افزودن  </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <div class="box-menu">
+        <div class="container">
+            <!-- ko if: absentationStudents().length > 0  -->
+            <div class="legend col-md-12">
+                <div class="title-o">
+                    <i class="fa fa-user"></i>
+                    <span>لیست حضور و غیاب ها</span>
+                </div>
+                <div class="table-responsive">
+                    <table id="modelList" class="table table-striped ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th style="text-align: center;">تاریخ حضور غیاب</th>
+                                <th style="text-align: center;">عملیات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: absentationStudents() ">
+                            <tr>
+                                <td style="text-align:left" data-bind="text: $index()+1"></td>
+                                <td style="text-align: center;" data-bind="text:Date"></td>
+                                <td style="text-align: center;">
+                                    <button data-bind="attr:{'data-Id':Id , 'data-date':Date}" class="btn btn-warning btn-sm viewAbsentationBtn">جزئیات حضور غیاب</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+            <!-- /ko -->
+            <!-- ko ifnot: absentationStudents().length > 0 -->
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" />
+                    <p class="place-holder">حضور و غیابی برای این جلسه ثبت نشده است.</p>
+                </div>
+            </div>
+            <!-- /ko -->
+
+        </div>
+    </div>
+</section>
+@{ await Html.RenderPartialAsync("Create");}
+@{ await Html.RenderPartialAsync("Edit");}
+

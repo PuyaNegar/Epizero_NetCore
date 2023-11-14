@@ -1,0 +1,81 @@
+﻿@model List<PanelViewModels.OnlineExamViewModels.StudentOnlineExamResultGroupsViewModel>
+@{
+    int i = 1;
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="center">#</th>
+            <th class="right">نام نام خانوادگی</th>
+            <th class="right">تراز کل</th>
+            <th class="right">نمره کل</th>
+            <th class="right">رتبه</th>
+            <th class="right">رشته</th>
+            <th class="right">مدرسه</th>
+            <th class="right">شهر</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Where(c => !c.IsAbsentOnMainTime) != null && Model.Where(c => !c.IsAbsentOnMainTime).Any())
+        {
+            @foreach (var item in Model.Where(c => !c.IsAbsentOnMainTime))
+            {
+                <tr style="@((item.CityId == 2)?"background: rgb(93 251 62 / 0.76) !important":"background: none; !important")">
+                    <th class="center">@i</th>
+                    <th class="center">@item.StudentFullName</th>
+                    <th class="center">@item.TotalBalance.ToString("#.##")</th>
+                    <th class="center">@item.TotalScore.ToString("#.##") %</th>
+                    <th class="center">@item.TotalRank</th>
+                    <th class="center">
+                        @if (item.FieldId == null)
+                        {
+                            <span>انتخاب نشده</span>
+                        }
+                        else if (item.FieldId == 1)
+                        {
+                            <span>بدون رشته</span>
+                        }
+                        else if (item.FieldId == 2)
+                        {
+                            <span>ریاضی فیزیک</span>
+                        }
+                        else if (item.FieldId == 3)
+                        {
+                            <span>علوم تجربی</span>
+                        }
+                        else if (item.FieldId == 4)
+                        {
+                            <span>علوم انسانی</span>
+                        }
+                        else if (item.FieldId == 5)
+                        {
+                            <span>هنر</span>
+                        }
+                    </th>
+                    <th class="center">@item.SchoolName</th>
+
+                    <th class="center">
+
+                        <span> @item.CityName</span>
+
+                    </th>
+
+                </tr>
+                { i++; }
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="center">داده ای یافت نشد</td>
+                <td class="right"></td>
+                <td class="right"></td>
+                <td class="right"></td>
+                <td class="right"></td>
+                <td class="right"></td>
+                <td class="right"></td>
+            </tr>
+        }
+
+    </tbody>
+</table>

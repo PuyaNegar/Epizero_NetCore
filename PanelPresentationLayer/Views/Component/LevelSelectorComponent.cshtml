@@ -1,0 +1,105 @@
+﻿@using PanelViewModels.Prefix
+@using PanelViewModels.TrainingManagementViewModels
+@model SelectorPrefix<LevelSelectorViewModel>
+
+<script type="text/javascript">
+    $(function () {
+        //***************************************************************************************
+        InitialChosen('#Selector_LevelGroupId');
+        //***************************************************************************************
+        $("#Selector_LevelGroupId").change(function () {
+            destroyChosen('#Selector_LevelId');
+            $("#Selector_LevelId").children().remove();
+            CreateComboLoader("/TrainingManagement/Levels/ReadForComboBox/",
+                "#Selector_LevelId",
+                '',
+                "Value",
+                "Text",
+                $(this).val(),
+                true,
+                function () { InitialChosen('#Selector_LevelId'); $('#Selector_LevelId').change(); },
+                null);
+        });
+        //***************************************************************************************
+        $("#Selector_LevelGroupId").change();
+        //***************************************************************************************
+        $('#Selector_LevelBtn').click(function () {
+            if (IsNullOrEmptyString($('#Selector_LevelId').val())) {
+                toastr.remove();
+                toastr.error('پایه تحصیلی را انتخاب کنید ');
+                return false
+            }
+
+            var levelGroup = $('#Selector_LevelGroupId option:selected').html();
+            var level = $('#Selector_LevelId option:selected').html();
+            if (!IsNullOrEmptyString($('#LevelSelectorModal').attr('data-multiTargetElementsForText'))) {
+                var str = $('#LevelSelectorModal').attr('data-multiTargetElementsForText').split(',');
+                $('#' + str[0]).val(levelGroup);
+                $('#' + str[1]).val(level);
+            } else {
+                var str = levelGroup + ' - ' + level;
+                $('#' + $('#LevelSelectorModal').attr('data-targetElementForText')).val(str);
+
+            }
+            $('#' + $('#LevelSelectorModal').attr('data-targetElementForId')).val($('#Selector_LevelId').val()).change();
+            $('#LevelSelectorModal').modal('hide');
+        });
+        //*********************************************************************************
+        $('#LevelSelectorModal').on("hidden.bs.modal", function (event) {
+            if (!IsNullOrEmptyString($('#LevelSelectorModal').attr('data-parentModalId'))) {
+                $('body').addClass('modal-open');
+                $('#' + $('#LevelSelectorModal').attr('data-parentModalId')).modal('show');
+            }
+        });
+        //*********************************************************************************
+    });
+</script>
+<div id="LevelSelectorModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog" data-targetElementForId="" data-targetElementForText="" data-parentModalId="">
+    <div class="modal-dialog modal-sm " role="document">
+        <div class="modal-content">
+            <form id="categoryForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> <strong>انتخاب پایه تحصیلی</strong>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label asp-for="Selector.LevelGroupId"></label>
+                                <select asp-for="Selector.LevelGroupId" class="form-control">
+                                    <option value="">لطفاً مقطع تحصیلی را انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.LevelGroups)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Selector.LevelGroupId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+
+                            <div class="form-group reletive">
+                                <label asp-for="Selector.LevelId"></label>
+                                <select asp-for="Selector.LevelId" class="form-control">
+                                    <!--load by javascript-->
+                                </select>
+                                <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom comboBoxIconLoader"></i>
+                                <span asp-validation-for="Selector.LevelId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button id="Selector_LevelBtn" type="button" class="btn btn-success btn-sm">انتخاب </button>
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

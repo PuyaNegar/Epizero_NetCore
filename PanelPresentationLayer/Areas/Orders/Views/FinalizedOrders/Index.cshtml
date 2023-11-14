@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "سفارشات خرید";
+    ViewData["PageFarsiName"] = "سفارشات خرید";
+    string Area = "Orders";
+    string Controller = "FinalizedOrders";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+
+<script id="operands" type="text/html">
+    <button class="btn btn-info btn-xs edit" type="button" style="margin-right:5px; margin-top:2px;float:right;"><i class="fa fa-eye" style="margin-left: 3px;"></i>نمایش  </button>
+</script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $("#delete, #create").remove();
+    });
+</script>
+<style type="text/css">
+    .table {
+        margin: 5px 0 10px 0;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="UserName">شماره موبایل</th> 
+                                    <th data-viewModel="StudentUserFullName">نام نام خانوادگی</th>
+                                    <th data-viewModel="InvoiceNo">شماره سفارش</th>
+                                    <th data-viewModel="RegDateTime" data-orderable="false">تاریخ و زمان ثبت </th>
+                                    <th data-viewModel="AcademyProductTypeName">نوع محصول</th>
+                                    <th data-viewModel="AcademyProductName">محصول</th>
+                                    <th data-viewModel="DiscountCodeAmount" data-thousandseparator="true">مبلغ کد تخفیف (تومان)</th>
+                                    <th data-viewModel="PaymentAmount" data-thousandseparator="true">جمع پرداختی (تومان)</th>
+                                    <th style="width: 140px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Info.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

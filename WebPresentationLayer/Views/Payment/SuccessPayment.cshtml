@@ -1,0 +1,31 @@
+﻿@using Common.Extentions
+
+@{
+    ViewData["Title"] = "پرداخت موفق";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<script>
+    $(function () {
+        $('.btn-register').hide();
+    });
+</script>
+
+<!-- End Page Title Area -->
+<!-- Start Error 404 Area -->
+<div class="error-404-area">
+    <div class="container">
+        <div class="notfound">
+            <div>
+                <img src="~/assets/img/Ok.png" style="width: 150px;" alt="پرداخت موفق در سایت اپیزرو" />
+            </div>
+            <h1 class="margin-10"> پرداخت موفق</h1>
+            <h3> پرداخت شما با موفقیت انجام شد</h3>
+
+            <div><span>شماره فاکتور شما: </span>  @ViewBag.InvoiveNo </div>
+            <span>ساعت و زمان خرید شما</span>  <p>@DateTime.UtcNow.ToLocalDateTimeLongFormatString()</p>
+            <a href="/" class="btn btn-border">برگشت به صفحه اصلی</a>
+
+        </div>
+    </div>
+</div>
+<!-- End Error 404 Area --> 

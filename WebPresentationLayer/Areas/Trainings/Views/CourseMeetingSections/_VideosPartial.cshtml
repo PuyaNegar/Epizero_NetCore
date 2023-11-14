@@ -1,0 +1,56 @@
+﻿@using Common.Extentions
+ 
+@{
+    var CourseMeetingSections = (WebViewModels.TrainingsViewModels.CourseMeetingSectionsViewModel)ViewBag.Data;
+    int i = 0;
+}
+
+<style type="text/css">
+    .split-c {
+        margin-bottom: 70px !important;
+    }
+</style>
+
+@if (CourseMeetingSections.CourseMeetingVideos.Any())
+{
+    <section class="courseMeetingVideo">
+        <div class="container">
+            <div class="split-c">
+                <hr class="hr">
+                <span class="pad-line-s split-liner bg-color-blue">
+                    ویدیو های جلسه
+                </span>
+            </div>
+            <div class="row">
+                @foreach (var item in CourseMeetingSections.CourseMeetingVideos)
+                {
+                    <div class="col-md-4 col-sm-6 col-xs-12 m-b-25">
+                        @Html.Raw(item.Link)  
+                    </div>
+                } 
+                <script>
+                window.onload = function () {
+                var media_obj = null ;
+                @foreach (var item in CourseMeetingSections.CourseMeetingVideos)
+                { 
+                    <text>
+                                media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(item.Link.GetKavemoId())");
+                                media_obj.api.DRMText({
+                                    text: ["@Html.Raw(CourseMeetingSections.StudentMobNo)", "@Html.Raw(CourseMeetingSections.StudentUserFullName)", "آموزشگاه اپیزرو" ] , 
+                                    time: 2.5,
+                                    color: "red",
+                                    fontSize: "17px",
+                                    fontStyle: "bold",
+                                    fontName: "arial",
+                                    opacity: 0.7,
+                                });
+                    
+                    </text>
+                  }
+               }
+                </script> 
+            </div>
+
+        </div>
+    </section>
+}

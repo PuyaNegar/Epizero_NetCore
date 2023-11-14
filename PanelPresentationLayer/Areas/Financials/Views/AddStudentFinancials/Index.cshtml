@@ -1,0 +1,766 @@
+﻿@{
+    ViewData["Title"] = "ثبت صورت مالی دانش آموز";
+    ViewData["PageFarsiName"] = "ثبت صورت مالی دانش آموز";
+
+}
+@{
+    var Options = new ComboBoxOptions()
+            {
+                Url = "/Identities/StudentUsers/Read/",
+                ComboBoxName = "StudentUserChosen",
+                IsMultiSelect = true,
+                ComboBoxDataColumn = new List<ComboBoxDataColumn>() {
+new ComboBoxDataColumn() { ColumnTitle = "Id"  , ColumnName="Id" , IsVisible=false , IsSearchable=false } ,
+new ComboBoxDataColumn() { ColumnTitle = "  نام نام خانوادگی"  , ColumnName="FullName" , IsSearchable= true } ,
+new ComboBoxDataColumn() { ColumnTitle = "کد ملی"  , ColumnName="NationalCode" , IsSearchable= true } ,
+new ComboBoxDataColumn() { ColumnTitle = "نام کاربری"  , ColumnName="UserName" , IsSearchable= true } ,
+},
+                ValueField = "Id",
+                TextField = "FullName",
+                TargetValueInputId = "StudentUserIds"
+
+            };
+}
+
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.cash = ko.observable({ Description: '' });
+    MainViewModel.manualDebt = ko.observable({ Description: '' });
+    MainViewModel.cheque = ko.observable({ Description: '' });
+    MainViewModel.posPayment = ko.observable({ Description: '' });
+    MainViewModel.bankTransfer = ko.observable({ Description: '' });
+    MainViewModel.discountPayment = ko.observable({});
+    MainViewModel.studentPaymentLink = ko.observable({});
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+    MainViewModel.cash_list = ko.observable([]);
+    MainViewModel.manualDebt_list = ko.observable([]);
+    MainViewModel.bankTransfer_list = ko.observable([]);
+    MainViewModel.posPayment_list = ko.observable([]);
+    MainViewModel.cheque_list = ko.observable([]);
+    MainViewModel.discount_list = ko.observable([]);
+    MainViewModel.studentPaymentLink_list = ko.observable([]);
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+    $(function () {
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        rebulidChosen('#CourseId');
+        rebulidChosen('#CourseMeetingId');
+        $('#CourseId').change(function () {
+            // alert($(this).val());
+            if (IsNullOrEmptyString($(this).val())) {
+                $('#courseInfo').hide(200);
+                $('#CourseName').val('');
+                $('#CoursePrice').val('');
+            } else {
+                $('#courseInfo').show(200);
+                $('#CourseName').text($('#CourseId > option:selected').text());
+                $('#CoursePrice').text($('#CourseId > option:selected').attr('data-price'));
+            }
+        });
+
+
+
+        $('#CourseMeetingId').change(function () {
+            // alert($(this).val());
+            if (IsNullOrEmptyString($(this).val())) {
+                $('#courseMeetingInfo').hide(200);
+                $('#CourseMeetingName').val('');
+                $('#CourseMeetingPrice').val('');
+            } else {
+                $('#courseMeetingInfo').show(200);
+                $('#CourseMeetingName').text($('#CourseMeetingId > option:selected').text());
+                $('#CourseMeetingPrice').text($('#CourseMeetingId > option:selected').attr('data-otherValue'));
+            }
+        });
+
+
+        $('#CourseMeetingStudentTypeId').change(function () {
+            if ($(this).val() == '1'){
+                $('#CourseMeeting_ComboBoxSection').hide();
+                $('#courseMeetingInfo_Div').hide();
+            }
+            else{
+                $('#CourseMeeting_ComboBoxSection').show();
+                $('#courseMeetingInfo_Div').show();
+            }
+        });
+
+        $.validator.unobtrusive.parse(document);
+        $.validator.setDefaults({
+            ignore: [],
+        });
+        ko.applyBindings(MainViewModel, document.getElementById('mainArea'));
+        rebulidChosen("#Course");
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .cashPayment', function () {
+            toastr.remove();
+            if (MainViewModel.cash_list().length > 0) {
+                toastr.error('مبلغ نقدی قبلا اضافه شده است');
+                return false;
+            }
+            MainViewModel.cash({ Description: '' });
+            $('#cashModal').modal({ backdrop: 'static', keyboard: false });
+            $('#cashModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .manualDebtBtn', function () {
+            toastr.remove();
+            if (MainViewModel.manualDebt_list().length > 0) {
+                toastr.error('بدهی ارزش افزوده قبلا اضافه شده است');
+                return false;
+            }
+            MainViewModel.manualDebt({ Description: '' });
+            $('#manualDebtsModal').modal({ backdrop: 'static', keyboard: false });
+            $('#manualDebtsModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .studentPaymentLink', function () {
+            toastr.remove();
+            if (MainViewModel.studentPaymentLink_list().length > 0) {
+                toastr.error('لینک پرداخت قبلا اضافه شده است');
+                return false;
+            }
+            MainViewModel.studentPaymentLink({});
+            $('#studentPaymentLinkModal').modal({ backdrop: 'static', keyboard: false });
+            $('#studentPaymentLinkModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .bankTransferPayment', function () {
+            toastr.remove();
+            if (MainViewModel.bankTransfer_list().length > 0) {
+                toastr.error('حواله قبلا اضافه شده است');
+                return false;
+            }
+            MainViewModel.bankTransfer({ Description: '' });
+            $('#bankTransferModal').modal({ backdrop: 'static', keyboard: false });
+            $('#bankTransferModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .posPayment', function () {
+            toastr.remove();
+            if (MainViewModel.posPayment_list().length > 0) {
+                toastr.error('پرداخت نقدی با کارت قبلا اضافه شده است');
+                return false;
+            }
+            MainViewModel.posPayment({ Description: '' });
+            $('#posPaymentModal').modal({ backdrop: 'static', keyboard: false });
+            $('#posPaymentModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .chequePayment', function () {
+            MainViewModel.cheque({ Description: '' });
+            rebulidChosen('#StudentChequePayment_PaidChequeId');
+            $('#chequeModal').modal({ backdrop: 'static', keyboard: false });
+            $('#chequeModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-modal .discountPayment', function () {
+            if (MainViewModel.discount_list().length > 0) {
+                toastr.error('تخفیف قبلا اعمال شده است');
+                return false;
+            }
+            MainViewModel.discountPayment({});
+            $('#discountModal').modal({ backdrop: 'static', keyboard: false });
+            $('#discountModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.manualDebt-delete-btn', function () {
+            delete_data(function () { MainViewModel.manualDebt_list([]); });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.cash-delete-btn', function () {
+            delete_data(function () { MainViewModel.cash_list([]); });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.student-payment-linl-delete-btn', function () {
+            delete_data(function () { MainViewModel.studentPaymentLink_list([]); });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.bankTransfer-delete-btn', function () {
+            delete_data(function () { MainViewModel.bankTransfer_list([]); });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.posPayment-delete-btn', function () {
+            delete_data(function () { MainViewModel.posPayment_list([]); });
+        });
+        //*************************************************************************
+        $('body').on('click', '.discount-delete-btn', function () {
+            delete_data(function () { MainViewModel.discount_list([]); });
+        });
+        //*************************************************************************
+        $('body').on('click', '.cheque-delete-btn', function () {
+            var list = JSON.parse(JSON.stringify(MainViewModel.cheque_list()));
+            list.splice($(this).attr('data-Id'), 1);
+            MainViewModel.cheque_list(list);
+
+        });
+        //*************************************************************************
+        function delete_data(func) {
+            bootbox.confirm({
+                message: "آیا برای حذف موارد انتخاب شده مطمئن می باشید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        func();
+                    }
+                }
+            });
+        }
+        //*************************************************************************
+        $('#cashForm').submit(function () {
+            if ($(this).valid()) {
+                toastr.remove();
+                var list = [];
+                list.push(MainViewModel.cash());
+                MainViewModel.cash_list(list);
+                $('#cashModal').modal('hide');
+                toastr.success('پرداخت با موفقیت ثبت شد');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#manualDebtsForm').submit(function () {
+            if ($(this).valid()) {
+                toastr.remove();
+                var list = [];
+                list.push(MainViewModel.manualDebt());
+                MainViewModel.manualDebt_list(list);
+                $('#manualDebtsModal').modal('hide');
+                toastr.success('پرداخت با موفقیت ثبت شد');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#studentPaymentLinkForm').submit(function () {
+            if ($(this).valid()) {
+                toastr.remove();
+                var list = [];
+                list.push(MainViewModel.studentPaymentLink());
+                MainViewModel.studentPaymentLink_list(list);
+                $('#studentPaymentLinkModal').modal('hide');
+                toastr.success('لینک پرداخت با موفقیت ثبت شد');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#bankTransferForm').submit(function () {
+            if ($(this).valid()) {
+                var list = [];
+                list.push(MainViewModel.bankTransfer());
+                MainViewModel.bankTransfer_list(list);
+                toastr.success('پرداخت با موفقیت ثبت شد');
+                $('#bankTransferModal').modal('hide');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#posPaymentForm').submit(function () {
+            if ($(this).valid()) {
+                var list = [];
+                MainViewModel.posPayment().BankPosDeviceName = $('#StudentPosPayment_BankPosDeviceId > option:selected').text();
+                list.push(MainViewModel.posPayment());
+                MainViewModel.posPayment_list(list);
+                toastr.success('پرداخت با موفقیت ثبت شد');
+                $('#posPaymentModal').modal('hide');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#chequeForm').submit(function () {
+            if ($(this).valid()) {
+                var list = JSON.parse(JSON.stringify(MainViewModel.cheque_list()));
+                MainViewModel.cheque().PaidChequeName = $('#StudentChequePayment_PaidChequeId > option:selected').text();
+                MainViewModel.cheque().RemainingAmount = $('#StudentChequePayment_RemainingAmount').val();
+                list.push(MainViewModel.cheque());
+                MainViewModel.cheque_list(list);
+                toastr.success('چک با موفقیت ثبت شد');
+                $('#chequeModal').modal('hide');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#discountForm').submit(function () {
+            if ($(this).valid()) {
+                var list = [];
+                MainViewModel.discountPayment().IsDiscountPercentName = $('#StudentDiscountPayment_IsDiscountPercent > option:Selected').text();
+                list.push(MainViewModel.discountPayment());
+                MainViewModel.discount_list(list);
+                toastr.success('تخفیف با موفقیت ثبت شد');
+                $('#discountModal').modal('hide');
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#sendToServerBtn').click(function () {
+            toastr.remove();
+            var data = {
+                CourseId: $('#CourseId').val(),
+                CourseMeetingId: $('#CourseMeetingId').val(),
+                CourseMeetingStudentTypeId: $('#CourseMeetingStudentTypeId').val(),
+                StudentUserIds: $('#StudentUserIds').val(),
+                ManualDebt: MainViewModel.manualDebt_list().length == 0 ? null : MainViewModel.manualDebt_list()[0],
+                Cash: MainViewModel.cash_list().length == 0 ? null : MainViewModel.cash_list()[0],
+                BankTransfer: MainViewModel.bankTransfer_list().length == 0 ? null : MainViewModel.bankTransfer_list()[0],
+                PosPayments: MainViewModel.posPayment_list().length == 0 ? null : MainViewModel.posPayment_list()[0],
+                Cheques: MainViewModel.cheque_list(),
+                StudentDiscount: MainViewModel.discount_list().length == 0 ? null : MainViewModel.discount_list()[0],
+                StudentPaymentLink: MainViewModel.studentPaymentLink_list().length == 0 ? null : MainViewModel.studentPaymentLink_list()[0],
+
+            }
+            if (IsNullOrEmptyString(data.CourseId)) {
+                toastr.error('دوره انتخاب نشده است');
+                return false;
+            }
+            if (IsNullOrEmptyString(data.StudentUserIds)) {
+                toastr.error('دانش آموزی انتخاب نشده است');
+                return false;
+            }
+            if (MainViewModel.studentPaymentLink_list().length == 0 && MainViewModel.cash_list().length == 0 && MainViewModel.bankTransfer_list().length == 0 && MainViewModel.posPayment_list().length == 0 && MainViewModel.discount_list().length == 0 && MainViewModel.cheque_list() == 0) {
+                toastr.error('پرداخت ها یا تخفیف های دانش آموز را مشخص نمایید');
+                return false;
+            }
+
+            DataTransfer('/Financials/AddStudentFinancials/Operation/', ko.toJSON(data), '#resultLoader',
+                function (e) {
+
+                    if (!e.IsSuccess) {
+                        toastr.error(e.Message);
+                    } else {
+                        $('#CourseId').change();
+                        MainViewModel.manualDebt_list([]);
+                        MainViewModel.cash_list([]);
+                        MainViewModel.studentPaymentLink_list([]);
+                        MainViewModel.bankTransfer_list([]);
+                        MainViewModel.posPayment_list([]);
+                        MainViewModel.discount_list([]);
+                        MainViewModel.cheque_list([]);
+                        toastr.remove();
+                        toastr.success(e.Message);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //*************************************************************************
+        $('#StudentChequePayment_PaidChequeId').change(function () {
+            //$('#StudentChequePayment_RemainingAmount').val($('#StudentChequePayment_PaidChequeId option:selected').attr('data-remainingamount'));
+            if (IsNullOrEmptyString($(this).val())) {
+                $('#StudentChequePayment_RemainingAmount').val('');
+                return false;
+            }
+            DataTransfer('/Financials/PaidCheques/GetRemainingAmount', ko.toJSON({ Id: $(this).val() }), '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        $('#StudentChequePayment_RemainingAmount').val(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //*************************************************************************
+
+        $("#CourseId").change(function () {
+            CreateComboLoader("/TrainingManagement/CourseMeetings/ReadForComboBox/", "#CourseMeetingId", '', "Value", "Text", $(this).val(), false,
+                function () {
+                    $('#CourseMeetingId').change();
+                    rebulidChosen('#CourseMeetingId');
+                }, null);
+        });
+
+    });
+</script>
+<style type="text/css">
+    .table-responsive {
+        min-height: 20px;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    <div class="row">
+                        <div class="alert alert-warning h-al-a">
+
+                            <div class="col-md-2 col-xs-12">
+                                <div class="form-group" id="ComboBoxSection">
+                                    <label for="CourseMeetingStudentTypeId">نوع آموزش</label>
+                                    <select id="CourseMeetingStudentTypeId" class="form-control" data-placeholder="موردی را انتخاب کنید" data-bind="value: fe().CourseMeetingStudentTypeId">
+                                        <option value="1">دوره</option>
+                                        <option value="2">جلسه دوره</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2 col-xs-12">
+                                <div class="form-group" id="ComboBoxSection">
+                                    <label for="Course">لیست دوره‌ها</label>
+                                    <select id="CourseId" class="form-control" data-placeholder="موردی را انتخاب کنید" data-bind="value: fe().CourseId">
+                                        <option value="">لطفا انتخاب کنید...</option>
+                                        @foreach (var item in ViewBag.Courses)
+                                        {
+                                            <option data-price="@item.Data" value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2 col-xs-12" id="CourseMeeting_ComboBoxSection">
+                                <div class="form-group" >
+                                    <label for="CourseMeeting">لیست جلسات دوره‌ها</label>
+                                    <select id="CourseMeetingId" class="form-control" data-placeholder="موردی را انتخاب کنید" data-bind="value: fe().CourseMeetingId">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for=" ">لیست دانش آموزان</label>
+                                    <input id="StudentUserIds" class="form-control" style="display:none;">
+                                    @await Html.PartialAsync("~/Views/Component/ChosenCombobox.cshtml", Options)
+                                    <span class="danger"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div id="courseInfo" class="row" style="text-align:center;font-size:15px;font-weight:bold">
+                        <div class="col-md-12">
+                            دوره   <span id="CourseName"> </span>  به مبلغ  <span id="CoursePrice"></span> تومان
+                        </div>
+                    </div>
+
+                    <div id="courseMeetingInfo_Div">
+                        <div id="courseMeetingInfo" class="row" style="text-align:center;font-size:15px;font-weight:bold">
+                            <div class="col-md-12">
+                                <span id="CourseMeetingName"> </span>  به مبلغ  <span id="CourseMeetingPrice"></span> تومان
+                            </div>
+                        </div>
+                    </div>
+                 
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                بدهی های ارزش افزوده
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a class="btn btn-success btn-sm shiny manualDebtBtn">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true">
+                                    </span>افزودن
+                                </a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: manualDebt_list() ">
+                                        <tr>
+                                            <td data-bind="text:  RegDateTime"> </td>
+                                            <td data-bind="text:  DebtAmount"> </td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+                                            <td>
+                                                <button data-bind="attr: {'data-Id' : $index()}" type="button" class="btn btn-danger btn-sm manualDebt-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                پرداخت نقدی
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId="3" data-title="نقدی" class="btn btn-success btn-sm shiny cashPayment"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: cash_list() ">
+                                        <tr>
+                                            <td data-bind="text:  RegDateTime"> </td>
+                                            <td data-bind="text:  AmountPaid"> </td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+                                            <td>
+                                                <button data-bind="attr: {'data-Id' : $index()}" type="button" class="btn btn-danger btn-sm cash-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert  alert-shadowed bg-green" role="alert">
+                                پرداخت حواله
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId="" data-title="حواله" class="btn btn-success btn-sm shiny bankTransferPayment"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>درخواست شماره ارجاع</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: bankTransfer_list()">
+                                        <tr>
+                                            <td data-bind="text:  RegDateTime"> </td>
+                                            <td data-bind="text:  AmountPaid"> </td>
+                                            <td data-bind="text:  RequestReferenceNumber"> </td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm bankTransfer-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                پرداخت کارتخوان
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId="" class="btn btn-success btn-sm shiny posPayment"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>شماره تراکنش</th>
+                                            <th>نام کارت خوان</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: posPayment_list()">
+                                        <tr>
+                                            <td data-bind="text:  RegDateTime"> </td>
+                                            <td data-bind="text:  AmountPaid"> </td>
+                                            <td data-bind="text:  TrackingNo"></td>
+                                            <td data-bind="text:  BankPosDeviceName"></td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm posPayment-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                پرداخت چک
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId=" " data-title="حواله" class="btn btn-success btn-sm shiny chequePayment"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+
+
+                                            <th>اطلاعات چک</th>
+                                            <th>مبلغ پرداخت (تومان)</th>
+                                            <th>مبلغ باقیمانده چک (تومان)</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: cheque_list()">
+                                        <tr>
+                                            <td data-bind="text:  PaidChequeName"> </td>
+                                            <td data-bind="text:  AmountPaid"> </td>
+                                            <td data-bind="text:  RemainingAmount"></td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm cheque-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                تخفیف
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId=" " data-title="تخفیف" class="btn btn-success btn-sm shiny discountPayment"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>نوع تخفیف</th>
+                                            <th>مبلغ / درصد</th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: discount_list()">
+                                        <tr>
+                                            <td data-bind="text:  IsDiscountPercentName"> </td>
+                                            <td data-bind="text:  AmountOrPercent"> </td>
+                                            <td data-bind="text:  Description == null ? '' : Description"></td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm discount-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-shadowed bg-green" role="alert">
+                                لینک پرداخت
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-title="لینک پرداخت" class="btn btn-success btn-sm shiny studentPaymentLink"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>مبلغ قابل پرداخت(تومان)</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: studentPaymentLink_list()">
+                                        <tr>
+                                            <td data-bind="text:  AmountPayable"> </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm student-payment-linl-delete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div style="text-align: left" class="col-md-12">
+                            <button style="width:250px" class="btn btn-info" id="sendToServerBtn">ثبت نهایی</button>
+                        </div>
+                    </div>
+
+                    @{
+                        await Html.RenderPartialAsync("_Cash.cshtml");
+                        await Html.RenderPartialAsync("_Cheque.cshtml");
+                        await Html.RenderPartialAsync("_PosPayment.cshtml");
+                        await Html.RenderPartialAsync("_BankTransfer.cshtml");
+                        await Html.RenderPartialAsync("_Discount.cshtml");
+                        await Html.RenderPartialAsync("_StudentPaymentLink.cshtml");
+                        await Html.RenderPartialAsync("_ManualDebts.cshtml");
+                    }
+
+                </div><!--Widget Body-->
+            </div><!--Widget-->
+        </div>
+    </div>
+</div>
+

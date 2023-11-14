@@ -1,0 +1,107 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.StudentCourseQuestionAdminAnswersViewModel
+
+<div id="AdminAnswerContexBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AdminAnswerContexForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن پاسخ ادمین</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="AnswerContext"></label>
+                        <textarea rows="3" asp-for="AnswerContext" class="form-control" data-bind="value: adminAnswerContex().AnswerContext"></textarea>
+                        <span asp-validation-for="AnswerContext" class="danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row d-img">
+                        <div class="col-lg-6 col-md-6 col-xs-6 pull-right">
+                            <div class="personal-pic">
+                                <div class="myAccount-content">
+                                    <div style="text-align:center">
+                                        <div class="form-group">
+                                            @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                                            new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                            {
+                                            ButtonFarsiName = "انتخاب تصویر",
+                                            DefualuNullImagePath = "/assets/img/DefaultFlag.svg",
+                                            Name = "AnswerPicPath",
+                                            KnockoutExpressionString = "MainViewModel.adminAnswerContex().AnswerPicPath",
+                                            MaxImageHeight = 3000,
+                                            MaxImageWidth = 3000,
+                                            MinImageHeight = 1,
+                                            MinImageWidth = 1,
+                                            MaxImageSize = 20480,
+                                            HasDeleteBtn = false,
+                                            //Description = "   حداکثر حجم مجاز تصویر : 300 کیلوبایت"
+                                            })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-xs-6 pull-right">
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                                new PanelPresentationLayer.ComponentModel.FileUploader()
+                                {
+                                ButtonFarsiName = "انتخاب فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.svg",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "AnswerFilePath",
+                                KnockoutExpressionString = "MainViewModel.adminAnswerContex().AnswerFilePath",
+                                HasDeleteBtn = false,
+                                MaxFileSize = 20480,
+                                //Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+                                })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row audio-div">
+                        <div class="col-md-12">
+                            <div class="audio-record">
+                                <button class="removeButton" type="button" id="answer_removeButton">
+                                    حذف ضبط <i class="fa fa-remove" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" id="answer_stopButton" class="inactive stopButton">
+                                    توقف ضبط <i class="fa fa-stop" aria-hidden="true"></i>
+                                </button>
+                                <button class="recordButton" type="button" id="answer_recordButton">
+                                    شروع ضبط <i class="fa fa-microphone" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="playback">
+                                <audio src="" controls id="answer_audioplayback" class="hidden audio-playback"></audio>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="IsBestAnswer"> </label>
+                        <select asp-for="IsBestAnswer" id="IsBest" class="form-control" data-bind="value: adminAnswerContex().IsBestAnswer">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            <option value="1"> بلی</option>
+                            <option value="0"> خیر</option>
+                        </select>
+                        <span asp-validation-for="IsBestAnswer" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

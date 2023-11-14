@@ -1,0 +1,539 @@
+﻿@using Common.Functions
+@using Common.Enums
+@{
+    ViewData["Title"] = "داشبورد";
+    ViewData["PageFarsiName"] = "داشبورد";
+        var UserGroup = (UserGroup)Convert.ToInt32(Context.User.Claims.ToList()[2].Value);
+}
+<style type="text/css">
+    .widget-body .box-all-m {
+        transition: all .3s;
+    }
+
+        .widget-body .box-all-m:hover .widget-body .box-all-m .box-img i {
+            color: blue;
+            transition: all .3s;
+        }
+
+        .widget-body .box-all-m:hover.widget-body .box-all-m .box-img span {
+            color: blue;
+            transition: all .3s;
+        }
+
+        .widget-body .box-all-m:hover.box-all-m .box-text .text {
+            color: #333;
+            transition: all .3s;
+        }
+
+        .widget-body .box-all-m .databox.databox-vertical.databox-lg {
+            height: 95px;
+            width: 100%;
+        }
+
+        .widget-body .box-all-m .box-text .text {
+            font-size: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: #777;
+            transition: all .3s;
+        }
+
+        .widget-body .box-all-m .box-text {
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .widget-body .box-all-m .box-img {
+            padding-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .widget-body .box-all-m .box-img i, .widget-body .box-all-m .box-img span {
+                font-size: 40px;
+            }
+
+    .widget-body {
+        padding: 15px !important;
+        min-height: 265px;
+    }
+
+    .online-class {
+        padding: 15px;
+    }
+
+        .online-class img {
+            width: 80px;
+            opacity: 0.6;
+            transition: all .3s;
+        }
+
+    .shake-box:hover img {
+        opacity: 1;
+        transition: all .3s;
+    }
+
+    .shake-box {
+        border-radius: 7px;
+        cursor: pointer;
+        border: 3px solid #ddd;
+        transition: all .3s;
+    }
+
+        .shake-box:hover {
+            border: 3px solid #fdbf00;
+            transition: all .3s;
+        }
+
+        .shake-box .databox-number {
+            font-size: 14px !important;
+            font-weight: 500;
+            color: #666 !important;
+            transition: all .3s;
+        }
+
+        .shake-box:hover .databox-number {
+            color: #444 !important;
+            transition: all .3s;
+        }
+</style>
+<script type="text/javascript">
+    $(function () {
+
+        $('body').on('click', '.tagShake', function () {
+            var url = $(this).attr('href');
+            pageLoader('#PageContent', '#pageLoader', url, true);
+        });
+
+    });
+</script>
+
+<div id="dashboardArea" class="page-body dashbord-main">
+    @if (UserGroup == UserGroup.Admin)
+    {
+    <div class="row">
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Identities/AdminUsers/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+                                <img src="~/assets/img/dashboard/settings.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">مدیران سیستم</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Identities/TeacherUsers/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+                                <img src="~/assets/img/dashboard/classroom.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">اساتید</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Identities/StudentUsers/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+                                <img src="~/assets/img/dashboard/graduated.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">دانشجویان</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/TrainingManagement/Courses/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/online-class.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">دوره ها</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/TrainingManagement/OnlineClasses/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/video-conference.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">کلاس آنلاین</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/TrainingManagement/Products/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/packaging.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">محصولات</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/TrainingManagement/Lessons/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/lesson.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:12px !important" class="databox-number lightcarbon no-margin">دروس</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Identities/Messages/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/message.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:12px !important" class="databox-number lightcarbon no-margin">پیام ها</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Contents/CoursePromos/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/ad.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:12px !important" class="databox-number lightcarbon no-margin">سکشن های تبلیغاتی دوره</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Orders/FinalizedOrders/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/online-shop.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:10px !important" class="databox-number lightcarbon no-margin">خرید های آنلاین دانش آموزان</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Financials/StudentUserFininces/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/money-transaction.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:10px !important" class="databox-number lightcarbon no-margin">تراکنش های آنلاین دانش آموزان</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Financials/StudentFinancialSummary/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/transaction.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:10px !important" class="databox-number lightcarbon no-margin">وضعیت مالی دانش آموز</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Financials/SalesPartnerUserShares/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/network.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">سهم همکار فروش</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/TrainingManagement/CourseStudentQuestions/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/question.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">پرسش و پاسخ</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Financials/DiscountCodes/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/voucher.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span class="databox-number lightcarbon no-margin">کدهای تخفیف</span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-2 col-sm-4 col-xs-6">
+            <a class="tagShake" href="/Financials/StudentPaymentLinks/Index">
+                <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                    <div class="databox-top">
+                        <div class="databox-piechart">
+                            <div class="online-class">
+
+                                <img src="~/assets/img/dashboard/link.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="databox-bottom no-padding text-align-center">
+                        <span style="font-size:10px !important" class="databox-number lightcarbon no-margin"> لینک های پرداخت دانش آموز  </span>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+    }
+    @if (UserGroup == UserGroup.Teacher)
+    {
+<div class="row">
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/Teachers/TeacherOnlineClasses/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+                            <img src="~/assets/img/dashboard/online-class.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">کلاس آنلاین</span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/Teachers/TeacherOnlineClassHistories/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/online-video.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">ویدیو های کلاس آنلاین </span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/Teachers/TeacherOnlineMeetings/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/online-class.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">کلاس فوق برنامه</span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/Teachers/TeacherOnlineMeetingHistories/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/online-video.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">ویدیوهای فوق برنامه</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/OnlineExams/OnlineExams/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/exam.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">آزمون آنلاین</span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/OnlineExams/DescriptiveQuestions/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/quiz.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">سوالات تشریحی</span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a class="tagShake" href="/OnlineExams/MultipleChoiceQuestions/Index">
+            <div class="databox databox-lg shake-box databox-vertical databox-inverted databox-graded">
+                <div class="databox-top">
+                    <div class="databox-piechart">
+                        <div class="online-class">
+
+                            <img src="~/assets/img/dashboard/quiz.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding text-align-center">
+                    <span class="databox-number lightcarbon no-margin">سوالات تستی</span>
+
+                </div>
+            </div>
+        </a>
+    </div>
+  
+</div>
+    }
+</div>
+

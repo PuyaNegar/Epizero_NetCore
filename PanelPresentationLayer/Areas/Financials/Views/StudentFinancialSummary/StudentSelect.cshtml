@@ -1,0 +1,45 @@
+﻿@model PanelViewModels.BaseViewModels.UserViewModel
+@using PanelPresentationLayer.ComponentModel
+@{
+    var Options = new ComboBoxOptions()
+    {
+        Url = "/Identities/StudentUsers/Read/",
+        ComboBoxName = "StudentChosen",
+        IsMultiSelect = false,
+        ComboBoxDataColumn = new List<ComboBoxDataColumn>() {
+new ComboBoxDataColumn() { ColumnTitle = "Id"  , ColumnName="Id" , IsVisible=false , IsSearchable=false } ,
+new ComboBoxDataColumn() { ColumnTitle = "دانش آموز"  , ColumnName="FullName" , IsSearchable= true , IsOrderable = false },
+new ComboBoxDataColumn() { ColumnTitle = "نام کاربری"  , ColumnName="UserName" , IsSearchable= true , IsOrderable = false },
+
+},
+        ValueField = "Id",
+        TextField = "FullName",
+        TargetValueInputId = "Selected_StudentId"
+
+    };
+}
+<div id="StudentSelectorModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="UserSelectorForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>انتخاب دانش آموز</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>دانش آموز</label>
+                        <input id="Selected_StudentName" type="hidden" class="form-control" />
+                        <input id="Selected_StudentId" type="hidden" class="form-control" />
+                        @await Html.PartialAsync("~/Views/Component/ChosenCombobox.cshtml", Options)
+                        <span asp-validation-for="StudentFullName" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+                    <button id="applySelectedStudent" type="button" class="btn btn-success btn-sm">انتخاب</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

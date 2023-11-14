@@ -1,0 +1,163 @@
+﻿@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+<style type="text/css">
+    .btn-warning {
+        color: #fff;
+        height: 25px;
+        font-size: 12px;
+        line-height: 13px;
+        margin-top: 8px;
+        margin-left: 3px;
+    }
+
+    .btn-danger {
+        margin-left: 3px;
+    }
+    .q-imge-e:hover {
+        cursor: pointer;
+    }
+
+    .q-imge-e {
+        padding:5px;
+        border-radius:5px;
+        width: 100px;
+    }
+</style>
+<div id="menu3" class="tab-pane">
+    <div class="container">
+
+        <div class="add-q-btn">
+            @*<button class="btn-a-i btn btn-warning  all-see-btn">
+            <i class="fa fa-eye"></i>
+            مشاهده همه پرسش های مربوط به این درس
+            </button>*@
+            @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse || Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any())
+            {
+                <a href="#add-q-box" class="btn-a-i add-a-q btn btn-danger">
+                    <i class="fa fa-plus"></i>
+                    اگر سوالی در این درس دارید بپرسید
+                </a>
+            }
+        </div>
+        <!-- ko if: mainViewModel.allCourseStudentQuestions().length > 0-->
+        <!-- ko foreach: mainViewModel.allCourseStudentQuestions() -->
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="box-question">
+
+                    <div class="q-text">
+
+                        <div class="q-title">
+                            <div class="title">
+                                <span>وضعیت : </span> <span data-bind="text: ConfirmStatusType"> در حال بررسی</span>
+                                /
+                                <span>تاریخ : </span> <span data-bind="text: RegDateTime"> 1400/10/03</span>
+                            </div>
+                        </div>
+                        <div class="btn-txt-j">
+                            <div class="row">
+                                <div class="col-md-8 pull-right">
+                                    <p data-bind="text : QuestionContext"></p>
+                                </div>
+                                <div class="col-md-4  pull-left">
+                                    @if (Courses.StudentAccessToCourse.IsAccessToEntireCourse || Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any())
+                                    {
+                                        <button data-bind="attr:{'data-Id':Id}" class="btn btn-danger btn-j-j add-answer"><i class="fa fa-plus"></i> ثبت پاسخ </button>
+                                    }<!--ko if:QuestionFilePath != null --><button data-bind="attr:{'data-url':QuestionFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:QuestionPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':QuestionPicPath,'data-url':QuestionPicPath}" /><!-- /ko -->
+                                    <!--ko if:AudioPath != null -->
+                                    <audio controls muted>
+                                        <source data-bind="attr:{'src':AudioPath}" type="audio/ogg">
+                                        <source data-bind="attr:{'src':AudioPath}" type="audio/mpeg">
+                                    </audio>
+                                    <!-- /ko -->
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- ko foreach: CourseStudentQuestionAnswers-->
+                    <div class="box-answer">
+                        <div class="all-a-box" data-bind="if:IsBestAnswer">
+                            <div class="box-title">
+                                <div class="title">
+                                    <span data-bind="text :  'پاسخ توسط' + '(' + AnsweredUserFullName + ')'"></span>
+                                    /
+                                    <span>تاریخ :</span> <span data-bind="text : RegDateTime "></span>
+                                </div>
+                            </div>
+                            <div class="box-j">
+                                <div class="row">
+                                    <div class="col-md-8 pull-right">
+                                        <img src="~/assets/img/elemans/check-on.svg" alt="پاسخ مدیر" />
+                                        <p data-bind="text : AnswerContext">
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4  pull-left">
+                                        <!--ko if:AnswerFilePath != null --><button data-bind="attr:{'data-url':AnswerFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:AnswerPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':AnswerPicPath,'data-url':AnswerPicPath}" /> <!-- /ko -->
+                                        <!--ko if:AnswerAudioPath != null -->
+                                        <audio controls muted>
+                                            <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/ogg">
+                                            <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/mpeg">
+                                        </audio>
+                                        <!-- /ko -->
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko-->
+                    <div class="q-btn">
+                        @*<a href="#" class="btn btn-info a-m-text"><span>سوال مشترک 23 نفر</span> <i class="fa fa-star"></i></a>*@
+                        <!-- ko if: NoBestAnswerCount > 0-->
+                        <a class="btn btn-danger a-text btn-answer">مشاهده همه پاسخ ها <span class="a-text-count-btn" data-bind="text: NoBestAnswerCount + ' '+ 'پاسخ' "></span></a>
+                        <!-- /ko-->
+                        <div class="box-answer-s">
+                            <!-- ko foreach: CourseStudentQuestionAnswers-->
+                            <div class="box-answer box-answer-s">
+                                <div class="all-a-box" data-bind="if:!IsBestAnswer">
+                                    <div class="box-title">
+                                        <span class="title" data-bind="text :  'پاسخ توسط' + '(' + AnsweredUserFullName + ')'"></span>
+                                    </div>
+                                    <div class="box-j">
+                                        <div class="row">
+                                            <div class="col-md-8 pull-right">
+                                                <p data-bind="text : AnswerContext"></p>
+                                            </div>
+                                            <div class="col-md-4  pull-left">
+                                                <!--ko if:AnswerFilePath != null --><button data-bind="attr:{'data-url':AnswerFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:AnswerPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':AnswerPicPath,'data-url':AnswerPicPath}" /> <!-- /ko -->
+                                                <!--ko if:AnswerAudioPath != null -->
+                                                <audio controls muted>
+                                                    <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/ogg">
+                                                    <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/mpeg">
+                                                </audio>
+                                                <!-- /ko -->
+                                            </div>
+
+                                        </div>
+                                         
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /ko-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /ko-->
+        <!-- /ko-->
+        <!-- ko ifnot: mainViewModel.allCourseStudentQuestions().length > 0-->
+        <div class="box-empty">
+            <div class="empty">
+                <img src="~/assets/img/box-empty.svg" alt="پرسش و پاسخ دوره" />
+                <p>پرسش و پاسخی برای این دوره ثبت نشده است .</p>
+            </div>
+        </div>
+        <!-- /ko-->
+    </div>
+</div>

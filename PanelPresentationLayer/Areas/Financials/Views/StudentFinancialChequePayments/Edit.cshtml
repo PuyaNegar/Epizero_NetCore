@@ -1,0 +1,94 @@
+﻿@model  PanelViewModels.EditPrefix<PanelViewModels.FinancialsViewModels.StudentFinancialChequePaymentsViewModel>
+
+    <div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                <form id="EditForm" role="form">
+                      <div class="modal-header edit-modal">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                        </div>
+                   <div class="modal-body">
+                       <div class="row">
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.DueDate"></label>
+                                   <input readonly="readonly" asp-for="Edit.DueDate" class="form-control" data-bind="value: e().DueDate">
+                                   <span asp-validation-for="Edit.DueDate" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.Description"></label>
+                                   <input readonly="readonly" asp-for="Edit.Description" class="form-control" data-bind="value: e().Description">
+                                   <span asp-validation-for="Edit.Description" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.ChequeNo"></label>
+                                   <input readonly="readonly" asp-for="Edit.ChequeNo" class="form-control" data-bind="value: e().ChequeNo">
+                                   <span asp-validation-for="Edit.ChequeNo" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.AmountPaid"></label>
+                                   <input type="text" readonly="readonly" asp-for="Edit.AmountPaid" class="form-control currency" data-bind="value: e().AmountPaid">
+                                   <span asp-validation-for="Edit.AmountPaid" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.BankName"></label>
+                                   <input readonly="readonly" asp-for="Edit.BankName" class="form-control" data-bind="value: e().BankName">
+                                   <span asp-validation-for="Edit.BankName" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.IssueDate"></label>
+                                   <input readonly="readonly" asp-for="Edit.IssueDate" class="form-control" data-bind="value: e().IssueDate">
+                                   <span asp-validation-for="Edit.IssueDate" class="danger"></span>
+                               </div>
+                           </div>
+                           <div style="display:none" class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.StudentFinancialPaymentId"></label>
+                                   <input readonly="readonly" asp-for="Edit.StudentFinancialPaymentId" class="form-control" data-bind="value: e().StudentFinancialPaymentId">
+                                   <span asp-validation-for="Edit.StudentFinancialPaymentId" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-6 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.CourseName"></label>
+                                   <input readonly="readonly" asp-for="Edit.CourseName" class="form-control" data-bind="value: e().CourseName">
+                                   <span asp-validation-for="Edit.CourseName" class="danger"></span>
+                               </div>
+                           </div>
+                           <div class="col-md-12 col-xs-12">
+                               <div class="form-group">
+                                   <label asp-for="Edit.ChequesStatusTypeId"></label>
+                                   <select asp-for="Edit.ChequesStatusTypeId" class="form-control" data-bind="value : e().ChequesStatusTypeId">
+                                       <option value="1">وصول شده</option>
+                                       <option value="2">وصول نشده</option>
+                                       <option value="3">برگشت خورده</option>
+                                   </select>
+                                   <span asp-validation-for="Edit.ChequesStatusTypeId" class="danger"></span>
+                               </div>
+                           </div>
+                       </div>
+                                    
+                        
+                         
+                        
+                      
+                  </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                  <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+             </div>
+            </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

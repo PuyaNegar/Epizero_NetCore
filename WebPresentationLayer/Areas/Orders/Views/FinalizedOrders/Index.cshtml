@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "سفارشات من";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+<style type="text/css">
+    .area-finalizedOrder .btn-warning {
+        margin-top: 0;
+    }
+
+    .area-finalizedOrder .modal-header {
+        background-color: #dddd;
+    }
+
+        .area-finalizedOrder .modal-header .close {
+            float: left !important;
+        }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            
+             //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            ReadFinalizedOrders();
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            function ReadFinalizedOrders() {
+                DataTransfer('/Orders/FinalizedOrders/Read/', 'Get', '', '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.finalizedOrders(f.Value);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.edit', function () {
+                var Id = $(this).attr('data-Id');
+                //**************=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**************
+                DataTransfer('/api/Orders/FinalizedOrders/Find/' + Id, 'Get', '', '',
+                    function (f) {
+                        toastr.remove();
+                        mainViewModel.infoFinalizedOrders(f.Value);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+                $('#EditBox').modal({ backdrop: 'static', keyboard: false });
+                $('#EditBox').modal('show');
+            });
+
+
+
+
+
+        });
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> سفارشات من </span>
+        </div>
+    </div>
+</div>
+<section class="box-menu box-course area-finalizedOrder">
+    <div class="container">
+        <div class="legend col-md-12">
+            <div class="title-o">
+                <i class="fa fa-list-alt"></i>
+                <span> سفارشات  من</span>
+            </div>
+            <!-- ko if:finalizedOrders().length > 0 -->
+            <div class="col-md-12 hidden-xs">
+                <div class="col-md-12 title-tbl-div">
+                    <div class="float-r width-d-25 text-align-r f-size-13 bold">
+                        نام نام خانوادگی
+                    </div>
+
+
+                    <div class="float-r width-d-15 text-align-r min-height-1 bold">
+                        شماره سفارش
+                    </div>
+
+                    <div class="float-r width-d-25 text-align-r min-height-1 bold">
+                        تاریخ و زمان ثبت
+                    </div>
+
+                    <div class="float-r width-d-15 text-align-r min-height-1 bold">
+                        جمع پرداختی (تومان)
+                    </div>
+
+                    <div class="float-l width-d-5  text-align-l">
+                    </div>
+
+                </div>
+            </div>
+            <!-- ko foreach: finalizedOrders-->
+            <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+                    <div class="hidden-xs float-r width-d-25 text-align-r bold f-size-12">
+                        <span data-bind="text:StudentUserFullName"></span>
+                    </div>
+                    <div class="float-r width-d-15 txt-w text-align-r   min-height-1">
+                        <span data-bind="text:InvoiceNo"></span>
+                    </div>
+
+                    <div class="float-r width-d-25 txt-w text-align-r   min-height-1">
+                        <span data-bind="text:RegDateTime"></span>
+                    </div>
+                    <div class="float-r width-d-15 txt-w text-align-r min-height-1">
+                        <span data-bind="text:PaymentAmount"></span>
+                    </div>
+
+
+                    <div class="hidden-xs btn-dore-lg center">
+                        <button data-bind="attr:{'data-Id':Id}" class="btn btn-warning btn-sm edit">
+                            <i class="fa fa-eye download"></i>
+                            <span class="date">نمایش</span>
+                        </button>
+                    </div>
+
+
+
+                    <div class="hidden-md hidden-lg hidden-sm col-xs-9 btn-dore-xs btn-dore-xs-d">
+                        <button data-bind="attr:{'data-Id':Id}" class="btn btn-warning btn-sm edit">
+                            <i class="fa fa-eye download"></i>
+                            <span class="date">نمایش</span>
+                        </button>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- ko ifnot:finalizedOrders().length > 0 -->
+            <div class="box-empty" style="border:none">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="سفارش آنلاین دوره" />
+                    <p>سفارشی برای شما ثبت نشده است .</p>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</section>
+@{ await Html.RenderPartialAsync("_info.cshtml"); }

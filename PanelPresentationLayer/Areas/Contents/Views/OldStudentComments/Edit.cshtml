@@ -1,0 +1,117 @@
+﻿@model PanelViewModels.EditPrefix<WebViewModels.ContentsViewModels.OldStudentCommentsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.StudentUserId"></label>
+                                <select asp-for="Edit.StudentUserId" class="form-control" data-bind="value : e().StudentUserId">
+                                    @foreach (var item in ViewBag.StudentUsers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Edit.StudentUserId" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Tilte"></label>
+                                <input asp-for="Edit.Tilte" class="form-control" data-bind="value: e().Tilte">
+                                <span asp-validation-for="Edit.Tilte" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.RegDateTimeComment"></label>
+                                <input data-mask="9999/99/99" asp-for="Edit.RegDateTimeComment" class="form-control" data-bind="value: e().RegDateTimeComment">
+                                <span asp-validation-for="Edit.RegDateTimeComment" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Inx"></label>
+                                <input asp-for="Edit.Inx" class="form-control" data-bind="value: e().Inx">
+                                <span asp-validation-for="Edit.Inx" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsActive"></label>
+                                <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                                    <option value="1">فعال</option>
+                                    @*       <option value="0">غیرفعال</option>*@
+                                </select>
+                                <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.CommentTypeId"></label>
+                                <select asp-for="Edit.CommentTypeId" class="form-control" data-bind="value: e().CommentTypeId">
+                                    <option value="1">متن</option>
+                                    <option value="2">فیلم</option>
+                                    <option value="3">صوت</option>
+                                </select>
+                                <span asp-validation-for="Edit.CommentTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="edit_commentTextDiv" class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CommentText"></label>
+                                <textarea rows="2" asp-for="Edit.CommentText" class="form-control" data-bind="value: e().CommentText"></textarea>
+                                <span asp-validation-for="Edit.CommentText" class="danger"></span>
+                            </div>
+                        </div>
+                        <div id="edit_commentAudioDiv" class="col-md-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="Edit.CommentAudio"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                                new PanelPresentationLayer.ComponentModel.FileUploader()
+                                {
+                                ButtonFarsiName = "آپلود فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "EditCommentAudioFilePath",
+                                KnockoutExpressionString = "MainViewModel.e().CommentAudio",
+                                HasDeleteBtn = false,
+                                MaxFileSize = 20480,
+                                Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+                                })
+                            </div>
+                            <span asp-validation-for="Edit.CommentAudio" class="danger"></span>
+                        </div>
+                        <div id="edit_commentVideoDiv" class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CommentVideo"></label>
+                                <input asp-for="Edit.CommentVideo" class="form-control" data-bind="value: e().CommentVideo">
+                                <span asp-validation-for="Edit.CommentVideo" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

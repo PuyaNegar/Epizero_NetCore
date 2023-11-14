@@ -1,0 +1,66 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.IdentitiesViewModels.MessagesViewModel>
+@{
+    var ReceiverUsers = ViewBag.ReceiverUsers;
+    var Tags = ViewBag.Tags;
+}
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  <strong>جزئیات</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Edit.MessageTypeName"></label>
+                        <input readonly="readonly" asp-for="Edit.MessageTypeName" class="form-control" data-bind="value: e().MessageTypeName">
+                        <span asp-validation-for="Edit.MessageTypeName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Edit.MessageTagsId"></label>
+                        <select disabled asp-for="Edit.MessageTagsId" class="form-control" data-bind="e().MessageTagsId" data-placeholder="تگ‌ها را انتخاب کنید" multiple>
+                            @foreach (var item in Tags)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Edit.MessageTagsId" class="danger"></span>
+                    </div>
+                    <!--ko if: e().MessageTypeId == 2 -->
+                    <div class="form-group">
+                        <label asp-for="Edit.ReceiverUserIds"></label>
+                        <select disabled asp-for="Edit.ReceiverUserIds" class="form-control" data-bind="e().ReceiverUsersId" data-placeholder="Select users..." multiple>
+                            @foreach (var item in ReceiverUsers)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Edit.ReceiverUsersId" class="danger"></span>
+                    </div>
+                    <!--/ko-->
+
+                    <div class="form-group">
+                        <label asp-for="Edit.Title"></label>
+                        <input readonly="readonly" asp-for="Edit.Title" class="form-control" data-bind="value: e().Title">
+                        <span asp-validation-for="Edit.Title" class="danger"></span>
+                    </div>
+
+                    <div class="form-group main-div">
+                        <label asp-for="Edit.Message" class="control-label"></label>
+                        <div class="form-control" data-bind="html: e().Message" style="min-height : 100px;display:table">
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    @*<button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>*@
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

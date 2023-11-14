@@ -1,0 +1,107 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.CourseMeetingVideosViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="CourseMeetingName"></label>
+                                <input class="form-control" readonly="readonly" value="@ViewBag.CourseMeetingName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Title"></label>
+                                <input asp-for="Title" class="form-control" data-bind="value: c().Title">
+                                <span asp-validation-for="Title" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select disabled="disabled" asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option selected="selected" value="1">فعال</option>
+                                    <option value="0">غير فعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Link"></label>
+                                <textarea rows="2" asp-for="Link" class="form-control" data-bind="value: c().Link"></textarea>
+                                <span asp-validation-for="Link" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="VideoUniqueId"></label>
+                                <input asp-for="VideoUniqueId" class="form-control" data-bind="value: c().VideoUniqueId">
+                                <span asp-validation-for="VideoUniqueId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                                <span asp-validation-for="Description" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="BannerPicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "BannerPicPath",
+                                   KnockoutExpressionString = "MainViewModel.c().BannerPicPath",
+                                   MaxImageHeight = 1000,
+                                   MaxImageWidth = 1000,
+                                   MinImageHeight = 1,
+                                   MinImageWidth = 1,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 1000 در 1000 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="BannerPicPath" class="danger"></span>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

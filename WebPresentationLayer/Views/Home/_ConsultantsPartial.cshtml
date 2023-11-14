@@ -1,0 +1,52 @@
+﻿@using WebViewModels.ContentsViewModels
+@{
+    var SuggestionTeachers = (List<SuggestionTeachersViewModel>)ViewBag.Data.SuggestionTeachers;
+}
+@if (SuggestionTeachers.Where(c=> c.TeacherUserTypeId == 2).Count() > 0)
+{
+    <style type="text/css">
+        .te-p-p .pad-line-s {
+            background-color: #1eb8d4;
+        }
+    </style>
+<section class="te-p-p">
+    <div class="container SearchPAll">
+        <div class="split-c">
+            <hr class="hr">
+            <span class="pad-line-s split-liner">
+                 مشاوران و رتبه های برتر اپیزرو
+            </span>
+        </div>
+    </div>
+    <div class="swiper-container swiper1">
+        <div class="swiper-wrapper">
+            @foreach (var item in SuggestionTeachers.Where(c=> c.TeacherUserTypeId == 2))
+            {
+                <div class="swiper-slide">
+                    <a href="/Contents/TeacherIntroductions?teacherId=@item.TeacherId">
+                        <div class="col-md-12 main-teacher">
+                            <div class="main-pic-path" style=" ">
+                                @if (!string.IsNullOrEmpty(item.TeacherPersonalPicPath))
+                                {
+                                        <img src="@item.TeacherPersonalPicPath" alt="مشاور و رتبه ی برتر اپیزرو @item.TeacherFullName" title="مشاور و رتبه ی برتر اپیزرو @item.TeacherFullName">
+                                }
+                                else
+                                {
+                                        <img src="~/assets/img/logo.png" alt="مشاور و رتبه ی برتر اپیزرو @item.TeacherFullName" title="مشاور و رتبه ی برتر اپیزرو @item.TeacherFullName" />
+                                }
+                            </div>
+                            <div class="col-md-12 main-title">
+                                @item.TeacherPrifixTitle    @item.TeacherFullName
+                                <br />
+                                @item.Skill
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+        <!-- Add Pagination -->
+        @*<div class="swiper-pagination1"></div>*@
+    </div>
+</section>
+}

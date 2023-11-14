@@ -1,0 +1,66 @@
+﻿@{
+    var TransactionResponse = (WebViewModels.IdentitiesViewModels.TransactionsResponseViewModel)ViewBag.Transactions;
+}
+<div id="MyTransaction" class="trasaction-main">
+    <div class="container">
+        <div class="row">
+            @if (TransactionResponse.Transactions.Any())
+            {
+                <div class="content-section default">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="tab-bar mt20 inner-tab">
+                                <div id="tab-20" class="tab-content current cm-list">
+                                    <div class="all-content col-md-12 col-sm-12 col-xs-12 ">
+                                        <ul class="table-row hidden-md hidden-sm hidden-xs" style="width:100%">
+                                            <li class="b center col-md-3 col-title table-cell text-center pull-right">عنوان</li>
+                                            <li class="c center col-md-3 col-td table-cell pull-right">تاریخ/ساعت</li>
+                                            <li class="d col-md-3 col-td table-cell text-center pull-right">برداشت/واریز</li>
+                                            <li class="e col-md-3 col-td table-cell text-center pull-right">موجودی</li>
+                      
+                                        </ul>
+                                    </div>
+                                    <hr>
+                                    <div class="row table-row-content">
+                                        @foreach (var item in TransactionResponse.Transactions)
+                                        {
+                                            <div class="col-md-12 col-sm-12 col-xs-12 row-color  @(item.Withdraw != 0  ? "row-com2" : "row-com1")">
+                                                <div class="div-center complate-m col-lg-3  col-sm-6  col-xs-12 pull-right">
+                                                    <div class="dic-m">
+                                                        <span class="typeInvoice">@item.FinancialTransactionTypes</span>
+                                                        <span class="InvoiceCode">
+                                                            (<a>ش صورتحساب:@item.InvoiceNo</a>)
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="div-center date-m col-lg-3 col-md-6 col-sm-6 col-xs-6 hidden-xs pull-right">@item.RegDateTime</div>
+                                                <div class="div-center col-lg-3  col-sm-6  col-xs-6 throw-digit pull-right  @(item.Withdraw == 0 ? "throw-m-green" : "throw-m-red")">
+                                                    @(item.Withdraw == 0 ? string.Format("{0:N0}",item.Deposit) : string.Format("{0:N0}", item.Withdraw))
+                                                </div>
+                                                <div class="div-center balance-m col-lg-3 col-sm-6  col-xs-6 pull-right">
+                                                    <span class="balanc-title-m"></span>
+                                                    <span style="font-size: 14px; font-weight: 500">@(string.Format("{0:N0}", item.Balance))</span>
+                                                </div>
+                                                <span class="hidden-md hidden-lg @(item.Withdraw != 0 ? "p-m-mines" :"p-m-plus")"> @(item.Withdraw != 0 ? "-" : "+") </span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="box-empty">
+                    <div class="empty">
+                        <img src="~/assets/img/box-empty.svg" alt="تراکنش مالی برای شما ثبت نشده است" title="تراکنش مالی برای شما ثبت نشده است" />
+                        <p>تراکنش مالی برای شما ثبت نشده است.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

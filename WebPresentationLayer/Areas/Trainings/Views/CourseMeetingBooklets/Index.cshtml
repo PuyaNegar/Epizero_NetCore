@@ -1,0 +1,148 @@
+﻿@{
+    var StudentCourseGroups = (List<WebViewModels.TrainingsViewModels.StudentCourseGroupsViewModel>)ViewBag.Data;
+    ViewData["Title"] = "جزوات من";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    int i = 0;
+    int j = 0;
+    int t = 0;
+}
+<style type="text/css">
+    .nav-tabs > li > a {
+        border: unset;
+    }
+   
+    .box-tab .main-tab .ul-nav .nav-s .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+    .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> جزوات من </span>
+        </div>
+    </div>
+</div>
+<section class="box-tab box-download">
+    <div class="container">
+        @if (StudentCourseGroups.Any())
+        {
+            <div class="legend col-md-12 float-r-o-i">
+                <div class="title-o">
+                    <i class="fa fa-window-restore"></i>
+                    <span>جزوات من</span>
+                </div>
+
+                <div class="col-md-12 col-xs-12 main-tab">
+
+                    <div class="ul-nav">
+                        <div class="nav-s">
+
+                            <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg tab-ul-xs">
+                                @foreach (var a in StudentCourseGroups)
+                                {
+                                    <li class="centered col-centered  @(j == 0 ? "active" : "") col-xs-12">
+                                        <a data-toggle="tab" href="#menu_@j">@a.Name</a>
+                                    </li>
+                                    j++;
+                                }
+                            </ul>
+                            <ul class="nav nav-tabs hidden-xs tab-ul-lg">
+                                @foreach (var a in StudentCourseGroups)
+                                {
+                                    <li class="centered col-centered @(t == 0  ? "active" : "")">
+                                        <a data-toggle="tab" href="#menu_@t" aria-expanded="true">@a.Name</a>
+                                    </li>
+                                    t++;
+                                }
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        @foreach (var item in StudentCourseGroups)
+                        {
+                        <div id="menu_@i" class="tab-pane fade @(i== 0  ? "active in" : "")">
+                            @if (item.StudentCourseMeetings.Where(c => c.HasBooklet).Count() > 0)
+                            {
+                                <div class="col-md-12 hidden-xs">
+
+                                    <div class="col-md-12 title-tbl-div">
+
+                                        <div class="float-r width-d-25 text-align-r f-size-13 bold">
+                                            عنوان
+                                        </div>
+
+
+                                        <div class="float-r width-d-25 text-align-r min-height-1 bold">
+                                            مدرس
+                                        </div>
+
+                                        @*<div class="float-r width-d-10  text-align-c">
+                        حجم
+                    </div>*@
+
+
+
+                                    </div>
+                                </div>
+
+                                @foreach (var studentCourseMeetings in item.StudentCourseMeetings.Where(c => c.HasBooklet))
+                                {
+                                    <div class="col-md-12 col-sm-12 col-xs-12 pageall  content0">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+                                            <div class="as-a-t float-r width-d-25 text-align-r bold f-size-12">
+                                                @studentCourseMeetings.Name
+                                            </div>
+                                            <div class="as-a-t float-r width-d-25 text-align-r bold f-size-12">
+                                                @studentCourseMeetings.TeacherFullName
+                                            </div>
+                                            <div class="hidden-xs as-a-t float-r width-d-25 text-align-r bold f-size-12">
+
+                                            </div>
+                                            @if (studentCourseMeetings.HasBooklet)
+                                            {
+                                                <div class="  btn-dore-lg ">
+                                                    <a href="/Trainings/CourseMeetingSections/?CourseMeetingId=@studentCourseMeetings.CourseMeetingId">
+                                                        <div class="cover">
+                                                            <i class="fa of download fa-eye  "></i>
+                                                            مشاهده جزوه ها
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                                    <p class="place-holder">جزوه ایی برای شما ثبت نشده است.</p>
+                                </div>
+                            }
+                        </div>
+                            i++;
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="جزوه " />
+                    <p>جزوه هایی برای شما ثبت نشده است .</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

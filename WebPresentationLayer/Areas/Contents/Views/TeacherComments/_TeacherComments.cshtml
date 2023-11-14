@@ -1,0 +1,75 @@
+﻿@model List<WebViewModels.ContentsViewModels.TeacherCommentsViewModel>
+
+<div class="legend col-md-12 float-r-o-i comment-teacher">
+    <div class="col-md-12 col-xs-12 main-tab twb_wc_reviews_slide_wrap">
+        <div class="row twb_wc_reviews_wrapper">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4" style="padding-right: 8px;padding-left: 8px;">
+                    <div class="twb_wc_reviews ">
+                        <div class="">
+                            <div class="twb_wc_reviews_product_thumb">
+                                <a > <img loading="lazy" src="~/assets/img/profile_image_man.png" class="attachment-150x150 size-150x150 wp-post-image" alt=" " width="100" height="100"> </a>
+                            </div>
+                            <a>
+                                <div class="twb_wc_reviews_ct">
+                                    <p>@item.Comment</p>
+                                </div>
+                            </a>
+                            <div class="author">
+                                <div class="twb_wcr_author">@item.StudentUserFullName</div>
+                                <div class="twb_wcr_date">@item.StringConfirmedDateTime</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+                @* <li class="comment-main centered col-centered col-xs-12">
+        <h6 class="studentUserFullName">@item.StudentUserFullName</h6>
+        <div class="comment-txt btn-courseStudentQuestions">@item.Comment</div>
+        </li>*@
+            }
+        }
+        else
+        {
+            <ul class="nav nav-tabs tab-ul-xs text-right">
+                <li class="centered col-centered col-xs-12">
+                    <h6>شمااولین نفر باشید که نظر ثبت میکنید</h6>
+                    <div class="btn-courseStudentQuestions"></div>
+                </li>
+            </ul>
+        }
+
+
+        <div class="card-footer bg-white">
+            <nav aria-label="Page navigation" class="float-left">
+                <ul class="pagination pagination-sm">
+                    @if (ViewBag.PageID > 1)
+                    {
+                        <li class="page-item"><a aria-label="Previous" onclick="pagedown(@((int)ViewBag.PageID-1))" class="page-link"><span aria-hidden="true"><i class="fa fa-arrow-left m-0"></i></span></a></li>
+                    }
+                    @for (int i = 1; i <= ViewBag.PageCount + 1; i++)
+                    {
+                        if (i <= ViewBag.PageID + 3 && i >= ViewBag.PageID - 3)
+                        {
+                            <li class="@(((int)ViewBag.PageID==i)?"active":"") page-item" aria-current="@(((int)ViewBag.PageID==i)?"page":"")"><a onclick="Page(@i)" class="page-link">@i<span class="sr-only"></span></a></li>
+                        }
+                    }
+                    @if (ViewBag.PageCount + 1 > ViewBag.PageID)
+                    {
+                        <li class="page-item"><a aria-label="Next" onclick="pageup(@((int)ViewBag.PageID+1))" class="page-link"><span aria-hidden="true"><i class="fa fa-arrow-right m-0"></i></span></a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <input type="hidden" value="@ViewBag.PageID" id="pageid" />
+        <input type="hidden" value="@ViewBag.TeacherId" id="TeacherId" />
+    </div>
+</div>

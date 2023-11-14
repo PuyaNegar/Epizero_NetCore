@@ -1,0 +1,427 @@
+﻿@using PanelViewModels.OnlineExamsViewModels
+@using Common.Enums;
+@model PanelViewModels.OnlineExamsViewModels.MultipleChoiceQuestionsViewModel
+@{
+    Layout = "_QuestionsDesignerLayout";
+    var dtoModel = (MultipleChoiceQuestionsViewModel)ViewBag.Data;
+    ViewBag.Title = ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create) ? "افزودن سوال تستی" : "ویرایش سوال تستی";
+    var Id = (QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create ? 0 : dtoModel.Id;
+    var Url = ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create ? "/OnlineExams/MultipleChoiceQuestions/Add" : "/OnlineExams/MultipleChoiceQuestions/Update");
+}
+<style type="text/css">
+    div {
+        height: auto !important;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#LessonSelectBtn').click(function () {
+            openLessonSelectorModal('', 'LessonId', 'LessonName');
+        });
+        $("#LessonId").change(function () {
+            localStorage.setItem("LessonId", $('#LessonId').val());
+            localStorage.setItem("LessonName", $('#LessonName').val());
+            CreateComboLoader("/OnlineExams/DescriptiveQuestions/GetLessonTopics/",
+                "#LessonTopicId",
+                '',
+                "Value",
+                "Text",
+                $(this).val(),
+                true,
+                function () {
+                   @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+                   {
+                        <text>
+                    $('#LessonTopicId').val('@Html.Raw(dtoModel.LessonTopicId)').change();
+                        </text>
+                   }
+                },
+                null);
+        });
+
+        //************************************************************************
+             @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Create)
+             {   <text>
+        $('#ResponseTime').val('60').change();
+        $('#LessonId').val(localStorage.getItem("LessonId"));
+        $('#LessonName').val(localStorage.getItem("LessonName"));
+                 </text>
+             }
+        //************************************************************************
+           @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+           {
+            <text>
+
+               @(Html.Raw((int)dtoModel.IsTextQuestionContext))  == 1 ? $('#isTextQuestionContext').prop('checked', true) : $('#isTextQuestionContext').prop('checked', false);
+                       @(Html.Raw((int)dtoModel.IsTextOption1))  == 1 ? $('#isTextOption1').prop('checked', true) : $('#isTextOption1').prop('checked', false);
+                       @(Html.Raw((int)dtoModel.IsTextOption2))  == 1 ? $('#isTextOption2').prop('checked', true) : $('#isTextOption2').prop('checked', false);
+                       @(Html.Raw((int)dtoModel.IsTextOption3))  == 1 ? $('#isTextOption3').prop('checked', true) : $('#isTextOption3').prop('checked', false);
+                       @(Html.Raw((int)dtoModel.IsTextOption4))  == 1 ? $('#isTextOption4').prop('checked', true) : $('#isTextOption4').prop('checked', false);
+
+
+               $('#DifficultyLevelType').val('@Html.Raw((int)dtoModel.DifficultyLevelType)');
+               $('#ResponseTime').val('@Html.Raw(dtoModel.ResponseTime)').change();
+               $('#LessonId').val('@dtoModel.LessonId').change();
+               $('#LessonName').val('@Html.Raw(dtoModel.LessonName)') ;
+               $('#Source').val('@Html.Raw(dtoModel.Source)').change();
+               $('input[value=#]'.replace(/#/g, '@Html.Raw(dtoModel.CorrectOption)')).prop('checked', true);
+            </text>
+           }
+        $('#GroupSelectBtn').click(function () {
+                  openLessonTopicSelectorModal('', 'LessonTopicId', 'LessonTopicName');
+        });
+        //************************************************************************
+        $('body').on('click', '.cancelBtn', function () {
+            window.location.href = "/OnlineExams/MultipleChoiceQuestions/Index/" + $('#LessonId').val();
+        });
+        //************************************************************************
+            $('#multipleChoiceQuestionsForm').submit(function () {
+                
+           if ($(this).valid()) {
+               toastr.remove();
+               if (!$('input[name=questionchoice]:checked').val()) {
+                   toastr.error("گزینه صحیح را انتخاب کنید.");
+                   return false;
+               }
+                 var data = {
+                    Id: @Id,
+                    QuestionId: 0,
+                     IsTextQuestionContext: $('#isTextQuestionContext').is(':checked') ? 1 : 0,
+                     IsTextOption1: $('#isTextOption1').is(':checked') ? 1 : 0,
+                     IsTextOption2: $('#isTextOption2').is(':checked') ? 1 : 0,
+                     IsTextOption3: $('#isTextOption3').is(':checked') ? 1 : 0,
+                     IsTextOption4: $('#isTextOption4').is(':checked') ? 1 : 0,
+                    ResponseTime: $('#ResponseTime').val(),
+                    LessonId: $('#LessonId').val(),
+                    DifficultyLevelType: $('#DifficultyLevelType').val(),
+                     Source: $('#Source').val(),
+                     DescriptiveAnswer: CKEDITOR.instances.DescriptiveAnswer.getData(),
+                     QuestionContext: CKEDITOR.instances.QuestionContext.getData(),
+                     Option1: CKEDITOR.instances.Option1.getData(),
+                     Option2: CKEDITOR.instances.Option2.getData(),
+                     Option3: CKEDITOR.instances.Option3.getData(),
+                     Option4: CKEDITOR.instances.Option4.getData(),
+                     DescriptiveAnswer_Html: $('#cke_DescriptiveAnswer').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     QuestionContext_Html: $('#cke_QuestionContext').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     Option1_Html: $('#cke_Option1').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     Option2_Html: $('#cke_Option2').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     Option3_Html: $('#cke_Option3').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     Option4_Html: $('#cke_Option4').find('iframe.cke_wysiwyg_frame').contents().find("body").html(),
+                     CorrectOption: $('input[name=questionchoice]:checked').val()
+                    };
+                       var url = '@Url';
+                       DataTransfer(url, ko.toJSON(data), '#resultLoader', function (e) {
+                           toastr.remove();
+                           if (!e.IsSuccess) {
+                               toastr.error(e.Message);
+                           } else {
+                               toastr.success(e.Message);
+                               setTimeout(function () { window.location.href = "/OnlineExams/MultipleChoiceQuestions/Index/" + $('#LessonId').val()}, 1000);
+                           }
+                       }, function (e) {
+                           toastr.error('خطا در ارتباط با سرور');
+                       });
+                   }
+                   return false;
+        });
+
+        $("#LessonId").change();
+        $('body').on('click', '.returnToQuestionBtn', function () {
+            $('.cancelBtn').click();
+        });
+    });
+</script>
+
+@if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+{
+    <script id="descriptiveAnswerHolder" type="text/html">
+        @Html.Raw(dtoModel.DescriptiveAnswer)
+    </script>
+    <script id="questionContextHolder" type="text/html">
+        @Html.Raw(dtoModel.QuestionContext)
+    </script>
+    <script id="option1ContextHolder" type="text/html">
+        @Html.Raw(dtoModel.Option1)
+    </script>
+    <script id="option2ContextHolder" type="text/html">
+        @Html.Raw(dtoModel.Option2)
+    </script>
+    <script id="option3ContextHolder" type="text/html">
+        @Html.Raw(dtoModel.Option3)
+    </script>
+    <script id="option4ContextHolder" type="text/html">
+        @Html.Raw(dtoModel.Option4)
+    </script>
+
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption"> اطلاعات سوال تستی</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <form id="multipleChoiceQuestionsForm" role="form">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="LessonId"></label>
+                                <div class="input-group">
+                                    <input asp-for="LessonId" type="hidden" class="form-control" />
+                                    <input asp-for="LessonName" readonly="readonly" type="text" class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button id="LessonSelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="LessonId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 hidden-xs hidden-sm">
+                            <div class="returnToQuestionBtn form-group">
+                                <a id="returnToQuestionBtn" class="btn btn-default"> <span class="glyphicon glyphicon-backward" aria-hidden="true"></span> بازگشت به صفحه سوالات تستی </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-md-6">
+                                <div class="form-group reletive">
+                                    <label for="LessonTopicId">نام سرفصل</label>
+                                    <select id="LessonTopicId" class="form-control">
+                                    </select>
+                                </div>
+                            </div>*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label asp-for="ResponseTime"></label>
+                                    <input type="number" asp-for="ResponseTime" class="form-control">
+                                    <span asp-validation-for="ResponseTime" class="danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IsTextQuestionContext"></label>
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="isTextQuestionContext" type="checkbox" class="colored-success">
+                                        <span class="text">محتوای سوال متنی است؟</span>
+                                    </label>
+                                </div>
+                                <span asp-validation-for="IsTextQuestionContext" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="DifficultyLevelType"></label>
+                                <select asp-for="DifficultyLevelType" class="form-control">
+                                    <option value="1">ساده</option>
+                                    <option value="2">متوسط</option>
+                                    <option value="3">دشوار</option>
+                                </select>
+                                <span asp-validation-for="DifficultyLevelType" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Source"></label>
+                                <input asp-for="Source" class="form-control">
+                                <span asp-validation-for="Source" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <hr class="col-12" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>پاسخ تشریحی</label>
+                                <textarea asp-for="DescriptiveAnswer" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="DescriptiveAnswer" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>متن سوال</label>
+                                <textarea asp-for="QuestionContext" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="QuestionContext" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr class="col-12" />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="questionchoice" type="radio" value="1" class="colored-success">
+                                            <span class="text"> گزینه یک</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-sm-6 col-xs-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="isTextOption1" type="checkbox" class="colored-success">
+                                            <span class="text">محتوای گزینه متنی است؟</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="widget">
+                                <textarea asp-for="Option1" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="Option1" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="questionchoice" type="radio" value="2" class="colored-success">
+                                            <span class="text"> گزینه دو</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-sm-6 col-xs-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="isTextOption2" type="checkbox" class="colored-success">
+                                            <span class="text">محتوای گزینه متنی است؟</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="widget">
+                                <textarea asp-for="Option2" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="Option2" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="questionchoice" type="radio" value="3" class="colored-success">
+                                            <span class="text"> گزینه سه</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-sm-6 col-xs-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="isTextOption3" type="checkbox" class="colored-success">
+                                            <span class="text">محتوای گزینه متنی است؟</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="widget">
+                                <textarea asp-for="Option3" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="Option3" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="questionchoice" type="radio" value="4" class="colored-success">
+                                            <span class="text"> گزینه چهار</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-sm-6 col-xs-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="isTextOption4" type="checkbox" class="colored-success">
+                                            <span class="text">محتوای گزینه متنی است؟</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="widget">
+                                <textarea asp-for="Option4" rows="10" cols="80"> </textarea>
+                                <span asp-validation-for="Option4" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var roxyFileman = '/FileManager/Index';
+                        var config = {
+                            filebrowserBrowseUrl: roxyFileman,
+                            on: {
+                                instanceReady: function (ev) {
+                                    document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                    ev.editor.on('focus', function (e) {
+                                        document.getElementById(ev.editor.id + '_top').style.display = 'block';
+                                    });
+                                    ev.editor.on('blur', function (e) {
+                                        document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                    });
+                                }
+                            }
+                        };
+                        CKEDITOR.replace('QuestionContext', config);
+                        CKEDITOR.replace('DescriptiveAnswer', config);
+                        CKEDITOR.replace('Option1', config);
+                        CKEDITOR.replace('Option2', config);
+                        CKEDITOR.replace('Option3', config);
+                        CKEDITOR.replace('Option4', config);
+
+
+                         @if ((QuestionDesignType)ViewBag.QuestionDesignType == QuestionDesignType.Edit)
+                         {
+                             <text>
+                               CKEDITOR.instances.DescriptiveAnswer.setData($('#descriptiveAnswerHolder').html());
+                               CKEDITOR.instances.QuestionContext.setData($('#questionContextHolder').html());
+                               CKEDITOR.instances.Option1.setData($('#option1ContextHolder').html());
+                               CKEDITOR.instances.Option2.setData($('#option2ContextHolder').html());
+                               CKEDITOR.instances.Option3.setData($('#option3ContextHolder').html());
+                               CKEDITOR.instances.Option4.setData($('#option4ContextHolder').html());
+                             </text>
+                          }
+
+
+                    </script>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-sm cancelBtn" data-dismiss="modal">انصراف</button>
+                                <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @{
+        await Html.RenderPartialAsync("~/Views/Component/LessonSelectorComponent.cshtml");
+
+        // await Html.RenderPartialAsync("~/Views/Component/LessonTopicSelectorComponent.cshtml");
+    }
+</div>

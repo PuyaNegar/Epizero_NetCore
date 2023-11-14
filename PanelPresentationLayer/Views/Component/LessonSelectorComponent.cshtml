@@ -1,0 +1,130 @@
+﻿@using PanelViewModels.Prefix
+@using PanelViewModels.TrainingManagementViewModels
+@model SelectorPrefix<LessonSelectorViewModel>
+
+<script type="text/javascript">
+    $(function () {
+        //***************************************************************************************
+        InitialChosen('#Selector_LevelGroupId');
+        //***************************************************************************************
+        $("#Selector_LevelGroupId").change(function () {
+            destroyChosen('#Selector_LevelId');
+            $("#Selector_LevelId").children().remove();
+            CreateComboLoader("/TrainingManagement/Levels/ReadForComboBox/",
+                "#Selector_LevelId",
+                '',
+                "Value",
+                "Text",
+                $(this).val(),
+                true,
+                function () { InitialChosen('#Selector_LevelId'); $('#Selector_LevelId').change(); },
+                null);
+        });
+        //***************************************************************************************
+        $("#Selector_LevelGroupId").change();
+        //***************************************************************************************
+        $("#Selector_LevelId").change(function () {
+            destroyChosen('#Selector_LessonId');
+            $("#Selector_LessonId").children().remove();
+            CreateComboLoader("/TrainingManagement/Lessons/ReadForComboBox/",
+                "#Selector_LessonId",
+                '',
+                "Value",
+                "Text",
+                $(this).val(),
+                true,
+                function () { InitialChosen('#Selector_LessonId'); $('#Selector_LessonId').change(); },
+                null);
+        });
+        //***************************************************************************************
+        $('#Selector_LessonBtn').click(function () {
+            if (IsNullOrEmptyString($('#Selector_LessonId').val())) {
+                toastr.remove();
+                toastr.error('درس را انتخاب کنید ');
+                return false
+            }
+          
+            var levelGroup = $('#Selector_LevelGroupId option:selected').html();
+            var level = $('#Selector_LevelId option:selected').html();
+            var lesson = $('#Selector_LessonId option:selected').html();
+            if (!IsNullOrEmptyString($('#LessonSelectorModal').attr('data-multiTargetElementsForText'))) {
+                var str = $('#LessonSelectorModal').attr('data-multiTargetElementsForText').split(',');
+                $('#' + str[0]).val(levelGroup);
+                $('#' + str[1]).val(level);
+                $('#' + str[2]).val(lesson);
+            } else {
+                var str = levelGroup + ' - ' + level + ' - ' + lesson;
+                $('#' + $('#LessonSelectorModal').attr('data-targetElementForText')).val(str);
+            }
+            $('#LessonSelectorModal').modal('hide');
+            $('#' + $('#LessonSelectorModal').attr('data-targetElementForId')).val($('#Selector_LessonId').val()).change();
+        });
+        //*********************************************************************************
+        $('#LessonSelectorModal').on("hidden.bs.modal", function (event) {
+            if (!IsNullOrEmptyString($('#LessonSelectorModal').attr('data-parentModalId'))) {
+                $('body').addClass('modal-open');
+                $('#' + $('#LessonSelectorModal').attr('data-parentModalId')).modal('show');
+            }
+        });
+        //*********************************************************************************
+    });
+</script>
+<div id="LessonSelectorModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog" data-targetElementForId="" data-targetElementForText="" data-parentModalId="" data-multiTargetElementsForText="">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="categoryForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> <strong>انتخاب  درس</strong>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label asp-for="Selector.LevelGroupId"></label>
+                                <select asp-for="Selector.LevelGroupId" class="form-control">
+                                    <option value="">لطفاً مقطع تحصیلی را انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.LevelGroups)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Selector.LevelGroupId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+
+                            <div class="form-group reletive">
+                                <label asp-for="Selector.LevelId"></label>
+                                <select asp-for="Selector.LevelId" class="form-control">
+                                    <!--load by javascript-->
+                                </select>
+                                <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom comboBoxIconLoader"></i>
+                                <span asp-validation-for="Selector.LevelId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group reletive">
+                                <label asp-for="Selector.LessonId"></label>
+                                <select asp-for="Selector.LessonId" class="form-control">
+                                    <!--load by javascript-->
+                                </select>
+                                <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom comboBoxIconLoader"></i>
+                                <span asp-validation-for="Selector.LessonId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button id="Selector_LessonBtn" type="button" class="btn btn-success btn-sm">انتخاب </button>
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

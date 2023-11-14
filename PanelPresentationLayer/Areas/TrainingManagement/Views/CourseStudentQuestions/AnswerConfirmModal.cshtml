@@ -1,0 +1,83 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.StudentCourseQuestionAnswerConfirmViewModel
+
+
+<div id="AnswerConfirmModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="ConfirmForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span>  <strong>تعیین وضعیت</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>متن پاسخ</label>
+                                <textarea id="answerContext" rows="3" class="form-control" readonly="readonly"></textarea>
+                            </div>
+                        </div>
+                     </div>
+                   <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label>نام پاسخ دهنده</label>
+                                <input id="answeredUserFullName" class="form-control" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label>تاریخ ارسال پاسخ</label>
+                                <input id="regDateTime" class="form-control" readonly="readonly">
+                            </div>
+                        </div>
+                   </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label>وضعیت تأیید</label>
+                                <select asp-for="IsVerified" class="form-control" data-bind="value: confirm().IsVerified">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">تأیید شده</option>
+                                    <option value="0">رد شده </option>
+                                </select>
+                                <span asp-validation-for="IsVerified" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label>آیا بهترین پاسخ است ؟</label>
+                                <select asp-for="IsBestAnswer" id="IsBest" class="form-control" data-bind="value: confirm().IsBestAnswer">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1"> بلی</option>
+                                    <option value="0"> خیر</option>
+                                </select>
+                                <span asp-validation-for="IsBestAnswer" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-12 div-file">
+                            <button id="data-answerFilePath" class="btn btn-info btn-sm btn-dwn">مشاهده فایل</button>
+                        </div>
+                        <div class="col-md-3 col-xs-12 div-pic">
+                            <button id="data-answerPicPath" class="btn btn-info btn-sm btn-dwn">مشاهده تصویر</button>
+                        </div>
+                        <div class="col-md-6 col-xs-12 div-audio">
+                            <audio style="width:100%" controls>
+                                <source id="data-answerAudioPath-1" src="" type="audio/ogg">
+                                <source id="data-answerAudioPath" src="" type="audio/mpeg">
+                            </audio>
+                        </div>
+                    </div>
+                   
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

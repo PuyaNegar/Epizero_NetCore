@@ -1,0 +1,154 @@
+﻿@model WebViewModels.ContentsViewModels.ContactUsViewModel
+
+@{
+    ViewData["Title"] = "تماس با ما";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            $('#captchaImg').click(function () {
+                $('#captchaImg').attr('src', '/Captcha/Get/' + Number.parseInt(Math.random() * 100000));
+            });
+            $('#contactForm').submit(function () {
+                if ($(this).valid()) {
+                    if (mainViewModel.contactUs().CaptchText == null) {
+                        toastr.error('متن کپچا را وارد کنید');
+                    }
+                    toastr.remove();
+                    $('.icon-loader').show();
+                    DataTransfer('/api/Contents/ContactUs/Add', 'post', ko.toJSON(mainViewModel.contactUs()), '.loader', function (e) {
+                        toastr.success(e.Message);
+                        mainViewModel.contactUs({});
+                        $('#captchaImg').click();
+                    }, function (e) {
+                        toastr.error(e.responseJSON.Message);
+                    });
+                }
+                return false;
+            });
+            //============================================================================
+
+        });
+
+    </script>
+}
+<style type="text/css">
+    h1 {
+        display: inline-block;
+    }
+
+    .h1-title {
+        margin: 0px;
+        font-size: 14px;
+    }
+
+    .split-liner {
+        line-height: 29px;
+    }
+</style>
+
+<section>
+    <div class="container-fluid SearchPAll">
+        <div class="split-c">
+            <hr class="hr">
+            <h1 class="pad-line-s split-liner bg-color-yellow h1-title">
+                مشتاقانه منتظر ارتباط با شما هستیم
+            </h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="contentus">
+            <div class="col-xs-12 col-md-6 right">
+
+                <i class="fa fa-map-pin" aria-hidden="true"></i>
+                تهران: خیابان سعادت آباد، میدان سرو
+                <br />
+                <i class="fa fa-phone-square" aria-hidden="true"></i>
+                021284221
+                <br />
+                <i class="fa fa-map-pin" aria-hidden="true"></i>
+                تبریز: خیابان 17 شهریور جدید ساختمان نابغه
+                <br />
+                <i class="fa fa-phone-square" aria-hidden="true"></i>
+                ۰۴۱۳۵۵۵۸۴۳۷
+                <br />
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                ساعات کاری:
+                شنبه تا پنجشنبه از ساعت 10 تا 19
+                <br />
+            </div>
+
+            <div class="col-xs-12 col-md-6 left">
+
+                @*<div class="title">
+                مشتاقانه منتظر ارتباط با شما هستیم
+                </div>*@
+
+
+                <form id="contactForm">
+                    <div class="controls">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="form_lastname">نام نام خانوادگی *</label>
+                                    <input asp-for="FullName" type="text" data-bind="value: contactUs().FullName" class="form-control" placeholder="نام نام خانوادگی *">
+                                    <span asp-validation-for="FullName" class="validation help-block with-errors"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_email">ایمیل</label>
+                                    <input asp-for="Email" type="text" data-bind="value: contactUs().Email" class="form-control" placeholder="ایمیل">
+                                    <span asp-validation-for="Email" class="validation help-block with-errors"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="form_phone">موبایل*</label>
+                                    <input asp-for="MobNo" type="text" data-bind="value: contactUs().MobNo" class="form-control" placeholder="شماره موبایل*">
+                                    <span asp-validation-for="MobNo" class="validation help-block with-errors"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="form_message">توضیحات *</label>
+                                    <textarea asp-for="Description" type="text" data-bind="value: contactUs().Description" class="form-control" placeholder="  توضیحات خود را وارد کنید *" rows="4"></textarea>
+                                    <span asp-validation-for="Description" class="validation help-block with-errors"></span>
+                                </div>
+                            </div>
+                            <div class="chapcha-txt-s">
+                                @if (ViewBag.EnableCaptcha = true)
+                                {
+                                    <img id="captchaImg" src="/Captcha/Get/" class="img-responsive" style="margin-bottom:10px;cursor:pointer;" title="جهت عوض کردن عکس روی این عکس کلیک کنید" />
+                                    <center><div><span style="color:blueviolet;font-size:10px;">جهت عوض کردن عکس روی عکس کلیک کنید</span></div></center>
+                                    <input type="text" data-bind="value: contactUs().CaptchText" asp-for="CaptchText" class="form-control" placeholder="متن تصویر را وارد کنید" required style="margin-top:5px;width:auto">
+                                }
+                            </div>
+                            <div class="col-md-12">
+                                <div class="loaderBox">
+                                    <div class="loader"><div class="icon-loader"><img alt="مدرسه آنلاین اپیزرو" src="~/assets/img/loader.svg" /></div></div>
+                                    <input type="submit" class="btn btn-black" value="ارسال  پیام">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <br>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>

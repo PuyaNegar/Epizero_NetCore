@@ -1,0 +1,36 @@
+﻿@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+<style type="text/css">
+    .descrip-ul-n {
+    }
+</style>
+@if (Courses.CourseDescriptionVideos.Any())
+{
+    <div class="row">
+        @foreach (var item in Courses.CourseDescriptionVideos)
+        {
+            <div class="col-md-4 col-sm-6 col-xs-12 m-b-25">
+                @Html.Raw(item.Link)
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <hr />
+        </div>
+    </div>
+    
+}
+
+
+<div id="menu0" class="tab-pane fade in active ">
+    <div class="more-desc descrip-ul-n">
+        <div class="row">
+            <div class="container">
+                @Html.Raw(Courses.Description)
+            </div>
+        </div>
+      
+    </div>
+</div>

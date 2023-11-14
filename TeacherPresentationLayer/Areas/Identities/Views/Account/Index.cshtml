@@ -1,0 +1,76 @@
+﻿@model PanelViewModels.IdentitiesViewModels.TeacherLoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "مدرسه آنلاین اپیزرو";
+}
+ 
+<style type="text/css">
+
+    .options-site{display:none !important;}
+
+    .login-section .login-s .login-area {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box-menu {
+        display: none;
+    }
+
+    .login-section .logo-div {
+        text-align: center;
+        padding-bottom: 40px;
+    }
+
+        .login-section .logo-div img {
+            width: 150px;
+        }
+
+    .login-section .loginmodal-container .form-group {
+        margin-bottom: 25px;
+    }
+
+    .login-section .loginmodal-container .loaderBox {
+        margin-top: 45px;
+    }
+    .loginmodal-container .logo-div a {
+        opacity:1;
+    }
+    .loginmodal-container input  {
+        margin-bottom: 3px !important;
+    }
+</style>
+
+<section class="login-section">
+  
+    <div class="loginmodal-container">
+        <div class=" ">
+            <div class="row">
+                 
+                    <div class="logo-div">
+                        <a href="/"> <img src="/assets/img/logo.png" title="اپیزرو" alt="اپیزرو"></a>
+                    </div>
+             
+                <form id="loginWithUsernameForm" method="post">
+
+                    <div class="form-group">
+                        <input asp-for="UserName" type="text" placeholder="نام کاربری (موبایل)" class="form-control" data-bind="value: loginWithUser().UserName">
+                        <span class="validation" asp-validation-for="UserName"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Password" type="password" autocomplete="off" placeholder="رمز عبور" required="" class="form-control" data-bind="value: loginWithUser().Password">
+                        <span class="validation" asp-validation-for="Password"></span>
+                    </div>
+
+                    <div class="loaderBox ">
+                        <div class="loader"><div class="icon-loader"><img src="~/assets/img/loader.svg" /></div></div>
+                        <input type="submit" name="login" class="login loginmodal-submit" value="وارد شوید">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

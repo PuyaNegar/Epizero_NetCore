@@ -1,0 +1,70 @@
+﻿@using Common.Functions
+<!-- Navbar -->
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="navbar-container">
+            <!-- Navbar Barnd -->
+            <div class="navbar-header pull-right">
+                <a href="#" class="navbar-brand"  style="padding-top:10px;">
+                    <small>
+                        <b>  @AppConfigProvider.GetCompanyName()</b>
+                    </small>
+                </a>
+            </div>
+            <!-- /Navbar Barnd -->
+            <!-- Sidebar Collapse -->
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="collapse-icon fa fa-bars"></i>
+            </div>
+            <!-- /Sidebar Collapse -->
+            <!-- Account Area and Settings --->
+            <div class="navbar-header pull-right">
+                <div class="navbar-account">
+                    <ul class="account-area">
+                        <li>
+                            <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                <div class="avatar" title="View your public profile">
+                                    <img src="/images/profile_image_man.png">
+                                </div>
+                                <section>
+                                    <h2><span class="profile" style="min-width:100px;"><span>@ViewData["Name"] </span></span></h2>
+                                </section>
+                            </a>
+                            <!--Login Area Dropdown-->
+                            <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
+                                <li class="username"><a>@ViewData["Name"]</a></li>
+                                <li class="email"><a>@ViewData["UserName"] </a></li>
+                                <!--Avatar Area-->
+                                <li>
+                                    <div class="avatar-area">
+                                        <img id="userImgAvator" src="/images/profile_image_man.png" class="avatar">
+                                        @*<span id="userChangePictureBtn" class="caption">تغيير عکس</span>*@
+                                    </div>
+                                </li>
+                                <!--Avatar Area-->
+                                @*<li class="edit">
+                                    <a id="userChangeProfileBtn" class="">پروفایل کاربری</a>
+                                </li>*@
+                                <li class="edit">
+                                    <a id="userChangePasswordBtn" href="#" class="">تغییر رمز عبور</a>
+                                </li>
+                                <!--Theme Selector Area-->
+                                <li class="dropdown-footer edit" style="text-align:right !important;">
+                                    <a class="signout" style="cursor:pointer;" data-href="/Account/SignOut/">
+                                        خروج از سيستم
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--/Login Area Dropdown-->
+                        </li>
+
+                    </ul>
+                    <!-- Settings -->
+                </div>
+            </div>
+
+            <!-- /Account Area and Settings -->
+        </div>
+    </div>
+</div>
+<!-- /Navbar -->

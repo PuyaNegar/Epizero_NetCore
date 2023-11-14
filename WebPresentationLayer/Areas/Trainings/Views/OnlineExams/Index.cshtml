@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "آزمون های آنلاین";
+    var onlineExam = (List<CoursesViewModel>)ViewBag.Data;
+    var i = 2;
+}
+
+<style type="text/css">
+
+    .azmoons-epizero {
+        margin-top: 85px;
+    }
+
+    .new-course {
+        margin-top: 85px;
+    }
+
+</style>
+
+
+@if (onlineExam.Any())
+{
+
+
+
+
+    <section class="title-color azmoons-epizero">
+        <div class="split-c">
+            <hr class="hr">
+            <h2 class="pad-line-s split-liner">
+                آزمون های آنلاین اپیزرو
+            </h2>
+        </div>
+        <div class="container-fluid new-course">
+            <div class="row">
+                @foreach (var onlinePromos in onlineExam)
+                {
+                    @if (@onlinePromos.IsVisibleOnSite)
+                    {
+                        <div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom:15px">
+                            <div class="item-azmoon">
+
+                                <div class="image-azmoon">
+                                    <a title="@onlinePromos.Name" href="/Trainings/Courses/Index?CoursesId=@onlinePromos.Id">
+                                        <img class="scale" src="@(!string.IsNullOrEmpty(onlinePromos.BannerPicPath) ? onlinePromos.BannerPicPath : "/assets/img/elemans/az01.png")" alt="@onlinePromos.Name" title="@onlinePromos.Name">
+                                    </a>
+
+                                    <a data-academyProductTypeId="1" data-academyProductId="@onlinePromos.Id" class="cart-btn add-cart">
+                                        <img src="/assets/img/sabab1.png" alt="افزودن به سبد خرید @onlinePromos.Name " title="@onlinePromos.Name">
+                                    </a>
+                                    @if (@onlinePromos.DiscountPercent > 0)
+                                    {
+                                        <span class="off-percent">@string.Format("{0:N0}", onlinePromos.DiscountPercent)%</span>
+                                    }
+
+
+                                    @*<div class="countdown_epizero" data-todate="1950403245000"></div>*@
+
+                                </div>
+
+                                <div class="info-azmoon">
+                                    @*                              <div class="image-master">
+                        @if (onlinePromos.IsMultiTeacher)
+                        {
+                        @foreach (var isIndexteacher in onlinePromos.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher).Take(1))
+                        {
+                        @if (string.IsNullOrEmpty(onlinePromos.TeacherPicPath))
+                        {
+                        <a href="/Contents/TeacherIntroductions?teacherId=@isIndexteacher.TeacherUserId">
+                        <img title="@isIndexteacher.TeacherFullName" src="~/assets/img/faviconss.png" alt="@isIndexteacher.TeacherFullName">
+
+                        </a>
+                        }
+                        else
+                        {
+                        <a href="/Contents/TeacherIntroductions?teacherId=@isIndexteacher.TeacherUserId">
+                        <img title="@isIndexteacher.TeacherFullName" src="@isIndexteacher.PersonalPicPath" alt="@isIndexteacher.TeacherFullName">
+                        </a>
+                        }
+                        }
+                        }
+                        else
+                        {
+                        @if (string.IsNullOrEmpty(onlinePromos.TeacherPicPath))
+                        {
+                        <img title="@onlinePromos.TeacherFullName" src="~/assets/img/faviconss.png" alt="@onlinePromos.TeacherFullName">
+                        }
+                        else
+                        {
+                        <img title="@onlinePromos.TeacherFullName" src="@onlinePromos.TeacherPicPath" alt="@onlinePromos.TeacherFullName">
+                        }
+                        }
+
+                        </div>*@
+                                    @* @foreach (var teacher in onlinePromos.CourseDedicatedTeachers.Where(c => !c.IsIndexTeacher).Take(3))
+                        {
+                        <div class="image-master@(i)">
+                        @if (string.IsNullOrEmpty(teacher.PersonalPicPath))
+                        {
+                        <a href="/Contents/TeacherIntroductions?teacherId=@teacher.TeacherUserId"><img src="~/assets/img/logo.png" alt="@teacher.TeacherFullName" title="@teacher.TeacherFullName" /></a>
+
+                        }
+                        else
+                        {
+                        <a href="/Contents/TeacherIntroductions?teacherId=@teacher.TeacherUserId"><img title="@teacher.TeacherFullName" alt="@teacher.TeacherFullName" src="@teacher.PersonalPicPath" /></a>
+                        }
+                        </div>
+                        i++;
+                        }
+                        @{
+                        i = 2;
+                        }
+                        *@
+                                    @if (!(onlinePromos.IsMultiTeacher))
+                                    {
+                                        <div class="box-azmoon box-azmoon-only">
+                                            <a class="name-master">@onlinePromos.TeacherFullName</a>
+                                            <h3 class="name-azmoon m-0">
+                                                <a title="@onlinePromos.Name" href="/Trainings/Courses/Index?CoursesId=@onlinePromos.Id">@onlinePromos.Name</a>
+                                            </h3>
+                                        </div>
+                                        <a title="@onlinePromos.Name" href="/Trainings/Courses/Index?CoursesId=@onlinePromos.Id" class="btn-more">اطلاعات بیشتر ...</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="box-azmoon">
+                                            <a class="name-master">@onlinePromos.TeacherFullName</a>
+                                            <h3 class="name-azmoon m-0">
+                                                <a title="@onlinePromos.Name" href="/Trainings/Courses/Index?CoursesId=@onlinePromos.Id">@onlinePromos.Name</a>
+                                            </h3>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            </div>
+        </div>
+    </section>
+
+}
+else
+{
+    <div class="box-empty">
+        <div class="empty">
+            <img src="~/assets/img/box-empty.svg" alt="آزمون های اپیزرو" />
+            <p>هیچ  آزمونی ثبت نشده است</p>
+        </div>
+    </div>
+}

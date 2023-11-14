@@ -1,0 +1,233 @@
+.content-tbl-f .div-btn {
+    width: 100%
+}
+.transaction .tab-main-product-show ul {
+    width: 66%;
+}
+.box-money .box-mon {
+    margin-bottom: 15px;
+}
+.productshow .header-main .main .content-text .m-t-90 {
+    margin-top: 90px;
+}
+.box-download .content0 .content-tbl-f .btn-dore-lg .cover {
+    text-align: center
+}
+
+.container {
+    transform: translateZ(100px);
+    transition: transform 500ms;
+}
+
+    .container.flip {
+        transform: rotateY(90deg) translateZ(288px);
+    }
+
+.container {
+    transform: translateZ(100px);
+    transition: transform 500ms;
+}
+#MyTransaction .table-row-content .row-color {
+    max-height: unset;
+}
+    .container.flip {
+        transform: rotateY(90deg) translateZ(288px);
+    }
+#MyTransaction .row-com1::after, #MyTransaction .row-com2::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    bottom: 0;
+    right: 0;
+    border-left: 20px solid transparent;
+    border-top: 20px solid transparent;
+}
+
+#MyTransaction .table-row-content .row-com1,
+#MyTransaction .table-row-content .row-com2 {
+    border: 2px solid #ddd;
+}
+
+#MyTransaction .row-com1,
+#MyTransaction .row-com2 {
+    height: 90px;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+}
+
+#MyTransaction .row-com1,
+#MyTransaction .row-com2 {
+    height: 90px !important;
+    margin-bottom: 15px;
+}
+
+#MyTransaction .throw-m-red {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #dd6060;
+}
+
+#MyTransaction .p-m-plus {
+    font-size: 25px;
+    color: #fff;
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    z-index: 9;
+}
+
+.table-row-content > div:nth-child(2n) {
+    background-color: beige;
+}
+
+#MyTransaction .row-com1::after {
+    border-right: 20px solid green;
+    border-bottom: 20px solid green;
+}
+
+#MyTransaction .table-row-content {
+    background-color: #fff !important;
+    margin: 0;
+}
+
+#MyTransaction .dic-m, .row-com1 .div-center, #MyTransaction .row-com2 .div-center {
+    text-align: right;
+}
+
+#MyTransaction .dic-m, .row-com1 .div-center, #MyTransaction .row-com2 .div-center {
+    text-align: right;
+}
+
+#MyTransaction .typeInvoice {
+    display: unset;
+}
+
+#MyTransaction .throw-m-green {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #9fd172;
+}
+
+#MyTransaction .balance-m {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#MyTransaction .balance-m, .date-m {
+    text-align: left;
+}
+
+#MyTransaction .balance-m {
+    font-size: 15px;
+}
+
+#MyTransaction .row-com2::after {
+    border-right: 20px solid red;
+    border-bottom: 20px solid red;
+}
+
+#MyTransaction .p-m-mines {
+    font-size: 37px;
+    color: #fff;
+    position: absolute;
+    right: 7px;
+    bottom: 2px;
+    z-index: 9;
+}
+
+.credit-main .account-box {
+    width: 330px;
+}
+
+#MyTransaction .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+#MyTransaction .balance-m {
+    text-align: left !important;
+}
+.w-m-100-f {
+    width: 100%;
+}
+.videos-epizero .list-right {
+    width: 100%;
+}
+.videos-epizero .view-videos {
+    width: 100%;
+}
+.videos-epizero .list-box {
+    padding: 0 20px;
+}
+
+  .videos-epizero .box-video-item {
+    width: 48% !important;
+}
+
+.videos-epizero .list-items {
+    order: 1 !important;
+}
+
+ .videos-epizero .view-videos .box-video {
+    width: 74%;
+    height: 325px;
+}
+
+  .videos-epizero .box-video-item.active::after {
+    right: 0 !important;
+    opacity: 1;
+    left: 0 !important;
+    top: -10px;
+    transform: rotate(28deg);
+    margin: 0 auto;
+}
+
+ .videos-epizero .list-right .box-video-item.active::after {
+    transform: rotate(90deg);
+}
+
+  .videos-epizero .lg-vw {
+    display: none;
+}
+.main-teacher .content .main-pic-teacher .pic {
+    width: 100px;
+    height: 100px;
+    background-color: #888;
+    text-align: center;
+    margin-top: 25px;
+    margin-left: 2px;
+    border-radius: 100%;
+    float: left;
+}
+
+.rules-content ul {
+    padding-right: 5px;
+}
+
+.productshow .header-main .main {
+    height: auto !important;
+    background-size: contain;
+}
+
+
+.singleCourse .btn-dore-xs .cover {
+    width: 120px;
+}
+
+.g-m-p-j {
+    margin-bottom: 100px;
+}
+    .g-m-p-j .chosen-container .chosen-results {
+        max-height : 140px !important;
+    }

@@ -1,0 +1,43 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.TrainingManagementViewModels.StudentCourseAndCourseMeetingsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>دوره های دانش آموز</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ردیف</th>
+                                <th>دانش آموز</th>
+                                <th>نام دوره</th>
+                                <th>دوره / جلسه</th>
+                                <th>تاریخ ثبت نام</th>
+                                <th>نوع ثبت نام</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: e()">
+                            <tr>
+                                <th scope="row" data-bind="text: $index()+1">  </th>
+                                <td data-bind="text: StudentFullName"></td>
+                                <td data-bind="text: CourseName"></td>
+                                <td data-bind="text: CourseMeetingStudentType"></td>
+                                <td data-bind="text: RegDateTime"></td>
+                                <td data-bind="text: IsTemporaryRegistrationName"></td>
+                            </tr> 
+                        </tbody>
+                    </table> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,363 @@
+﻿@model PanelViewModels.TeacherTrainingsViewModels.TeacherHomworksViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = " امور مالی |  مدرسه آنلاین اپیزرو";
+    var TeacherFinancials = (PanelViewModels.TeacherFinancialsViewModels.TeacherFinancialDashboardViewModel)ViewBag.TeacherFinancials;
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $(".persian-date").pDatepicker({ format: 'YYYY/MM/DD', initialValue: false, autoClose: true });
+        });
+        //===========================================
+        function readSattlementAggregationSummery() {
+            DataTransfer('/api/Financials/TeacherSattlements/ReadAggregationSummery', 'get', '', '.icon-loader', function (e) {
+
+                mainViewModel.sattlementAggregationSummery(e.Value)
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        }
+        readSattlementAggregationSummery();
+        //===========================================
+        function readSattlements() {
+            var fromDate = $('.fromDate').val();
+            var toDate = $('.toDate').val();
+            DataTransfer('/api/Financials/TeacherSattlements/Read?FromDate=' + fromDate + '&' + 'ToDate=' + toDate, 'get', '', '.icon-loader', function (e) {
+                mainViewModel.sattlements(e.Value);
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        }
+        readSattlements();
+        $('#filterBtn').click(function () {
+            readSattlements();
+        });
+        //===========================================
+    </script>
+}
+<script src="~/assets/chartjs/chart.js"></script>
+
+@section Styles{
+    <style type="text/css">
+
+        .box-right .box {
+            position: relative;
+        }
+
+        .box-right .active:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            border: 2px solid red;
+            border-radius: 15px;
+            height: 100px;
+            transition: all .3s;
+        }
+
+        .box-right .active:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            bottom: -10px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #f00;
+            transition: all .3s;
+        }
+
+        .teacherSattlement .nav-tabs > li > a:hover {
+            border-color: #eee #eee #fff;
+            border-radius: 25px 25px 0 0;
+            color: #233591;
+            background-color: #fff;
+        }
+
+        .teacherSattlement .nav-tabs > li.active > a:hover {
+            border-radius: 25px 25px 0 0;
+            color: #233591;
+            background-color: #fff;
+            border-bottom: 3px solid #233591;
+        }
+
+        .teacherSattlement .nav-tabs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding-right: 0;
+        }
+
+            .teacherSattlement .nav-tabs li {
+                width: 50%;
+                text-align: center;
+                color: #233591;
+                background-color: #fff;
+                border-radius: 25px 25px 0 0;
+            }
+
+            .teacherSattlement .nav-tabs > li.active > a,
+            .teacherSattlement .nav-tabs > li.active > a:focus,
+            .teacherSattlement .nav-tabs > li.active > a:hover {
+                box-shadow: 0 -4px 0px #fcc200;
+            }
+
+        .teacherSattlement .btn-filter {
+            margin-top: 3px;
+        }
+
+        .teacherSattlement .tab-content .tab-pane {
+            padding: 25px;
+        }
+
+        .teacherSattlement .lbl-text {
+            margin-right: 5px;
+            font-size: 14px;
+            margin-bottom: 7px;
+            color: #555;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard .box .content-box {
+            margin-bottom: 23px;
+        }
+
+        .dashboard img {
+            width: 100px;
+        }
+
+        .dashboard p {
+            margin-top: 20px;
+        }
+
+        .dashboard .legend {
+            padding: 40px 20px 20px 20px;
+        }
+
+    </style>
+    
+
+
+}
+
+<section class="dashboard m-b-50">
+    <div class="container box-right">
+        <div class="legend">
+            <div class="title-o">
+                <i class="fa fa-credit-card"></i>
+                <span>موجودی - تسویه</span>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                    <div class="box">
+                        <div class="title-box box-blue-strong">
+                            <span>موجودی کیف پول</span>
+                        </div>
+                        <div class="content-box">
+                            <div class="price-c">
+                                <span class="price">@( string.Format("{0:N0}", TeacherFinancials.Balance))</span>   <span class="toman">تومان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                    <div class="box">
+                        <div class="title-box box-red">
+                            <span>آخرین تسویه حساب</span>
+                        </div>
+                        <div class="content-box">
+                            <div class="price-c">
+                                <span class="price">@(string.Format("{0:N0}", TeacherFinancials.LastSettledAmount))</span>   <span class="toman">تومان</span>
+                            </div>
+                            <span class="date">   @(TeacherFinancials.LastSettledDate) : <span class="toman">در تاریخ</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                    <div class="box">
+                        <div class="title-box box-orange">
+                            <span>تسویه حساب بعدی</span>
+                        </div>
+                        <div class="content-box">
+                            <div class="price-c">
+                                <div style="margin-top:25px;">
+                                    <span class="price"> @TeacherFinancials.NextSettledDate</span> @*: <span class="toman">  تاریخ</span>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="list-student teacherSattlement">
+ 
+    <div class="container">
+        <div class="legend col-md-12">
+            <div class="title-o">
+                <i class="fa fa-money"></i>
+                <span>امور مالی</span>
+            </div>
+            <div class="m-t-30">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#tab_1" aria-controls="tab_1" role="tab" data-toggle="tab">تسویه ها</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#tab_2" aria-controls="tab_2" role="tab" data-toggle="tab">گزارش تجمعی تسویه ها</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab_1">
+                        <div class="row">
+                            <div class="col-md-4 pull-right">
+                                <div class="form-group">
+                                    <label class="lbl-text"> از تـاریخ </label>
+                                    <input placeholder="از تاریخ" readonly="readonly" type="text" class="persian-date form-control fromDate" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 pull-right">
+                                <div class="form-group">
+                                    <label class="lbl-text"> تا تـاریخ </label>
+                                    <input placeholder="تا تاریخ" readonly="readonly" type="text" class="persian-date form-control toDate" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 pull-right btn-filter">
+                                <label>   </label>
+                                <button id="filterBtn" class="btn btn-warning btn-block">فیلتر</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover ">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th style="text-align: center;">تاریخ تسویه</th>
+                                            <th style="text-align: center; ">مبلغ تسویه</th>
+                                            <th style="text-align: center;">دوره</th>
+                                            <th style="text-align: center;">نحوه پرداخت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: sattlements()">
+                                        <tr>
+                                            <td class="left" data-bind="text: $index()+1 "> </td>
+                                            <td class="center" data-bind="text: Date">   </td>
+                                            <td class="center" data-bind="text: SattledAmount">    </td>
+                                            <td class="center" data-bind="text: CourseName">   </td>
+                                            <td class="center" data-bind="TeacherPaymentMethod">    </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <!-- ko if: sattlements().length == 0 -->
+                            <div class="box-empty">
+                                <div class="empty">
+                                    <img src="~/assets/img/box-empty.svg" />
+                                    <p>تسویه ای  برای شما ثبت نشده است .</p>
+                                </div>
+                            </div>
+                            <!-- /ko   -->
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab_2">
+                        <div class="row">
+                            <div class="tajamoyi">
+                                <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                                    <div class="box">
+                                        <div class="title-box box-blue-strong">
+                                            <span>مبلغ کل تسویه ها</span>
+                                        </div>
+                                        <div class="content-box">
+                                            <div class="price-c">
+                                                <span class="price" data-bind="text: sattlementAggregationSummery().TotalSettledAmount + ' '"> </span>   <span class="toman">تومان</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-xs-12 pull-right">
+                                    <div class="box">
+                                        <div class="title-box box-red">
+                                            <span>تعداد تراکنش</span>
+                                        </div>
+                                        <div class="content-box">
+                                            <div class="price-c">
+                                                <span class="price" data-bind="text: sattlementAggregationSummery().TotalSettledCount + ' '"></span>   <span class="toman"> مورد </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+ 
+
+        <div class="col-lg-12 col-md-12 col-xs-12 pull-right m-t-70">
+            <div class="box" style="height: unset;text-align:center">
+                <div class="title-box box-orange">
+                    <span> نمودار تسویه حساب ها </span>
+                </div>
+                <div class="content-box flex">
+                    <div style="text-align:center;width:100% !important;height:100% !important;">
+                        <canvas id="myChart-cities"></canvas>
+                        <script>
+                                    var ctx = document.getElementById('myChart-cities');
+                                            var myChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: [
+                                                      @foreach(var city in ViewBag.TeacherSattlementChart)
+                                         {
+                                         <text>'@Html.Raw(city.Date)',</text>
+                                        }
+                                                    ],
+                                                    datasets: [{
+                                                        data: [
+                                                                        @foreach(var city in ViewBag.TeacherSattlementChart)
+                                         {
+                                         <text>'@Html.Raw(city.SattledAmount)',</text>
+                                        }
+                                                        ],
+                                                        backgroundColor: [
+                                                            'red'
+                                                        ],
+                                                    }]
+                                                },
+                                                options: {
+                                                    plugins: {
+                                                        legend: {
+                                                            display: false
+                                                        }
+                                                    }
+                                                }
+                                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,363 @@
+﻿@{
+    var StudentCourses = (List<WebViewModels.TrainingsViewModels.StudentCoursesViewModel>)ViewBag.StudentCourses;
+    ViewData["Title"] = " پرسش و پاسخ";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    int j = 0;
+    int t = 0;
+}
+<script type="text/javascript">
+    $(function () {
+        $('body').on('click', '.showBtnPic', function () {
+            var url = $(this).attr('data-url');
+            $('#img-question').attr('src', url);
+            $('#btnDownloadPic-q').attr('attr-u', url);
+            $('#showQuestionPicPathModal').modal({ backdrop: 'static', keyboard: false });
+            $('#showQuestionPicPathModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#question_removeButton', function () {
+            mainViewModel.questionAdd().AudioPath = null;
+            $('#question_stopButton').prop('disabled', false);
+            $('#question_recordButton').prop('disabled', false);
+            $('#question_audioplayback').addClass("hidden");
+            $(this).hide();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#btnDownloadPic-q', function () {
+            window.open($(this).attr('attr-u'), '_blank');
+        });
+        $('body').on('click', '.showBtnFile', function () {
+            window.open($(this).attr('data-url'), '_blank');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-answer', function () {
+            $(this).parent().find('.box-answer-s').toggle("slow");
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.btn-courseStudentQuestions', function () {
+            mainViewModel.questionAdd().CourseId = $(this).attr('data-Id');
+            DataTransfer('/api/Trainings/MyQuestions/Read/' + $(this).attr('data-Id'), 'Get', '', '.wrapper-parent',
+                function (f) {
+                    toastr.remove();
+                    mainViewModel.courseStudentQuestions(f.Value);
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error(e.responseJSON.Message);
+                }
+            );
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('li.active .btn-courseStudentQuestions').click();
+
+        $('#addQuestionModal').on("hidden.bs.modal", function (event) {
+            $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+            $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+            $('#question_stopButton').prop('disabled', false);
+            $('#question_recordButton').prop('disabled', false);
+            $('#question_audioplayback').addClass("hidden");
+            $('#question_removeButton').hide();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#addQuestionForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Trainings/MyQuestions/AddQuestion', 'post', ko.toJSON(mainViewModel.questionAdd()), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        $('#QuestionFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.svg');
+                        $('#QuestionPicPathImage').attr('src', '/assets/img/DefaultFlag.svg');
+                        mainViewModel.questionAdd({});
+                        $('#addQuestionModal').modal('hide');
+                        $('#question_removeButton').hide();
+                        $('#question_stopButton').prop('disabled', false);
+                        $('#question_recordButton').prop('disabled', false);
+                        $('#question_audioplayback').addClass("hidden");
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            return false;
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#question_removeButton', function () {
+            mainViewModel.questionAdd().AudioPath = null;
+            $('#question_stopButton').prop('disabled', false);
+            $('#question_recordButton').prop('disabled', false);
+            $('#question_audioplayback').addClass("hidden");
+            $(this).hide();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.all-see-btn', function () {
+            window.location.href = "/Trainings/Courses/Index?CoursesId=" + mainViewModel.questionAdd().CourseId + '&IsQuestion=true';
+        });
+    });
+</script>
+<style type="text/css">
+    .q-imge-e:hover {
+        cursor: pointer;
+    }
+
+    .q-imge-e {
+        padding:5px;
+        border-radius:5px;
+        width: 100px;
+    }
+
+    .btn-danger, .btn-success {
+        margin-top: 0 !important;
+    }
+
+    .btn-sm {
+        padding: 3px 10px;
+    }
+
+    .btn-j-j-f {
+        height: 25px;
+        font-size: 12px;
+        line-height: 13px;
+        margin-top: 8px;
+        margin-left: 3px;
+        border-top-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        padding: 4px 15px 5px 15px;
+    }
+
+    .btn-j-j-f, .btn-j-j-p {
+        height: 25px;
+        font-size: 12px;
+        line-height: 13px;
+        margin-top: 8px;
+        margin-left: 3px;
+        border-top-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        padding: 4px 15px 5px 15px;
+    }
+
+    .question-main .box-question .box-answer-s {
+        display: none;
+    }
+
+    .nav-tabs > li > a {
+        border: unset;
+    }
+
+    .box-tab .main-tab .ul-nav .nav-s .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+
+    .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+
+    .question-main .tab-pane .box-question .box-j p {
+        margin-top: 0;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> سوالات من</span>
+        </div>
+    </div>
+</div>
+<section class="box-tab question-main">
+    <div class="container">
+        @if (StudentCourses.Any())
+        {
+
+            <div class="legend col-md-12 float-r-o-i">
+                <div class="title-o">
+                    <i class="fa fa-question"></i>
+                    <span>پرسش و پاسخ</span>
+                </div>
+
+                <div class="col-md-12 col-xs-12 main-tab">
+
+                    <div class="ul-nav">
+                        <div class="nav-s">
+                            <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg tab-ul-xs">
+                                @foreach (var studentCourse in StudentCourses)
+                                {
+                                    <li class="centered col-centered  col-xs-12 @(j == 0 ? "active" : "")">
+                                        <a class="btn-courseStudentQuestions" data-Id="@studentCourse.Id" data-toggle="tab" href="#menu_@j">@studentCourse.Name</a>
+                                    </li>
+                                    j++;
+                                }
+                            </ul>
+                            <ul class="nav nav-tabs hidden-xs tab-ul-lg">
+                                @foreach (var studentCourse in StudentCourses)
+                                {
+                                    <li class="centered col-centered  @(t == 0 ? "active" : "")">
+                                        <a class="btn-courseStudentQuestions" data-Id="@studentCourse.Id" data-toggle="tab" href="#menu_@t" aria-expanded="true">@studentCourse.Name</a>
+                                    </li>
+                                    t++;
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active in">
+
+                            <div class="add-q-btn">
+                                <button class="btn-a-i btn btn-warning  all-see-btn">
+                                    <i class="fa fa-eye"></i>
+                                    مشاهده همه سوالات  مربوط به این درس
+                                </button>
+
+                                <a class="btn-a-i add-a-q btn btn-danger">
+                                    <i class="fa fa-plus"></i>
+                                    اگر سوالی در این درس دارید بپرسید
+                                </a>
+
+                            </div>
+
+                            <!-- ko if: mainViewModel.courseStudentQuestions().length > 0-->
+                            <!-- ko foreach: mainViewModel.courseStudentQuestions() -->
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="box-question">
+
+                                        <div class="q-text">
+                                            <div class="q-title">
+                                                <div class="title">
+                                                    <span>وضعیت : </span> <span data-bind="text: ConfirmStatusType"> در حال بررسی</span>
+                                                    /
+                                                    <span>تاریخ : </span> <span data-bind="text: RegDateTime"> 1400/10/03</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8 pull-right">
+                                                    <p data-bind="text : QuestionContext"></p>
+                                                </div>
+                                                <div class="col-md-4  pull-left">
+                                                    <!--ko if:QuestionFilePath != null --><button data-bind="attr:{'data-url':QuestionFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:QuestionPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':QuestionPicPath,'data-url':QuestionPicPath}" /> <!-- /ko -->
+                                                    <!--ko if:AudioPath != null -->
+                                                    <audio controls muted>
+                                                        <source data-bind="attr:{'src':AudioPath}" type="audio/ogg">
+                                                        <source data-bind="attr:{'src':AudioPath}" type="audio/mpeg">
+                                                    </audio>
+                                                    <!-- /ko -->
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- ko foreach: CourseStudentQuestionAnswers-->
+                                        <div class="box-answer">
+                                            <div class="all-a-box" data-bind="if:IsBestAnswer">
+                                                <div class="box-title">
+                                                    <div class="title">
+                                                        <span data-bind="text :  'پاسخ توسط' + '(' + AnsweredUserFullName + ')'"></span>
+                                                        /
+                                                        <span>تاریخ :</span> <span data-bind="text : RegDateTime "></span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="box-j">
+                                                    <div class="row">
+                                                        <div class="col-md-8 pull-right">
+                                                            <img src="~/assets/img/elemans/check-on.svg" alt="پاسخ مدیر" />
+                                                            <p data-bind="text : AnswerContext">
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-4  pull-left">
+                                                            <!--ko if:AnswerFilePath != null --><button data-bind="attr:{'data-url':AnswerFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:AnswerPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':AnswerPicPath,'data-url':AnswerPicPath}" /><!-- /ko -->
+                                                            <!--ko if:AnswerAudioPath != null -->
+                                                            <audio controls muted>
+                                                                <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/ogg">
+                                                                <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/mpeg">
+                                                            </audio>
+                                                            <!-- /ko -->
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /ko-->
+
+
+                                        <div class="q-btn">
+                                            @*<a href="#" class="btn btn-info a-m-text"><span>سوال مشترک 23 نفر</span> <i class="fa fa-star"></i></a>*@
+                                            <!-- ko if: NoBestAnswerCount > 0-->
+                                            <a class="btn btn-danger a-text btn-answer">مشاهده همه پاسخ ها <span class="a-text-count-btn" data-bind="text: NoBestAnswerCount + ' '+ 'پاسخ' "></span></a>
+                                            <!-- /ko-->
+                                            <div class="box-answer-s">
+                                                <!-- ko foreach: CourseStudentQuestionAnswers-->
+                                                <div class="box-answer box-answer-s">
+                                                    <div class="all-a-box" data-bind="if:!IsBestAnswer">
+                                                        <div class="box-title">
+                                                            <span class="title" data-bind="text :  'پاسخ توسط' + '(' + AnsweredUserFullName + ')'"></span>
+                                                        </div>
+                                                        <div class="box-j">
+                                                            <div class="row">
+                                                                <div class="col-md-8 pull-right">
+                                                                    <img src="~/assets/img/elemans/check-on.svg" alt="پاسخ مدیر" />
+                                                                    <p data-bind="text : AnswerContext">
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-4  pull-left">
+                                                                    <!--ko if:AnswerFilePath != null --><button data-bind="attr:{'data-url':AnswerFilePath}" class="btn btn-warning btn-j-j-f showBtnFile"><i class="fa fa-file"></i> مشاهده فایل</button><!-- /ko --><!--ko if:AnswerPicPath != null --><img class="showBtnPic q-imge-e" data-bind="attr:{'src':AnswerPicPath,'data-url':AnswerPicPath}" /> <!-- /ko -->
+                                                                    <!--ko if:AnswerAudioPath != null -->
+                                                                    <audio controls muted>
+                                                                        <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/ogg">
+                                                                        <source data-bind="attr:{'src':AnswerAudioPath}" type="audio/mpeg">
+                                                                    </audio>
+                                                                    <!-- /ko -->
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /ko-->
+                                            </div>
+                                        </div>
+
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <!-- /ko-->
+                            <!-- /ko-->
+                            <!-- ko ifnot: mainViewModel.courseStudentQuestions().length > 0-->
+                            <div class="box-empty">
+                                <div class="empty">
+                                    <img src="~/assets/img/box-empty.svg" alt="سوالات ثبت شده" />
+                                    <p>سوالی برای این دوره ثبت نشده است .</p>
+                                </div>
+                            </div>
+                            <!-- /ko-->
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+        else
+        {
+            <div class="box-empty">
+                <div class="empty">
+                    <img src="~/assets/img/box-empty.svg" alt="دوره ثبت شده" />
+                    <p>دوره ای برای شما ثبت نشده است .</p>
+                </div>
+            </div>
+        }
+    </div>
+    @{
+        await Html.RenderPartialAsync("~/Views/Component/AddQuestionModal.cshtml");
+        await Html.RenderPartialAsync("_ShowQuestionPicPathModal.cshtml");                            
+    }
+</section>

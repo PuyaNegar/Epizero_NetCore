@@ -1,0 +1,604 @@
+﻿<style type="text/css">
+    thead tr th,tbody tr td {
+        text-align:center;
+    }
+    .financialSummaryPartial .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        background-color: #dddd;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+    .financialSummaryPartial .modal-title {
+        display: inline-block;
+        float: right;
+    }
+    .financialSummaryPartial button.close {
+        float: left;
+    }
+   
+    .title-y {
+        font-weight: 700;
+        font-size: 14px;
+        display: inline-block;
+        width: 200px;
+        text-align: right;
+        margin-right: 3px;
+    }
+
+    .text-y {
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .financialSummaryPartial .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
+</style>
+ <script type="text/javascript">
+     $(function () {
+        
+         //*************************************************************************
+         function readStudentFinancialSummary() {
+             DataTransfer('/api/Financials/StudentFinancialSummary/Read/', 'Get', '', '',
+                 function (f) {
+                     toastr.remove();
+                     mainViewModel.financialSummary(f.Value);
+                     
+                 },
+                 function (e) {
+                     toastr.remove();
+                     toastr.error(e.responseJSON.Message);
+                 }
+             );
+         }
+         readStudentFinancialSummary()
+         //*************************************************************************
+         $('body').on('click', '.btnCheque', function () {
+             var Id = $(this).attr('data-Id');
+             DataTransfer('/api/Financials/StudentFinancialSummary/FindCheque/' + Id, 'Get', '', '',
+                 function (f) {
+                     toastr.remove();
+                     mainViewModel.financialSummaryCheque(f.Value);
+
+                 },
+                 function (e) {
+                     toastr.remove();
+                     toastr.error(e.responseJSON.Message);
+                 }
+             );
+             $('#chequeModal').modal({ backdrop: 'static', keyboard: false });
+             $('#chequeModal').modal('show');
+         });
+         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
+         $('body').on('click', '.btnNoCheque', function () {
+             var Id = $(this).attr('data-Id');
+             var title = $(this).attr('data-title');
+             $('#noChequeModal .modal-title').html(title);
+             DataTransfer('/api/Financials/StudentFinancialSummary/Find/' + Id, 'Get', '', '',
+                 function (f) {
+                     toastr.remove();
+                     mainViewModel.financialSummaryNoCheque(f.Value);
+
+                 },
+                 function (e) {
+                     toastr.remove();
+                     toastr.error(e.responseJSON.Message);
+                 }
+             );
+             $('#noChequeModal').modal({ backdrop: 'static', keyboard: false });
+             $('#noChequeModal').modal('show');
+         });
+         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+         $('body').on('click', '.btnPosPayment', function () {
+             var Id = $(this).attr('data-Id');
+             var title = $(this).attr('data-title');
+             $('#posPaymenModal .modal-title').html('پرداخت' + ' ' + title);
+             DataTransfer('/api/Financials/StudentFinancialSummary/FindPosPayment/' + Id, 'Get', '', '',
+                 function (f) {
+                     toastr.remove();
+                     mainViewModel.financialSummaryPosPayment(f.Value);
+
+                 },
+                 function (e) {
+                     toastr.remove();
+                     toastr.error(e.responseJSON.Message);
+                 }
+             );
+             $('#posPaymenModal').modal({ backdrop: 'static', keyboard: false });
+             $('#posPaymenModal').modal('show');
+         });
+         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+         $('body').on('click', '.btn-returnPaymentViewer', function () {
+             var Id = $(this).attr('data-Id');
+             var title = $(this).attr('data-title');
+             $('#noChequeModal .modal-title').html('پرداخت' + ' ' + title);
+             DataTransfer('/api/Financials/StudentFinancialReturnPayments/Find/' + Id, 'Get', '', '',
+                 function (f) {
+                     toastr.remove();
+                     mainViewModel.financialSummaryReturnPayment(f.Value);
+                 },
+                 function (e) {
+                     toastr.remove();
+                     toastr.error(e.responseJSON.Message);
+                 }
+             );
+             $('#returnPaymentsModal').modal({ backdrop: 'static', keyboard: false });
+             $('#returnPaymentsModal').modal('show');
+         });
+     });
+ </script>
+ <section class="financialSummaryPartial">
+     <div class="container">
+
+
+         <!-- ko if: mainViewModel.financialSummary().StudentFinancialManualDebts != null && mainViewModel.financialSummary().StudentFinancialManualDebts.length > 0 -->
+         <div class="row" style="position:sticky">
+             <div class="split-c">
+                 <hr class="hr">
+                 <span class="pad-line-s split-liner bg-color-red">
+                     بدهی های ارزش افزوده
+                 </span>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered  table-striped">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>دوره</th>
+                                 <th>نوع ثبت نام</th>
+                                 <th>تاریخ</th>
+                                 <th>مبلغ </th>
+
+                                 <th>شرح سند</th>
+
+                             </tr>
+                         </thead>
+                         <tbody data-bind="foreach: financialSummary().StudentFinancialManualDebts">
+                             <tr>
+                                 <td scope="row" data-bind="text: $index() + 1"></td>
+                                 <td data-bind="text: CourseName"></td>
+                                 <td data-bind="text: CourseMeetingStudentType"></td>
+                                 <td data-bind="text: RegDateTime"></td>
+                                 <td data-bind="text: DebtAmount"></td>
+                                 <td data-bind="text: Description"></td>
+
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <!-- /ko -->
+         <!-- ko if: mainViewModel.financialSummary().StudentFinancialDebts != null && mainViewModel.financialSummary().StudentFinancialDebts.length > 0 -->
+         <div class="row" style="position:sticky">
+             <div class="split-c">
+                 <hr class="hr">
+                 <span class="pad-line-s split-liner bg-color-red">
+                     دوره های خریداری شده من
+                 </span>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered  table-striped">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>دانش آموز</th>
+                                 <th>دوره</th>
+                                 <th>مبلغ کل</th>
+                                 <th>مبلغ تخفیف (تومان)</th>
+                                 <th>بدهی دانش آموز (تومان)</th>
+                                 <th>وضعیت</th>
+                             </tr>
+                         </thead>
+                         <tbody data-bind="foreach: financialSummary().StudentFinancialDebts">
+                             <tr data-bind="style: {'background-color': IsCanceled ? '#cc6b60' : '' , color: IsCanceled ? '#fff' : '#000'}">
+                                 <td scope="row" data-bind="text: $index() + 1"></td>
+                                 <td data-bind="text: StudentUserFullName"></td>
+                                 <td data-bind="text: CourseName"></td>
+                                 <td data-bind="text: TotalAmount"></td>
+                                 <td data-bind="text: DiscountAmount"></td>
+                                 <td data-bind="text: DebtAmount"></td>
+                                 <td>
+                                     <!--ko if: !IsCanceled -->
+                                     <span>---</span>
+                                     <!-- /ko  -->
+                                     <!--ko if: IsCanceled -->
+                                     <span style="color:#fff;">انصراف از دوره</span>
+                                     <!-- /ko  -->
+
+                                 </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <!-- /ko -->
+         <!-- ko if: mainViewModel.financialSummary().StudentFines != null &&  mainViewModel.financialSummary().StudentFines.length > 0 -->
+         <div class="row" style="position:sticky">
+             <div class="split-c">
+                 <hr class="hr">
+                 <span class="pad-line-s split-liner bg-color-red">
+                     جریمه های من
+                 </span>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered  table-striped">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>دانش آموز</th>
+                                 <th>مبلغ جریمه(تومان)</th>
+                                 <th>شرح سند</th>
+                             </tr>
+                         </thead>
+                         <tbody data-bind="foreach: financialSummary().StudentFines">
+                             <tr>
+                                 <th scope="row" data-bind="text: $index() + 1"></th>
+                                 <td data-bind="text: StudentFullName"></td>
+                                 @*<td data-bind="text: AmountPaidDateTime"></td>*@
+                                 <td data-bind="text: Amount"></td>
+                                 <td data-bind="text: Description"></td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <!-- /ko -->
+         <!-- ko if: mainViewModel.financialSummary().StudentFinancialPayments != null && mainViewModel.financialSummary().StudentFinancialPayments.length > 0 -->
+         <div class="row" style="position:sticky">
+             <div class="split-c">
+                 <hr class="hr">
+                 <span class="pad-line-s split-liner bg-color-blue">
+                     پرداختی های من
+                 </span>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered  table-striped">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>دانش آموز</th>
+                                 <th>تاریخ</th>
+                                 <th>نحوه پرداخت</th>
+                                 <th>مبلغ(تومان)</th>
+                                 <th>عملیات</th>
+                             </tr>
+                         </thead>
+                         <tbody data-bind="foreach: financialSummary().StudentFinancialPayments">
+                             <tr>
+                                 <td scope="row" data-bind="text: $index() + 1"></td>
+                                 <td data-bind="text: StudentUserFullName"></td>
+                                 <td data-bind="text: AmountPaidDateTime"></td>
+                                 <td data-bind="text: StudentFinancialPaymentType"></td>
+                                 <td data-bind="text: AmountPaid"></td>
+                                 <td>
+                                     <!-- ko if:ChequeId != null-->
+                                     <button style="margin-top:0" data-bind="attr: {'data-Id':(ChequeId != null ? ChequeId : Id),'data-title':StudentFinancialPaymentType,'class' : (StudentFinancialPaymentTypeId == 1 ? 'btnCheque btn btn-info btn-sm' : 'btnNoCheque btn btn-info btn-sm') }" type="button">مشاهده</button>
+                                     <!-- /ko -->
+                                     <!-- ko if:PosPaymentId != null-->
+                                     <button style="margin-top:0" data-bind="attr: {'data-Id':(PosPaymentId != null ? PosPaymentId : Id),'data-title':StudentFinancialPaymentType,'class' : (StudentFinancialPaymentTypeId == 4 ? 'btnPosPayment btn btn-info btn-sm' : 'btnPosPayment btn btn-info btn-sm') }" type="button">مشاهده</button>
+                                     <!-- /ko -->
+                                     <!-- ko if:  StudentFinancialPaymentTypeId == 3 || StudentFinancialPaymentTypeId == 7 || StudentFinancialPaymentTypeId == 8  -->
+                                     <button class="btn btn-info btn-sm btnNoCheque" style="margin-top:0" data-bind="attr: {'data-Id': Id,'data-title':StudentFinancialPaymentType}" type="button">مشاهده</button>
+                                     <!-- /ko -->
+                                 </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <!-- /ko -->
+         <!-- ko if: mainViewModel.financialSummary().StudentFinancialReturnPayments != null && mainViewModel.financialSummary().StudentFinancialReturnPayments.length > 0 -->
+         <div class="row" style="position:sticky">
+             <div class="split-c">
+                 <hr class="hr">
+                 <span class="pad-line-s split-liner bg-color-blue">
+                     عودت های من
+                 </span>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-md-12 col-sm-12 col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered  table-striped">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>دانش آموز</th>
+                                 <th>تاریخ  </th>
+                                 <th>نحوه پرداخت</th>
+                                 <th>مبلغ(تومان)</th>
+                                 <th>شرح سند</th>
+                             </tr>
+                         </thead>
+                         <tbody data-bind="foreach: mainViewModel.financialSummary().StudentFinancialReturnPayments">
+                             <tr>
+                                 <th scope="row" data-bind="text: $index() + 1"></th>
+                                 <td data-bind="text: StudentUserFullName"></td>
+                                 <td data-bind="text: AmountPaidDateTime"></td>
+                                 <td data-bind="text: ReturnPaymentTypeName"></td>
+                                 <td data-bind="text: ReturnAmount"></td>
+                                 <td>
+                                     <p class="description-value" style="display:none" data-bind="text: Description"></p>
+                                     <button data-bind="attr: {'data-Id': Id  }" type="button" class="btn btn-warning btn-sm btn-view btn-returnPaymentViewer">مشاهده</button>
+                                 </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <!-- /ko -->
+
+
+         <div class="row">
+             <div class="col-md-12 col-xs-12 pull-left">
+                 <div class="panel panel-danger">
+                     <div class="panel-heading">
+                         <h3 style="text-align:center" class="panel-title">وضعیت مالی</h3>
+                     </div>
+                     <div class="panel-body">
+                         <div class="row" style="direction:ltr">
+
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">مجموع پرداختی    :</label><label class="text-y" data-bind="text: financialSummary().TotalPayments+ ' تومان'"></label>
+                                 </div>
+                             </div>
+
+                             <!-- ko if: mainViewModel.financialSummary().StudentFines != null &&  mainViewModel.financialSummary().StudentFines.length > 0 -->
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">مجموع جریمه :</label><label class="text-y" data-bind="text: financialSummary().TotalFines + ' تومان'"></label>
+                                 </div>
+                             </div>
+                             <!-- /ko -->
+                             <!-- ko if: mainViewModel.financialSummary().StudentFinancialReturnPayments != null && mainViewModel.financialSummary().StudentFinancialReturnPayments.length > 0 -->
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">مجموع عودتی    :</label><label class="text-y" data-bind="text: financialSummary().TotalReturn+ ' تومان'"></label>
+                                 </div>
+                             </div>
+                             <!-- /ko -->
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">مجموع بدهی    :</label><label class="text-y" data-bind="text: financialSummary().TotalDebts + ' تومان'"></label>
+                                 </div>
+                             </div>
+                             
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">مجموع بدهی های ارزش افزوده    :</label><label class="text-y" data-bind="text: financialSummary().TotalManualDebts + ' تومان'"></label>
+                                 </div>
+                             </div>
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">وضعیت مالی  :</label><label class="text-y" data-bind="text: financialSummary().TotalSum + ' تومان',style: { color: !financialSummary().IsDebt  ? 'green' : 'red' }"></label>
+                                 </div>
+                             </div>
+
+                             <div class="col-md-12 col-xsw-12">
+                                 <div class="form-group text-left">
+                                     <label class="title-y">وضعیت کلی  :</label><label class="text-y" data-bind="text: ((financialSummary().TotalSum == 0) ? '---' : (financialSummary().IsDebt ? 'بدهکار' : 'بستانکار') )  ,style: { color: !financialSummary().IsDebt  ? 'green' : 'red' }"></label>
+                                 </div>
+                             </div>
+
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+     </div>
+
+     <div class="modal fade" id="chequeModal">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">پرداخت چک</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>مبلغ پرداختی(تومان)</label>
+                                 <input readonly="readonly" type="text" placeholder="مبلغ پرداختی(تومان)" class="form-control" data-bind="value: financialSummaryCheque().AmountPaid">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شماره چک</label>
+                                 <input readonly="readonly" type="text" placeholder="شماره چک" class="form-control" data-bind="value: financialSummaryCheque().ChequeNo">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>بانک</label>
+                                 <input readonly="readonly" type="text" placeholder="بانک" class="form-control" data-bind="value: financialSummaryCheque().Bank">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>تاریخ  پرداخت </label>
+                                 <input readonly="readonly" type="text" placeholder="تاریخ سررسید" class="form-control" data-bind="value: financialSummaryCheque().RegDateTime">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>تاریخ سررسید</label>
+                                 <input readonly="readonly" type="text" placeholder="تاریخ سررسید" class="form-control" data-bind="value: financialSummaryCheque().DueDate">
+                             </div>
+                         </div>
+                         <div class="col-md-12 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شرح سند</label>
+                                 <textarea rows="3" readonly="readonly" type="text" placeholder="شرح سند" class="form-control" data-bind="value: financialSummaryCheque().Description"></textarea>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <div class="modal fade" id="noChequeModal">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"> </h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>نام نام خانوادگی</label>
+                                 <input readonly="readonly" type="text" placeholder="نام نام خانوادگی" class="form-control" data-bind="value: financialSummaryNoCheque().StudentUserFullName">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>مبلغ پرداختی(تومان)</label>
+                                 <input readonly="readonly" type="text" placeholder="مبلغ پرداختی(تومان)" class="form-control" data-bind="value: financialSummaryNoCheque().AmountPaid">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>نحوه پرداخت</label>
+                                 <input readonly="readonly" type="text" placeholder="نحوه پرداخت" class="form-control" data-bind="value: financialSummaryNoCheque().StudentFinancialPaymentType">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>تاریخ  پرداخت </label>
+                                 <input readonly="readonly" type="text" placeholder="تاریخ پرداخت" class="form-control" data-bind="value: financialSummaryNoCheque().AmountPaidDateTime">
+                             </div>
+                         </div>
+                         <div class="col-md-12 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شرح سند</label>
+                                 <textarea rows="3" readonly="readonly" type="text" placeholder="شرح سند" class="form-control" data-bind="value: financialSummaryNoCheque().Description"></textarea>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <div class="modal fade" id="returnPaymentsModal">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">عودت</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>نحوه پرداخت</label>
+                                 <select disabled="disabled" type="text" class="form-control" data-bind="value: financialSummaryReturnPayment().ReturnPaymentTypeId">
+                                     <option value="1"> نقدی </option>
+                                     <option value="2"> کارت به کارت </option>
+                                     <option value="3"> چک </option>
+                                 </select>
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>مبلغ جریمه  (تومان)</label>
+                                 <input readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryReturnPayment().ReturnAmount">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>تاریخ  پرداخت </label>
+                                 <input readonly="readonly" type="text" placeholder="تاریخ پرداخت" class="form-control" data-bind="value: financialSummaryReturnPayment().AmountPaidDateTime">
+                             </div>
+                         </div>
+                         <div class="col-md-12 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شرح سند</label>
+                                 <textarea rows="3" readonly="readonly" type="text" placeholder="شرح سند" class="form-control" data-bind="value: financialSummaryReturnPayment().Description"></textarea>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <div class="modal fade" id="posPaymenModal">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"> </h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>نام نام خانوادگی</label>
+                                 <input readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryPosPayment().StudentUserName">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>مبلغ پرداختی(تومان)</label>
+                                 <input readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryPosPayment().AmountPaid">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شماره تراکنش</label>
+                                 <input readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryPosPayment().TrackingNo">
+                             </div>
+                         </div>
+                         <div class="col-md-6 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>تاریخ پرداخت</label>
+                                 <input readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryPosPayment().RegDateTime">
+                             </div>
+                         </div>
+                         <div class="col-md-12 col-xs-12 pull-right">
+                             <div class="form-group text-right">
+                                 <label>شرح سند</label>
+                                 <textarea rows="3" readonly="readonly" type="text" class="form-control" data-bind="value: financialSummaryPosPayment().Description"></textarea>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+
+

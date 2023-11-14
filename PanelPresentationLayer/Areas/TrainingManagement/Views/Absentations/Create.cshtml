@@ -1,0 +1,55 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.AbsentationsViewModel
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>نام جلسه</label>
+                        <input asp-for="CourseMeetingName" readonly="readonly" class="form-control" data-bind="value: c().CourseMeetingName">
+                        <span asp-validation-for="CourseMeetingName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Date"></label>
+                        <input data-mask="9999/99/99" asp-for="Date" class="form-control" data-bind="value: c().Date">
+                        <span asp-validation-for="Date" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>انتخاب همه</label>
+                        <input type="checkbox" class="add-checkbox-all" />
+
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">ردیف</th>
+                                <th scope="col">نام دانش آموز</th>
+                                <th scope="col">وضعیت حضور</th>
+
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: c().StudentsAbsentationState">
+                            <tr>
+                                <th scope="row" data-bind="text: $index() + 1"></th>
+                                <td data-bind="text: StudentFullName"> </td>
+                                <td>
+                                    <input  class="itemcheckbox"  type="checkbox" data-bind="checked:  IsPresent" />
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button   type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

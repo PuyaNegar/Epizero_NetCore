@@ -1,0 +1,274 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "     جزوات |  مدرسه آنلاین اپیزرو";
+    var courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $('#addCourseMeetingBookletForm').submit(function () {
+                if ($(this).valid()) {
+                    DataTransfer('/Trainings/CourseMeetingBooklets/Add', 'post', ko.toJSON(mainViewModel.addCourseMeetingBookletStudents()), '.loader',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.addCourseMeetingBookletStudents({});
+                            $('#courseMeetingsComboBox').change();
+                            $('#CourseMeetingBookletFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.png');
+                            setTimeout(function () {
+                                $('#addCourseMeetingBookletModal').modal('hide');
+                            }, 300);
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#editCourseMeetingBookletForm').submit(function () {
+                if ($(this).valid()) {
+                    DataTransfer('/Trainings/CourseMeetingBooklets/Update', 'post', ko.toJSON(mainViewModel.editCourseMeetingBookletStudents()), '.loader',
+                        function (f) {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            mainViewModel.editCourseMeetingBookletStudents({});
+                            $('#courseMeetingsComboBox').change();
+                             setTimeout(function () {
+                                $('#editCourseMeetingBookletModal').modal('hide');
+                            }, 300);
+                        },
+                        function (e) {
+                            toastr.remove();
+                            toastr.error(e.responseJSON.Message);
+                        }
+                    );
+                }
+                return false;
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.delete', function () {
+                var data = { Id: $(this).attr('data-Id') };
+                bootbox.confirm({
+                    message: "آیا از حذف رکورد مطمئن هستید؟",
+                    buttons: {
+                        confirm: {
+                            label: 'تایید',
+                            className: 'btn-primary'
+                        },
+                        cancel: {
+                            label: 'انصراف',
+                            className: 'btn-default'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+
+                            DataTransfer('/api/Trainings/CourseMeetingBooklets/Delete/', 'post', ko.toJSON(data), '.wrapper-parent', function (e) {
+                                toastr.remove();
+                                $('#courseMeetingsComboBox').change();
+                                toastr.success(f.Message);
+                               
+                            }, function (e) {
+                                toastr.error(e.responseJSON.Message);
+                            });
+                        }
+                    }
+                });
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#courseMeetingsComboBox').change(function () {
+                sendDataToServer($(this).val());
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#coursesComboBox').change(function () {
+                $('#courseMeetingsComboBox').find('option').hide();
+                $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').show();
+                var courseMeetingId = $('#courseMeetingsComboBox').find('option[data-courseId=' + $(this).val() + ']').eq(0).attr('value');
+                $('#courseMeetingsComboBox').val(courseMeetingId).change();
+            });
+            $('#coursesComboBox').change();
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            function sendDataToServer(courseMeetingId) {
+                if (courseMeetingId == null) {
+                    mainViewModel.courseMeetingBookletStudents([]);
+                    return;
+                }
+                mainViewModel.addCourseMeetingBookletStudents().CourseMeetingId = courseMeetingId;
+                DataTransfer('/api/Trainings/CourseMeetingBooklets/Read?Id=' + courseMeetingId, 'get', '', '.wrapper-parent', function (e) {
+                    mainViewModel.courseMeetingBookletStudents(e.Value);
+                }, function (e) {
+                    toastr.error(e.responseJSON.Message);
+                });
+            }
+
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('#addCourseMeetingBookletModal').on("hidden.bs.modal", function (event) {
+                CourseMeetingBookletFilePathResetFile();
+
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('.btn-addHomwork').click(function () {
+                $('#addCourseMeetingBookletModal').modal({ backdrop: 'static', keyboard: false });
+                $('#addCourseMeetingBookletModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.showFile', function () {
+                var fileUrl = $(this).attr('data-file');
+                window.open(fileUrl, '_blank');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+            $('body').on('click', '.edit', function () {
+                var Id = $(this).attr('data-Id');
+                mainViewModel.editCourseMeetingBookletStudents().CourseMeetingId = $(this).attr('data-CourseMeetingId');
+                //**************=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**************
+                DataTransfer('/api/Trainings/CourseMeetingBooklets/Find/' + Id, 'Get', '' , '',
+                function (f) {
+                    toastr.remove();
+                    mainViewModel.editCourseMeetingBookletStudents(f.Value);
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error(e.responseJSON.Message);
+                }
+                );
+                $('#editCourseMeetingBookletModal').modal({ backdrop: 'static', keyboard: false });
+                $('#editCourseMeetingBookletModal').modal('show');
+            });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        });
+    </script>
+
+}
+<style type="text/css">
+    .list-homwork-ersali .showFile {
+        height: 25px;
+        line-height: 0.5;
+        padding-top: 6px;
+    }
+
+    .modal-btn .loaderBox {
+        display: inline-block;
+    }
+
+    .modal-btn .modal-footer .btn {
+        margin-top: 0;
+        padding: 4px 20px 3px 20px;
+    }
+
+    .modal-btn .loaderBox .icon-loader img {
+        width: 40px;
+    }
+
+    .modal-btn .loaderBox .icon-loader {
+        border-radius: 0;
+    }
+</style>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> جزوات  </span>
+        </div>
+    </div>
+</div>
+<section class="list-student list-homwork-ersali">
+    <div class="container">
+        @if (courses.Count() > 0)
+        {
+            <div class="border-i">
+                <div class="col-md-4">
+                    <div class="btn-r-0">
+                        <button type="button" class="btn btn-warning btn-r btn-addHomwork"><i class="fa fa-plus"></i> افزودن جزوه </button>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="coursesComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    <option value="@course.Id">@course.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="courseMeetingsComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    foreach (var courseMeeting in course.CourseMeetings)
+                                    {
+                                        <option data-courseId="@course.Id" value="@courseMeeting.Id">@courseMeeting.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>}
+    </div>
+    <div class="box-menu homwork-b">
+        <div class="container">
+            <div class="legend col-md-12">
+                <div class="title-o">
+                    <i class="fa fa-book"></i>
+                    <span>جزوات</span>
+                </div>
+                <div class="table-responsive">
+                    <!-- ko if: mainViewModel.courseMeetingBookletStudents().length > 0 -->
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="center">عنوان</th>
+                                <th class="center">جلسه</th>
+                                <th class="center">وضعیت</th>
+                                <th class="center">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: courseMeetingBookletStudents()">
+                            <tr>
+                                <td class="left" data-bind="text: $index()+1"></td>
+                                <td style="text-align: center;" data-bind="text: Title"></td>
+                                <td class="center" data-bind="text: CourseMeetingName"></td>
+                                <td class="center" data-bind="text: IsActiveName">
+                                </td>
+                                <td class="center btn-homwork">
+                                    <!-- ko if:FilePath != null -->
+                                    <button data-bind="attr:{'data-file':FilePath}" class="btn btn-warning btn-sm showFile">مشاهده فایل</button>
+                                    <!-- /ko -->
+                                    <button data-bind="attr:{'data-Id':Id , 'data-CourseMeetingId':CourseMeetingId}" class="btn btn-info btn-sm edit">ویرایش</button>
+                                    <button data-bind="attr:{'data-Id':Id}" class="btn btn-danger btn-sm delete">حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- /ko -->
+                    <!-- ko ifnot: mainViewModel.courseMeetingBookletStudents().length > 0 -->
+                    <div class="box-empty">
+                        <div class="empty">
+                            <img src="~/assets/img/box-empty.svg" />
+                            <p>جزوه ای ثبت نشده است .</p>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+@{ await Html.RenderPartialAsync("_AddCourseMeetingBookletPartial");}
+@{ await Html.RenderPartialAsync("_EditCourseMeetingBookletPartial");}

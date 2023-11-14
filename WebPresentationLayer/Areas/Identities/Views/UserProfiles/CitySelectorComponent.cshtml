@@ -1,0 +1,104 @@
+﻿@using WebViewModels.Prefix
+@using WebViewModels.BasicDefinitionsViewModels
+@model SelectorPrefix<CitySelectorViewModel>
+
+<script type="text/javascript">
+    $(function () {
+        //***************************************************************************************
+        InitialChosen('#Selector_ProvinceId');
+        //***************************************************************************************
+        $("#Selector_ProvinceId").change(function () {
+            destroyChosen('#Selector_CityId');
+            $("#Selector_CityId").children().remove();
+            CreateComboLoader("/BasicDefinitions/Cities/ReadForComboBox/",
+                "#Selector_CityId",
+                '',
+                "Value",
+                "Text",
+                $(this).val(),
+                true,
+                function () { InitialChosen('#Selector_CityId'); $('#Selector_CityId').change(); },
+                null);
+        });
+        //***************************************************************************************
+        $("#Selector_ProvinceId").change();
+        //***************************************************************************************
+        $('#Selector_CityBtn').click(function () {
+            if (IsNullOrEmptyString($('#Selector_CityId').val())) {
+                toastr.remove();
+                toastr.error('شهر را انتخاب کنید ');
+                return false
+            }
+           
+            var group = $('#Selector_ProvinceId option:selected').html();
+            var subGroup = $('#Selector_CityId option:selected').html();
+            if (!IsNullOrEmptyString($('#CitySelectorModal').attr('data-multiTargetElementsForText'))) {
+                var str = $('#CitySelectorModal').attr('data-multiTargetElementsForText').split(',');
+                $('#' + str[0]).val(group);
+                $('#' + str[1]).val(subGroup);
+            } else {
+                var str = group + ' - ' + subGroup ;
+                $('#' + $('#CitySelectorModal').attr('data-targetElementForText')).val(str);
+                
+            }
+            $('#' + $('#CitySelectorModal').attr('data-targetElementForId')).val($('#Selector_CityId').val()).change();
+            $('#CitySelectorModal').modal('hide');
+        });
+        //*********************************************************************************
+        //$('#CitySelectorModal').on("hidden.bs.modal", function (event) {
+        //    if (!IsNullOrEmptyString($('#CitySelectorModal').attr('data-parentModalId'))) {
+        //        $('body').addClass('modal-open');
+        //        $('#' + $('#CitySelectorModal').attr('data-parentModalId')).modal('show');
+        //    }
+        //});
+        //*********************************************************************************
+    });
+</script>
+<div id="CitySelectorModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog" data-targetElementForId="" data-targetElementForText="" data-parentModalId="">
+    <div class="modal-dialog modal-sm " role="document">
+        <div class="modal-content">
+            <form id="categoryForm" role="form">
+                <div  class="modal-header create-modal">
+                    <button style="float:left" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span style="color:#6f736b" class="glyphicon glyphicon-tasks" aria-hidden="true"></span> <strong>انتخاب استان و شهر</strong>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label asp-for="Selector.ProvinceId"></label>
+                                <select asp-for="Selector.ProvinceId" class="form-control">
+                                    <option value="">لطفاً گروه را انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.Provinces)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Selector.ProvinceId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group reletive">
+                                <label asp-for="Selector.CityId"></label>
+                                <select asp-for="Selector.CityId" class="form-control">
+                                    <!--load by javascript-->
+                                </select>
+                                <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom comboBoxIconLoader"></i>
+                                <span asp-validation-for="Selector.CityId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">انصراف</button>
+                    <button id="Selector_CityBtn" type="button" class="btn btn-success btn-sm btn-se">انتخاب </button>
+
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

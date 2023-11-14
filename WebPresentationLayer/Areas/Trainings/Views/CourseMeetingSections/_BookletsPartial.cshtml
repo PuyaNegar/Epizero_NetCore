@@ -1,0 +1,119 @@
+﻿@{
+    var CourseMeetingSections = (WebViewModels.TrainingsViewModels.CourseMeetingSectionsViewModel)ViewBag.Data;
+}
+ 
+    <script type="text/javascript">
+        $(function () {
+            $('.btn-description').click(function () {
+                var $title = $(this).parent().parent().parent().parent().parent().find('.title').text();
+                $('.modal-title').html(' جزوه مربوط به   ' + $title);
+                var $text = $(this).find('.descript').text();
+                $('.p-descroiption').html($text);
+                $('#bookletDescriptionModal').modal({ backdrop: 'static', keyboard: false });
+                $('#bookletDescriptionModal').modal('show');
+            });
+        });
+    </script>
+ 
+
+<section class="homeworks">
+    <!-- Modal -->
+    <div class="modal fade" id="bookletDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="p-descroiption">
+
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="split-c">
+            <hr class="hr">
+            <span class="pad-line-s split-liner bg-color-red">
+                جزوات من
+            </span>
+        </div>
+        <div class="row">
+            @if (CourseMeetingSections.CourseMeetingBooklets.Any())
+            {
+                @foreach (var item in CourseMeetingSections.CourseMeetingBooklets)
+                {
+                    <div class="col-md-4 col-xs-12 pull-right">
+                        <div class="box-h">
+                            <div class="title">
+                                <span>@item.Title</span>
+                            </div>
+                            <div class="content">
+
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="center col-md-6 col-sm-12 col-xs-12">
+                                        <a class="btn-o btn-description">
+                                            <span class="none descript">@item.Description</span>
+                                            <p>
+                                                <span class="bg"></span>
+                                                <span class="base"></span>
+                                                <span class="text">توضیحات</span>
+                                            </p>
+                                        </a>
+
+                                    </div>
+                                    <div class="center col-md-6 col-sm-12 col-xs-12">
+                                        <a target="_blank" class="btn-o" href="@item.FilePath">
+                                            <p>
+                                                <span class="bg"></span>
+                                                <span class="base"></span>
+                                                <span class="text">دریافت فایل</span>
+                                            </p>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="btn-i col-md-12 col-sm-12 col-xs-12">
+
+                                    @*<div class="center col-md-6 col-sm-12 col-xs-12">
+                                    <input type="file" name="file" id="file" class="inputfile" />
+                                    <label for="file">انتخاب فایل</label>
+                                </div>
+                                <div class="center col-md-6 col-sm-12 col-xs-12">
+                                    <a class="btn-o" href="#">
+                                        <p>
+                                            <span class="bg"></span>
+                                            <span class="base"></span>
+                                            <span class="text">ارسال تکلیف</span>
+                                        </p>
+                                    </a>
+                                </div>*@
+                                </div>
+                            </div>
+                            @*<div class="grade">
+                            <span class="number"> 15.75</span>       <span class="text"> : نمره  </span>
+                        </div>*@
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="box-empty">
+                    <div class="empty">
+                        <img src="~/assets/img/box-empty.svg" alt="تکالیف جزوه"/>
+                        <p>جزوه ایی برای شما ثبت نشده است .</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+ 

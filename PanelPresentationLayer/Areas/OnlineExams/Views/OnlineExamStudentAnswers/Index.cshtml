@@ -1,0 +1,261 @@
+﻿@using PanelViewModels.OnlineExamsViewModels;
+@using Common.Enums;
+@{
+    ViewData["Title"] = "جواب دانشجویان به آزمون";
+    ViewData["PageFarsiName"] = "جواب دانشجویان به آزمون";
+    string Area = "OnlineExams";
+    string Controller = "OnlineExamStudentAnswers";
+    var data = (OnlineExamStudentAnswersViewModel)ViewBag.Data;
+    int i = 0;
+    int j = 0;
+}
+<style type="text/css">
+    .bg-color-span {
+        background-color: #c5ffde;
+        padding: 3px 5px 0px 3px;
+    }
+
+    .flex-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        font-size: 15px !important;
+    }
+
+    .examName {
+        color: #9b8080 !important;
+        font-size: 14px;
+    }
+
+    .file-download:hover {
+        text-decoration: none;
+        transition: all .3s;
+        border: 2px solid #87b9e6;
+    }
+
+    .file-download {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        border: 2px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        color: #666;
+        transition: all .3s;
+        overflow: hidden;
+        height: 45px;
+    }
+
+        .file-download:hover .face-secondary {
+            transition: all .3s;
+            top: 0px;
+            display: block;
+            height: 45px;
+        }
+
+    .face-secondary {
+        padding: 10px;
+        background-color: #8adae8;
+        color: #fff;
+        right: 0;
+        height: 45px;
+        width: 100%;
+        position: absolute;
+        transition: all .3s;
+        top: -45px;
+    }
+
+        .face-primary span.fa, .face-secondary span.fa {
+            font-size: 17px;
+            margin-left: 3px;
+            vertical-align: middle;
+        }
+
+    .widget-caption p img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto !important;
+        height: auto !important;
+    }
+</style>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('body').on('click', '.file-download', function () {
+            var url = $(this).attr('href');
+            alert(url)
+            window.open(url,'_blank');
+        });
+    });
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;overflow:hidden">
+                <div id="mainArea">
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="margin-bottom: 0; color: #a86363; font-size: 14px !important; padding: 7px;" class="form-group">
+                                    <span class="glyphicon glyphicon-list alert-info-icon"></span> سوالات مربوط به آزمون  <span class="alert-info-text"> @data.ExamName  </span> دانشجویان <span class="alert-info-text"> @data.StudentFullName</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (data.OnlineExamStudentAnswerFiles.Any())
+                    {
+
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="widget">
+                                <div class="widget-header" style="text-align:right">
+                                    <div class="widget-buttons">
+                                        <span class="widget-caption">فایل های مربوط به آزمون <span class="examName">@data.ExamName</span></span>
+                                    </div>
+                                </div>
+                                <div class="widget-body" style="min-height: unset;">
+                                    <div class="row">
+                                        @foreach (var file in data.OnlineExamStudentAnswerFiles)
+                                        {
+                                            j++;
+                                            <div class="col-md-3">
+                                                <a class="file-download" href="@file.FilePath">
+
+                                                    <div class="face-primary">
+                                                        <span class="icon fa fa-paperclip"></span>
+                                                        فایل پیوستی شماره @j
+                                                    </div>
+
+                                                    <div class="face-secondary">
+                                                        <span class="icon fa fa-cloud-download"></span>
+                                                        جهت دانلود کلیک کنید
+                                                    </div>
+
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                    @foreach (var item in data.StudentOnlineExamQuestions)
+                    {
+                        i++;
+                        @if (item.QuestionTypeId == (int)QuestionType.DescriptiveQuestions)
+                        {
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="widget">
+                                    <div class="widget-header" style="text-align:right">
+
+                                        @*<div class="widget-buttons">
+                                            <span class="badge badge-success graded flex-div">
+                                                @i
+                                            </span>
+                                        </div>*@
+                                        <div style="border-right: none" class="widget-buttons buttons-bordered">
+                                            <span class="widget-caption">@Html.Raw(item.QuestionContext)</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget-body" style="min-height: unset;">
+
+                                        <p>
+                                            @if (item.DescriptiveAnswers != null)
+                                                @Html.Raw(item.DescriptiveAnswers.AnswerContext)
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                 if (item.QuestionTypeId == (int)QuestionType.MultipleChoiceQuestions)
+                        {
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <div class="widget">
+                                    <div class="widget-header" style="text-align:right">
+                                        @*<div class="widget-buttons">*@
+                                            <span style="overflow:hidden;float:right;margin-bottom:10px;" class="badge badge-success graded flex-div">
+                                                @i
+                                            </span>
+                                        @*</div>*@
+                                        <div style="border-right: none" class="widget-buttons buttons-bordered">
+                                            <div style="margin-top:10px;margin-bottom:10px">
+                                                <span style="text-align:right" class="widget-caption">@Html.Raw(item.QuestionContext)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-body" style="min-height: unset;">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 col-xs-12">
+                                                <div class="checkbox">
+                                                    <label>1 )</label>
+                                                    <label>
+                                                        <input disabled type="checkbox" class="@((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption != item.MultipleChoiceQuestionOptions.CorrentOption ) ? "colored-darkorange" : "colored-success")" @((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption == 1) ? "checked" : "")>
+                                                        <span style="display: inline-flex;" class="text"><span class="@(item.MultipleChoiceQuestionOptions.CorrentOption == 1 ? "bg-color-span": "")">@Html.Raw(item.MultipleChoiceQuestionOptions.Option1)</span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 col-xs-12">
+                                                <div class="checkbox">
+                                                    <label>2 )</label>
+                                                    <label>
+                                                        <input disabled type="checkbox" class="@((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption != item.MultipleChoiceQuestionOptions.CorrentOption ) ? "colored-darkorange" : "colored-success")" @((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption == 2 ? "checked" : ""))>
+                                                        <span style="display: inline-flex;" class="text"><span class="@(item.MultipleChoiceQuestionOptions.CorrentOption == 2 ? "bg-color-span": "")">@Html.Raw(item.MultipleChoiceQuestionOptions.Option2)</span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 col-xs-12">
+                                                <div class="checkbox">
+                                                    <label>3 )</label>
+                                                    <label>
+                                                        <input disabled type="checkbox" class="@((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption != item.MultipleChoiceQuestionOptions.CorrentOption ) ? "colored-darkorange" : "colored-success")" @((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption == 3 ? "checked" : ""))>
+                                                        <span style="display: inline-flex;" class="text"><span class="@(item.MultipleChoiceQuestionOptions.CorrentOption == 3 ? "bg-color-span": "")"> @Html.Raw(item.MultipleChoiceQuestionOptions.Option3)</span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 col-xs-12">
+                                                <div class="checkbox">
+                                                    <label>4 )</label>
+                                                    <label>
+                                                        <input disabled type="checkbox" class="@((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption != item.MultipleChoiceQuestionOptions.CorrentOption ) ? "colored-darkorange" : "colored-success")" @((item.MultipeChoiceAnswer != null && item.MultipeChoiceAnswer.SelectedOption == 4 ? "checked" : ""))>
+                                                        <span style="display: inline-flex;" class="text"><span class="@(item.MultipleChoiceQuestionOptions.CorrentOption == 4 ? "bg-color-span": "")">@Html.Raw(item.MultipleChoiceQuestionOptions.Option4)</span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+@using WebBusinessLogicLayer.BusinessComponents.ContentsComponents
+@{
+    var result = AboutUsComponent.Find();
+}
+<html dir="rtl" lang="fa-IR">
+<head>
+    @*<title>مدرسه آنلاین اپیزرو</title>*@
+    <title>@Html.Raw(ViewData["Title"])</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    @RenderSection("MetaTag", required: false)
+   
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+@*    <link rel="canonical" href="epizero_default.html" />*@
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="مدرسه آنلاین اپیزرو| کلاس آنلاین کنکور و متوسطه" />
+
+    <meta property="og:url" content="https://epizero.ir" />
+    <meta property="og:site_name" content="مدرسه آنلاین اپیزرو| کلاس آنلاین کنکور و متوسطه" />
+    <meta property="article:modified_time" content="2020-09-20T17:23:59+00:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link href=https://file.epizero.ir/files/favicon/favicon.ico type=image/x-icon rel=icon>
+    @{ await Html.RenderPartialAsync("_StylesPartial"); }
+    @RenderSection("Styles", required: false)
+    <script src="~/assets/lib/jquery/jquery.min.js"></script>
+    <script src="~/assets/lib/knockout/knockout-3.4.2.js"></script>
+    <script src="~/assets/lib/chosen_v1.8.7/chosen.jquery.js"></script>
+    <!--BEGIN RAYCHAT CODE-->
+    <script type="text/javascript">!function () { function t() { var t = document.createElement("script"); t.type = "text/javascript", t.async = !0, localStorage.getItem("rayToken") ? t.src = "https://app.raychat.io/scripts/js/" + o + "?rid=" + localStorage.getItem("rayToken") + "&href=" + window.location.href : t.src = "https://app.raychat.io/scripts/js/" + o + "?href=" + window.location.href; var e = document.getElementsByTagName("script")[0]; e.parentNode.insertBefore(t, e) } var e = document, a = window, o = "cb18c1a2-310f-46c7-8788-fbb93eec44bd"; "complete" == e.readyState ? t() : a.attachEvent ? a.attachEvent("onload", t) : a.addEventListener("load", t, !1) }();</script>
+    <!--END RAYCHAT CODE-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!--<script async src="https://www.googletagmanager.com/gtag/js?id=G-4FZDGGS1DB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4FZDGGS1DB');
+    </script>-->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C465ZYKL0F"></script>
+    <script>
+        window.dataLayer = window.dataLayer[];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-C465ZYKL0F');
+    </script>
+
+    <script>!function (t, e, n) { t.yektanetAnalyticsObject = n, t[n] = t[n] || function () { t[n].q.push(arguments) }, t[n].q = t[n].q || []; var a = new Date, r = a.getFullYear().toString() + "0" + a.getMonth() + "0" + a.getDate() + "0" + a.getHours(), c = e.getElementsByTagName("script")[0], s = e.createElement("script"); s.id = "ua-script-u6RR2RU4"; s.dataset.analyticsobject = n; s.async = 1; s.type = "text/javascript"; s.src = "https://cdn.yektanet.com/rg_woebegone/scripts_v3/u6RR2RU4/rg.complete.js?v=" + r, c.parentNode.insertBefore(s, c) }(window, document, "yektanet");</script>
+</head>
+<body id="mainArea">
+    
+    <div class="wrapper-parent">
+        <div class="wrapper-child">
+            <img src="~/assets/img/main-loader.svg" alt="لطفا منتظر بمانید" title="لطفا منتظر بمانید" />
+            @*<p>لطفا منتظر بمانید...</p>*@
+        </div>
+    </div>
+    @{ await Html.RenderPartialAsync("_HeaderPartial.cshtml"); }
+
+    @RenderBody()
+
+    @{ await Html.RenderPartialAsync("_FooterPartial.cshtml"); }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        await Html.RenderPartialAsync("AcountModal/_AccountModal.cshtml");
+
+    }
+    else
+    {
+        await Html.RenderPartialAsync("AcountModal/_ChangePasswordModal.cshtml");
+    }
+
+    @{ await Html.RenderPartialAsync("_ScriptsPartial");}
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+
+</html>
+

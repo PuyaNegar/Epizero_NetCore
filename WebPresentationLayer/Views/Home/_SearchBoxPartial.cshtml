@@ -1,0 +1,83 @@
+﻿<style type="text/css">
+    input::placholder {
+        color: #333;
+        font-size: 14px;
+    }
+    .searchBox .main-search {
+        position: relative;
+    }
+
+        .searchBox .main-search .result {
+            position: absolute;
+            background: #fff;
+            left: 52px;
+            right: 0;
+            top: 100%;
+            z-index: 9999998;
+            border-top: 1px solid #e7e7e7;
+            overflow: hidden;
+            overflow-y: hidden;
+            border-radius: 0 0 7px 7px;
+            display: block;
+            box-shadow: 0 -4px 8px 0 rgba(0,0,0,.3);
+            padding: 10px 15px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .searchBox .main-search .input-group-addon {
+            padding: 8px 14px;
+            background-color: #fcc200;
+            border: 1px solid #fcc200;
+        }
+        .searchBox .main-search .input-group-addon:hover {
+         cursor : pointer;
+        }
+            .searchBox .main-search .input-group-addon .icon-s {
+                font-size: 22px;
+                color:#fff;
+            }
+        .searchBox .main-search .input-div {
+            position: relative;
+        }
+        .searchBox .main-search .input-s {
+            height: 47px;
+            font-size: 16px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+            .searchBox .main-search .input-s:focus {
+                border-color: #fcc200;
+                outline: 0;
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            }
+   
+</style>
+
+
+<section>
+    <div class="searchBox">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 hidden-xs"></div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="main-search">
+                        <div class="input-group ltr">
+                            <span class="input-group-addon" id="basic-addon2">
+                                <span class="glyphicon glyphicon-search icon-s"></span>
+                            </span>
+                            <div class="input-div">
+                                <span class="glyphicon glyphicon-close"></span>
+                                <input type="text" class="form-control input-s" placeholder="متن جستجو را وارد کنید..." aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        @*<div class="result">
+
+                        </div>*@
+                    </div>
+                </div>
+                <div class="col-md-3 hidden-xs"></div>
+            </div>
+        </div>
+    </div>
+</section>

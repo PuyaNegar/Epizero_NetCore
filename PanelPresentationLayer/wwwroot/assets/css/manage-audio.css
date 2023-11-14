@@ -1,0 +1,166 @@
+ 
+ 
+
+/* used to set default load to show Option A until toggled */
+.audio-div .hidden {
+    display: none;
+}
+
+.audio-div .inactive {
+    background-color: #eee !important;
+    color: #666 !important;
+    cursor: default !important;
+}
+
+.audio-div h1 {
+    font-family: 'Bebas Neue',cursive;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 40px;
+    color: #FBBA72;
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.audio-div .recorder-instructions {
+    margin: 30px auto;
+    width: 80%;
+    padding: 5px 5px 20px 5px;
+    background-color: rgb(220, 253, 225);
+}
+
+.audio-div .step-1A,
+.audio-div .step-2A,
+.audio-div .step-3A,
+.audio-div .step-4A,
+.audio-div .step-5A {
+    width: 90%;
+    margin: auto;
+}
+
+.audio-div .recorder-instructions > * > h2 {
+    font-size: 16px;
+    color: #1E1014;
+    margin-bottom: 3px;
+}
+
+.audio-div .recorder-instructions > * > p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* recorder buttons start */
+.audio-div .audio-record {
+    padding: 10px 10px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.audio-div .recordButton {
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #1E1014;
+    background: #CAFFD0;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out 0s;
+    cursor: pointer;
+    padding: 10px;
+}
+.audio-div .removeButton {
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #1E1014;
+    background: #E19C9559;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out 0s;
+    cursor: pointer;
+    padding: 10px;
+}
+.audio-div .button-animate {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 3px 1px #7eda88;
+    }
+
+    100% {
+        box-shadow: 0px 0px 3px 10px #7eda88;
+
+    }
+}
+
+.audio-div .stopButton {
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-size: 15px;
+    font-weight: bold;
+    color: #1E1014;
+    background-color: #F8333C;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 40px;
+    cursor: pointer;
+}
+
+.audio-div .playback {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.audio-div .audio-playback {
+    width: 600px;
+    height: 50px;
+}
+
+.audio-div audio::-webkit-media-controls-panel,
+.audio-div video::-webkit-media-controls-panel {
+    background-color: #fff;
+}
+
+.audio-div .download {
+    display: flex;
+    justify-content: center;
+}
+
+.audio-div #downloadButton {
+    text-decoration: none;
+    color: #1E1014;
+}
+
+.audio-div #downloadContainer {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1E1014;
+    background-color: #FBBA72;
+    border: none;
+    border-radius: 5px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+/* recorder buttons end */
+
+
+@media all and (max-width: 643px) {
+    .audio-div .audio-record {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .audio-div .stopButton {
+        margin: 20px 15px;
+    }
+}

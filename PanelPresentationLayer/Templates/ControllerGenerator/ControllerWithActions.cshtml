@@ -1,0 +1,83 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Common.Extentions;
+using Common.Objects;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+@{string modelName = (Model.ClassName.EndsWith("Controller") ? Model.ClassName.Substring(0, Model.ClassName.Length - 10) : Model.ClassName);}
+namespace @Model.NamespaceName
+{
+    [Area("XXXXXXXXX")]
+    [Authorize]
+    [ModelValidatorAsync]
+    [Permision]
+    [ExceptionHandlerAsync]
+    public class @Model.ClassName : Controller
+    {
+    private @(modelName)Service @(modelName)Service;
+    //===========================================================================
+    public @(modelName)Controller()
+    {
+    this.@(modelName)Service = new @(modelName)Service();
+    }
+    //===========================================================================
+    public IActionResult Index()
+    {
+    return View();
+    }
+    //===========================================================================
+    public JsonResult Read([FromForm] DataTableRequest request)
+    {
+    var sysResult = @(string.Concat(modelName, "Service")).Read();
+    var result = sysResult.GetGridData<@( string.Concat(modelName, "ViewModel"))>
+    (request);
+    return Json(result);
+    }
+    //============================================================================
+    [HttpPost]
+    public JsonResult Add([FromBody] @(string.Concat(modelName, "ViewModel")) viewModel )
+    {
+    var result = @(string.Concat(modelName, "Service")).Add(viewModel, GetCurrentUserId());
+    return Json(result);
+    }
+    //============================================================================
+    [HttpPost]
+    public JsonResult Find([FromBody] IntegerIdentifierViewModel viewModel)
+    {
+    var result =  @(string.Concat(modelName, "Service")).Find(viewModel.Id.Value);
+    return Json(result);
+    }
+    //===========================================================================
+    [HttpPost]
+    public JsonResult Update([FromBody]  @(string.Concat(modelName, "ViewModel")) viewModel)
+    {
+    var result = @(string.Concat(modelName, "Service")).Update(viewModel, GetCurrentUserId());
+    return Json(result);
+    }
+    //===========================================================================
+    [HttpPost]
+    public JsonResult Delete([FromBody] List<IntegerIdentifierViewModel>
+        viewModel)
+        {
+        var result = @(string.Concat(modelName, "Service")).Delete(viewModel);
+        return Json(result);
+        }
+        //===========================================================================
+        public int GetCurrentUserId()
+        {
+        return CurrentContext.GetCurrentUserId(this);
+        }
+        //=========================================================================Disposing
+        #region DisposeObjects
+        protected override void Dispose(bool disposing)
+        {
+        @string.Concat(modelName, "Service") ?.Dispose();
+        GC.SuppressFinalize(this);
+        }
+        #endregion
+        }
+        }

@@ -1,0 +1,46 @@
+﻿@model PanelViewModels.BaseViewModels.CourseViewModel
+@using PanelPresentationLayer.ComponentModel
+@{
+    var Options = new ComboBoxOptions()
+    {
+        Url = "/TrainingManagement/CoursesAndOnlineExam/ReadMultiTeacherCourse",
+        ComboBoxName = "CourseChosen",
+        IsMultiSelect = false,
+        ComboBoxDataColumn = new List<ComboBoxDataColumn>() {
+        new ComboBoxDataColumn() { ColumnTitle = "Id"  , ColumnName="Id" , IsVisible=false , IsSearchable=false } ,
+        new ComboBoxDataColumn() { ColumnTitle = "نام دوره / آزمون"  , ColumnName="Name" , IsSearchable= true , IsOrderable = false } ,
+        new ComboBoxDataColumn() { ColumnTitle = "نوع دوره"  , ColumnName="CourseCategoryTypeName" , IsSearchable= true , IsOrderable = false } ,
+        new ComboBoxDataColumn() { ColumnTitle = "استاد شاخص"  , ColumnName="TeacherFullName" , IsSearchable= true , IsOrderable = false } ,
+        new ComboBoxDataColumn() { ColumnTitle = "وضعیت"  , ColumnName="IsActiveName" , IsSearchable= true , IsOrderable = false } ,
+         
+    },
+        ValueField = "Id",
+        TextField = "Name",
+        TargetValueInputId = "Selected_CourseId" 
+    };
+}
+<div id="CourseSelectorModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="UserSelectorForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>انتخاب دانش آموز</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>انتخاب دوره / آزمون</label>
+                        <input id="Selected_CourseName" type="hidden" class="form-control" />
+                        <input id="Selected_CourseId" type="hidden" class="form-control" />
+                        @await Html.PartialAsync("~/Views/Component/ChosenCombobox.cshtml", Options)
+                        <span asp-validation-for="CourseName" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+                    <button id="applySelectedCourse" type="button" class="btn btn-success btn-sm">انتخاب</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

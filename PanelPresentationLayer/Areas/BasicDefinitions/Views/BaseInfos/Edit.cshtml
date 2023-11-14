@@ -1,0 +1,28 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.BasicDefinitionsViewModels.BaseInfosViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>اطلاعات پایه</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label asp-for="Edit.EpizeroCoinPrice"></label>
+                            <input asp-for="Edit.EpizeroCoinPrice" type="text" class="form-control currency" data-bind="value: e().EpizeroCoinPrice"  >
+                            <span asp-validation-for="Edit.EpizeroCoinPrice" class="danger"></span>
+                        </div> 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,51 @@
+﻿@model PanelViewModels.Prefix.StudentPosPaymentPrefix< PanelViewModels.FinancialsViewModels.StudentFinancialPosPaymentsViewModel>
+
+<div id="posPaymentModal" class="modal fade " tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">پرداخت کارتخوان</h4>
+            </div>
+            <form id="posPaymentForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="StudentPosPayment.AmountPaid"> </label>
+                        <input asp-for="StudentPosPayment.AmountPaid" type="text" data-bind="value: posPayment().AmountPaid" class="form-control currency AmountPaid_ps">
+                        <span asp-validation-for="StudentPosPayment.AmountPaid" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StudentPosPayment.TrackingNo"> </label>
+                        <input asp-for="StudentPosPayment.TrackingNo" type="text" data-bind="value: posPayment().TrackingNo" class="form-control">
+                        <span asp-validation-for="StudentPosPayment.TrackingNo" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StudentPosPayment.RegDateTime"> </label>
+                        <input data-mask="9999/99/99" asp-for="StudentPosPayment.RegDateTime" type="text" data-bind="value: posPayment().RegDateTime" class="form-control">
+                        <span asp-validation-for="StudentPosPayment.RegDateTime" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StudentPosPayment.BankPosDeviceId"> </label>
+                        <select asp-for="StudentPosPayment.BankPosDeviceId" type="text" data-bind="value: posPayment().BankPosDeviceId" class="form-control">
+                            <option value="">لطفاً انتخاب کنید</option>
+                            @foreach (var item in ViewBag.BankPosDevices)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="StudentPosPayment.BankPosDeviceId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StudentPosPayment.Description"> </label>
+                        <textarea asp-for="StudentPosPayment.Description" type="text" data-bind="value: posPayment().Description" class="form-control Description_ps"></textarea>
+                        <span asp-validation-for="StudentPosPayment.Description" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

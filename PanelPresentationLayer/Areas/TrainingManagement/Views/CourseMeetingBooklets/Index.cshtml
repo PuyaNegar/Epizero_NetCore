@@ -1,0 +1,88 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.CourseMeetingBookletsViewModel>
+@{
+    ViewData["Title"] = "جزوه";
+    ViewData["PageFarsiName"] = "جزوه";
+    string Area = "TrainingManagement";
+    string Controller = "CourseMeetingBooklets";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;">
+        <button class="btn btn-info btn-xs edit" type="button" style="margin-left:10px; margin-top:2px;  width:70px; "><i class="fa fa-pencil" style="margin-left: 1px;"></i>ویرايش</button>
+        <a class="btn btn-warning btn-xs showfile" style="margin-left:10px; margin-top:2px;"><i class="fa fa-eye" style="margin-left: 1px;"></i>مشاهده فایل</a>
+
+    </div>
+</script>
+<script type="text/javascript">
+    extendViewModelColumns.push('FilePath');
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/' + @ViewBag.CourseMeetingId,
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        GenerateReturnBtn();
+        //================================
+          AddBoxModalOnShow = function () {
+             MainViewModel.c().CourseMeetingId = @ViewBag.CourseMeetingId;
+        }
+          EditBoxModalOnShow = function () {
+             MainViewModel.e().CourseMeetingId = @ViewBag.CourseMeetingId;
+        }
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=
+        TableOnDraw = function () {
+            for (i = 0; i < $('#modelList > tbody > tr').length; i++) {
+                var data = $('#modelList').DataTable().row($('#modelList > tbody > tr').eq(i)).data().FilePath;
+                $('#modelList > tbody > tr').eq(i).find('.showfile').attr("href", data);
+            }
+        }
+        $('body').on('click', '.showfile', function (e) {
+            e.preventDefault();
+            window.open($(this).attr('href'), '_blank');
+        });
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="Title">عنوان</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                    <th data-viewModel="CourseMeetingName">جلسه</th>
+                                    <th data-viewModel="UserEditor">مسئول ثبت</th>
+                                    <th style="width: 220px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

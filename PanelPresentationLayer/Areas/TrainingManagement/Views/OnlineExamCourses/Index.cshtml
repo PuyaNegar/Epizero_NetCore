@@ -1,0 +1,218 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.CoursesViewModel>
+@{
+    ViewData["Title"] = "ازمون های مستقل";
+    ViewData["PageFarsiName"] = "آزمون های مستقل";
+    string Area = "TrainingManagement";
+    string Controller = "OnlineExamCourses";
+}
+<script id="operands" type="text/html">
+    <div class="dropdown clearfix" style="float:right;margin-right:5px;">
+        <button class="btn btn-info btn-xs edit" type="button" style="margin-left:10px; margin-top:2px;  width:70px; "><i class="fa fa-pencil" style="margin-left: 1px;"></i>ویرايش</button>
+        <button style="margin-top: 2px;width: 100px;" class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> موارد بیشتر <span class="caret"></span> </button>
+        <ul class="dropdown-menu pull-left">
+                <li><a class="onlineExamCopyBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> کپی آزمون </a></li>
+            <li><a class="descriptionBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> توضیحات </a></li>
+            <li><a class="courseSamplevideoBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> نمونه فیلم </a></li>
+            <li><a class="courseStudents"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>  دانش آموزان آزمون ها </a></li>
+            <li><a class="courseMeetingBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>  زیر آزمون ها </a></li>
+            <li><a class="teacherPaymentMethodsBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>    نحوه پرداخت به معلم </a></li>
+            <li><a class="sendSmsForStudentBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> ارسال پیامک به دانش آموزان آزمون </a></li>
+            <li class="shareTeacher"><a class="shareTeacherBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> تعیین سهم هر دبیر </a></li>
+
+        </ul>
+    </div>
+</script>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.courseSms = ko.observable({});
+    extendViewModelColumns.push('IsMultiTeacher');
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#IsActiveFilter').change(function () {
+            $('#applyFilter').click();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+        TableOnDraw = function () {
+            for (i = 0; i < $('#modelList > tbody > tr').length; i++) {
+                 
+                var data = $('#modelList').DataTable().row($('#modelList > tbody > tr').eq(i)).data().IsMultiTeacher;
+
+                if (data == 'Active') {
+                    $('#modelList > tbody > tr').eq(i).find('.shareTeacher').show();
+                } else {
+                    $('#modelList > tbody > tr').eq(i).find('.shareTeacher').hide();
+                }
+            }
+        }
+
+        //***************************************************************************
+        $('body').on('click', '.onlineExamCopyBtn', function () {
+            if (confirm("آیا از کپی آزمون اطمینان دارید؟")) {
+                var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
+                DataTransfer('/OnlineExams/IndependentOnlineExamsCopy/Operation/' + id, '', '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            $('#reloadTableBtn').click();
+                            toastr.success(f.Message);
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+        });
+         //***************************************************************************
+        EditBoxModelOnShow = function () {
+            EditCoursesPicPathSetImage();
+        }
+         //***************************************************************************
+        $('#AddBox').on('hidden.bs.modal', function () {
+            CoursesPicPathResetImage();
+        });
+         //***************************************************************************
+        $('#EditBox').on('hidden.bs.modal', function () {
+            EditCoursesPicPathResetImage();
+        });
+       //***************************************************************************
+        $('body').on('click', '.descriptionBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            window.open("http://" + window.location.host + '/TrainingManagement/CourseDescriptionEditor/Index/' + id, '_blank');
+        }); 
+        
+        //*************************************************************************** 
+        $('body').on('click', '.courseMeetingBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            pageLoader('#PageContent', '#pageLoader', '/OnlineExams/IndependentOnlineExams/Index/' + id, true);
+        });
+        //*************************************************************************** 
+        $('body').on('click', '.courseStudents', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            pageLoader('#PageContent', '#pageLoader', '/TrainingManagement/CourseStudents/Index/' + id, true);
+        });
+        //***************************************************************************
+        $('body').on('click', '.courseSamplevideoBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            pageLoader('#PageContent', '#pageLoader', '/TrainingManagement/CourseSampleVideos/Index/' + id, true);
+        });
+        //***************************************************************************t
+        $('body').on('click', '.teacherPaymentMethodsBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            pageLoader('#PageContent', '#pageLoader', '/Financials/TeacherPaymentMethods/Index/' + id, true);
+        });
+        //***************************************************************************t
+        $('body').on('click', '.shareTeacherBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            pageLoader('#PageContent', '#pageLoader', '/Financials/CourseMultiTeacherShares/Index/' + id, true);
+        });
+        //***************************************************************************t
+    
+        $('body').on('click', '.sendSmsForStudentBtn', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
+            MainViewModel.courseSms().CourseId = id;
+            var courseName = $('#modelList').DataTable().row($(this).parents('tr')).data().Name;
+            $('#txtCourseName').val(courseName);
+            $('#courseSmsModal').modal({ backdrop: 'static', keyboard: false });
+            $('#courseSmsModal').modal('show');
+        });
+        //***************************************************************************
+        $('#descriptionSmsForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/TrainingManagement/CourseStudents/SendSms/', ko.toJSON(MainViewModel.courseSms()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            MainViewModel.courseSms({});
+                            $('#courseSmsModal').modal('hide');
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+
+
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمایش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group reletive">
+                                    <label for="IsActiveFilter"> وضعیت آزمون</label>
+                                    <select id="IsActiveFilter" class="form-control" data-bind="value: fe().IsActive">
+                                        <option value="1">فعال</option>
+                                        <option value="0">غیر فعال</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="Name">نام آزمون</th>
+                                    <th data-viewModel="TeacherFullName">استاد</th>
+                                    <th data-viewModel="DiscountType">نوع تخفیف</th>
+                                    <th data-viewModel="DiscountPercentOrDiscountAmount">تخفیف</th>
+                                    <th data-viewModel="Price" data-thousandSeparator="true">قیمت</th>
+                                    <th data-viewModel="Inx">اولویت</th>
+                                    <th data-viewModel="IsMultiTeacherName">آیا حالت چند دبیر فعال می باشد؟</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                    <th data-viewModel="IsVisibleOnSiteName">قابل نمایش در سایت</th>
+                                    <th data-viewModel="UserEditor">مسئول ثبت</th>
+                                    <th style="width: 220px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("CourseSms.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

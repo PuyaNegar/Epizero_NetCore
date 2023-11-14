@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "فیلم ها | تکالیف | جزوات";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+<style type="text/css">
+    .close {
+        float: left;
+    }
+
+    .modal-title {
+        float: right;
+    }
+    .courseMeetingSections {
+        min-height:300px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('html, body').animate({
+            scrollTop: $(".homeworks").offset().top
+        }, 2000);
+    });
+</script>
+<div class="courseMeetingSections">
+    @{ await Html.RenderPartialAsync("_VideosPartial.cshtml"); }
+    @{ await Html.RenderPartialAsync("_HomeworksPartial.cshtml"); }
+    @{ await Html.RenderPartialAsync("_BookletsPartial.cshtml"); }
+</div>

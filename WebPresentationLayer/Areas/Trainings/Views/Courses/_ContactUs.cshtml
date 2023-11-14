@@ -1,0 +1,73 @@
+﻿@model WebViewModels.ContentsViewModels.ContactUsViewModel
+@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+
+ 
+ 
+
+
+<section class="moshaver-sec">
+    <div class="container-fluid">
+        <div class="row">
+            <form id="contactUsForm">
+                  <div class="col-md-12 col-xs-12">
+                    <div class="moshaver-title">
+                        <span>برای درخواست مشاوره رایگان شماره تماس خود را وارد کنید</span>
+                    </div>
+                    <div class="moshaver-input">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">نام نام خانوادگی</label>
+                            <input asp-for="FullName" type="text" data-bind="value: contactUs().FullName"  class="form-control" placeholder="نام نام خانوادگی خود را وارد کنید ...">
+                            <span asp-validation-for="FullName" class="validation help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="moshaver-input">
+                        <div class="form-group">
+                            <label for="exampleInputEmail ">شماره تماس</label>
+                            <input asp-for="MobNo" type="text" data-bind="value: contactUs().MobNo" class="form-control" placeholder="شماره تماس خود را وارد کنید ...">
+                            <span asp-validation-for="MobNo" class="validation help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="chapcha-txt-s">
+                        @if (ViewBag.EnableCaptcha = true)
+                        {
+                            <img id="captchaImg" src="/Captcha/Get/" class="img-responsive" style="margin-bottom:10px;cursor:pointer;" title="جهت عوض کردن عکس روی این عکس کلیک کنید" />
+                            <center><div><span style="color:blueviolet;font-size:10px;">جهت عوض کردن عکس روی عکس کلیک کنید</span></div></center>
+                            <input type="text" data-bind="value: contactUs().CaptchText" asp-for="CaptchText" class="form-control" placeholder="متن تصویر را وارد کنید" required style="margin-top:5px;width:auto">
+                        }
+                    </div>
+                    <div class="moshaver-btn">
+                        <button type="submit" class="btn btn-warning btn-sendphone">ارسال شماره تماس</button>
+                    </div>
+                    <div class="moshaver-social">
+                        <div class="social-d">
+                            <div class="logo-s">
+                                <img src="~/assets/img/logo/call.png" />
+                            </div>
+                            <div class="txt-s">
+                                <span>برای مشاوره رایگان و خرید آسان با ما تماس بگیرید</span>
+                            </div>
+                            <div class="btn-s">
+                                <a href="tel:021284221">021284221</a>
+                            </div>
+                        </div>
+                        <div class="social-d-2">
+                            <div class="logo-s">
+                                <img src="~/assets/img/logo/whatsapp-logo.png" />
+                            </div>
+                            <div class="txt-s">
+                                <span> ارتباط با ما در واتساپ</span>
+                            </div>
+                            <div class="btn-s">
+                                <a href="https://api.whatsapp.com/send?phone=989025531147">شماره واتساپ</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+          
+        </div>
+    </div>
+</section>

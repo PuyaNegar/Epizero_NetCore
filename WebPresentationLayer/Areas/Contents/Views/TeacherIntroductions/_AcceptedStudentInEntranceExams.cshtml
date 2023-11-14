@@ -1,0 +1,227 @@
+﻿@using WebViewModels.ContentsViewModels
+@{
+    var TeacherIntroductions = (TeacherIntroductionsViewModel)ViewBag.TeacherIntroductions;
+    var i = 0;
+    var j = 0;
+    var t = 0;
+}
+<script type="text/javascript">
+
+    var swiper6 = null;
+    $(function () {
+
+        swiper6 = new Swiper('.awawawaw', {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            slidesPerColumn: 2,
+            slidesPerColumnFill: 'row',
+            init: true,
+
+            pagination: {
+                el: '.swiper-pagination-teach',
+                type: 'bullets',
+                clickable: true,
+            }
+            ,
+            autoplay:
+            {
+                delay: 2000,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+
+            ,
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                    slidesPerColumn: 2,
+                    slidesPerColumnFill: 'row',
+                    spaceBetween: 10,
+                },
+                768: {
+                    slidesPerView: 2,
+                    slidesPerColumn: 2,
+                    slidesPerColumnFill: 'row',
+                    spaceBetween: 10,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    slidesPerColumn: 2,
+                    slidesPerColumnFill: 'row',
+                    spaceBetween: 10,
+                },
+            }
+        });
+
+
+        $('body').on('click', '.cli-c', function () {
+            var index = $(this).index();
+            swiper6[index].resize.createObserver();
+        });
+
+    });
+
+
+
+
+
+
+
+</script>
+
+<style type="text/css">
+    .accepted-main .dd-f {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .accepted-main .main-tab .tab-ul-lg li {
+        display: block;
+        margin-bottom: 0px;
+    }
+
+    .accepted-main .main-new-course .content-new-course {
+        min-height: 125px;
+        border-radius: 8px;
+        padding: 0px;
+        border: 0px solid #dedede;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+
+    .accepted-main .main-new-course {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+        .accepted-main .main-new-course .content-new-course .div-title-content {
+            text-align: right;
+            padding-right: 30px;
+            padding-top: 13px;
+        }
+
+        .accepted-main .main-new-course .content-new-course .div-img-small {
+            bottom: 55px;
+        }
+
+    .div-title-content .icon {
+        width: 15px;
+    }
+</style>
+@if (TeacherIntroductions.AcceptedStudentInEntranceExamGroups.Any())
+{
+
+
+    <section class="title-color">
+        <div class="container SearchPAll">
+            <div class="split-c">
+                <hr class="hr" />
+                <span class="pad-line-s split-liner">
+                    نتایج قبولی   @TeacherIntroductions.TeacherPrefix  @TeacherIntroductions.FullName
+                </span>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    <section class="accepted-main">
+        
+
+
+
+
+        <div class="main-tab">
+            <div class="ul-nav">
+                <div class="nav-s">
+                    <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg tab-ul-xs">
+                        @foreach (var group in (List<AcceptedStudentInEntranceExamGroupsViewModel>)TeacherIntroductions.AcceptedStudentInEntranceExamGroups)
+                        {
+                            <li class="centered cli-c col-centered @(i == 0 ? "active" : "") col-xs-12">
+                                <a data-toggle="tab" href="#menu_@i">@group.EntranceExamTypeName</a>
+                            </li>
+                            i++;
+                        }
+                    </ul>
+                    <ul class="nav nav-tabs dd-f hidden-xs tab-ul-lg">
+                        @foreach (var group in (List<AcceptedStudentInEntranceExamGroupsViewModel>)TeacherIntroductions.AcceptedStudentInEntranceExamGroups)
+                        {
+                            <li class="centered cli-c col-centered @(j == 0 ? "active" : "")">
+                                <a data-toggle="tab" href="#menu_@j">@group.EntranceExamTypeName</a>
+                            </li>
+                            j++;
+                        }
+
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content">
+                @foreach (var accepted in (List<AcceptedStudentInEntranceExamGroupsViewModel>)TeacherIntroductions.AcceptedStudentInEntranceExamGroups)
+                {
+                    <div id="menu_@t" class="tab-pane fade @(t == 0 ? "active" : "") in">
+                        <div class="container new-course">
+                            <div class="row">
+
+                                <div class="swiper-container awawawaw">
+                                    <div class="swiper-wrapper">
+
+                                        @foreach (var item in accepted.AcceptedStudentInEntranceExams)
+                                        {
+                                            <div class="swiper-slide">
+                                                <a>
+                                                    <div data-aos="fade-right" class="col-md-12 col-sm-12 col-xs-12 main-new-course">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                                            <div class="div-title-content">
+                                                                <span>
+                                                                    @if (item.OlympiadMedalTypeId != null)
+                                                                    {
+                                                                        <img class="icon" src="~/assets/img/medal.png" alt=" مدرسه آنلاین  " />
+                                                                    }
+                                                                    @item.StudentFullName
+                                                                </span>
+                                                                <br />
+                                                                <span>
+                                                                    @item.Description
+                                                                </span>
+                                                            </div>
+                                                            <div class="div-img-small">
+                                                                @if (string.IsNullOrEmpty(item.PicPath))
+                                                                {
+                                                                    <img src="~/assets/img/logo.png" alt="@item.StudentFullName" title="@item.StudentFullName" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <img title="@item.StudentFullName" alt="@item.StudentFullName" src="@item.PicPath" />
+                                                                }
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        }
+
+
+
+                                    </div>
+                                    <!-- Add Pagination -->
+                                    <div class="swiper-pagination-teach"></div>
+                                    <!-- Add Arrows -->
+                                    @*<div class="swiper-button-next"></div>
+                                        <div class="swiper-button-prev"></div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    t++;
+                }
+            </div>
+        </div>
+
+    </section>
+
+
+}

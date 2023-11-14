@@ -1,0 +1,93 @@
+﻿@model PanelViewModels.TeacherTrainingsViewModels.TeacherHomeworksViewModel
+
+<div class="modal fade modal-btn" id="addCourseMeetingBookletModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ارسال تکلیف</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="fileHomework" id="addCourseMeetingBookletForm">
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label asp-for="Title"> </label>
+                                <input asp-for="Title" type="text" class="form-control" data-bind="value: addCourseMeetingBookletStudents().Title">
+                                <span class="validation" asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label for="IsActive">وضعیت</label>
+                                <div class="select-box">
+                                    <select asp-for="IsActive" class="form-control" data-bind="value: addCourseMeetingBookletStudents().IsActive">
+                                        <option value="1" selected="selected">فعال</option>
+                                        <option value="0">غیر فعال</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="IsActive" class="validate-error text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label asp-for="Description"> </label>
+                                <textarea rows="3" asp-for="Description" type="text" class="form-control" data-bind="value: addCourseMeetingBookletStudents().Description"></textarea>
+                                <span class="validation" asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <p class="title-file"> فایل تکلیف  <span class="text-title"></span></p>
+                        </div>
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                            new TeacherPresentationLayer.ComponentModel.FileUploader()
+                            {
+                                ButtonFarsiName = "آپلود فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "CourseMeetingBookletFilePath",
+                                KnockoutExpressionString = "mainViewModel.addCourseMeetingBookletStudents().FilePath",
+                                HasDeleteBtn = false,
+                                MaxFileSize = 20480,
+                                Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+                            })
+                            </div>
+                            <span asp-validation-for="FilePath" class="danger"></span>
+
+                        </div>
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger " data-dismiss="modal">بستن</button>
+
+                                <div class="loaderBox">
+                                    <div class="loader">
+                                        <div class="icon-loader">
+                                            <img src="/assets/img/loader.svg">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning btn-sm ">
+                                        ثبت
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

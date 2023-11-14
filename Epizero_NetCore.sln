@@ -1,0 +1,143 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{7728A352-9993-4413-8808-DAD461961A6E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{721988E3-43C8-4013-9ACA-BB966D9AA142}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModels", "DataModels\DataModels.csproj", "{20031EF6-EDD9-4FF2-8316-091D7DB613DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PanelBusinessLogicLayer", "PanelBusinessLogicLayer\PanelBusinessLogicLayer.csproj", "{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PanelPresentationLayer", "PanelPresentationLayer\PanelPresentationLayer.csproj", "{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PanelViewModels", "PanelViewModels\PanelViewModels.csproj", "{8EAECFCE-CFB3-490E-909C-C78FFB14FD45}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherPresentationLayer", "TeacherPresentationLayer\TeacherPresentationLayer.csproj", "{97153381-4FAE-45DD-B3F0-85B726B8119D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebBusinessLogicLayer", "WebBusinessLogicLayer\WebBusinessLogicLayer.csproj", "{8E4FC3B9-349C-4624-A20D-1690CB6E60E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPresentationLayer", "WebPresentationLayer\WebPresentationLayer.csproj", "{46E52224-D37C-45A0-B954-7B8B039D6262}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebViewModels", "WebViewModels\WebViewModels.csproj", "{373E489F-473A-418E-BFEB-E352E02A8AC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F668D887-CF61-428D-A87A-EDA5B2C418C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Panel", "Panel", "{A5A264FB-D948-4583-B6CD-553211084EB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{58A2A5CF-D96E-4A9F-9C60-274F8755E20F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7728A352-9993-4413-8808-DAD461961A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7728A352-9993-4413-8808-DAD461961A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7728A352-9993-4413-8808-DAD461961A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7728A352-9993-4413-8808-DAD461961A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{721988E3-43C8-4013-9ACA-BB966D9AA142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{721988E3-43C8-4013-9ACA-BB966D9AA142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{721988E3-43C8-4013-9ACA-BB966D9AA142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{721988E3-43C8-4013-9ACA-BB966D9AA142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20031EF6-EDD9-4FF2-8316-091D7DB613DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20031EF6-EDD9-4FF2-8316-091D7DB613DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20031EF6-EDD9-4FF2-8316-091D7DB613DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20031EF6-EDD9-4FF2-8316-091D7DB613DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EAECFCE-CFB3-490E-909C-C78FFB14FD45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EAECFCE-CFB3-490E-909C-C78FFB14FD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EAECFCE-CFB3-490E-909C-C78FFB14FD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EAECFCE-CFB3-490E-909C-C78FFB14FD45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97153381-4FAE-45DD-B3F0-85B726B8119D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97153381-4FAE-45DD-B3F0-85B726B8119D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97153381-4FAE-45DD-B3F0-85B726B8119D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97153381-4FAE-45DD-B3F0-85B726B8119D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E4FC3B9-349C-4624-A20D-1690CB6E60E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E4FC3B9-349C-4624-A20D-1690CB6E60E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E4FC3B9-349C-4624-A20D-1690CB6E60E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E4FC3B9-349C-4624-A20D-1690CB6E60E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46E52224-D37C-45A0-B954-7B8B039D6262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46E52224-D37C-45A0-B954-7B8B039D6262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46E52224-D37C-45A0-B954-7B8B039D6262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46E52224-D37C-45A0-B954-7B8B039D6262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{373E489F-473A-418E-BFEB-E352E02A8AC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{373E489F-473A-418E-BFEB-E352E02A8AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{373E489F-473A-418E-BFEB-E352E02A8AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{373E489F-473A-418E-BFEB-E352E02A8AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7728A352-9993-4413-8808-DAD461961A6E} = {F668D887-CF61-428D-A87A-EDA5B2C418C3}
+		{721988E3-43C8-4013-9ACA-BB966D9AA142} = {F668D887-CF61-428D-A87A-EDA5B2C418C3}
+		{20031EF6-EDD9-4FF2-8316-091D7DB613DE} = {F668D887-CF61-428D-A87A-EDA5B2C418C3}
+		{8EE7C89B-F7A8-4A54-8C12-4FCF19F8F27C} = {A5A264FB-D948-4583-B6CD-553211084EB7}
+		{D92DB0B1-9DF4-4BE1-BD46-20FF56469C09} = {A5A264FB-D948-4583-B6CD-553211084EB7}
+		{8EAECFCE-CFB3-490E-909C-C78FFB14FD45} = {A5A264FB-D948-4583-B6CD-553211084EB7}
+		{97153381-4FAE-45DD-B3F0-85B726B8119D} = {A5A264FB-D948-4583-B6CD-553211084EB7}
+		{8E4FC3B9-349C-4624-A20D-1690CB6E60E2} = {58A2A5CF-D96E-4A9F-9C60-274F8755E20F}
+		{46E52224-D37C-45A0-B954-7B8B039D6262} = {58A2A5CF-D96E-4A9F-9C60-274F8755E20F}
+		{373E489F-473A-418E-BFEB-E352E02A8AC3} = {58A2A5CF-D96E-4A9F-9C60-274F8755E20F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CACAAA83-7A07-4BA8-B2CC-D3ABC8A64E58}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/epizeronetcore3
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Common\\Common.csproj
+		SccProjectTopLevelParentUniqueName1 = Epizero_NetCore.sln
+		SccProjectName1 = Common
+		SccLocalPath1 = Common
+		SccProjectUniqueName2 = DataAccessLayer\\DataAccessLayer.csproj
+		SccProjectTopLevelParentUniqueName2 = Epizero_NetCore.sln
+		SccProjectName2 = DataAccessLayer
+		SccLocalPath2 = DataAccessLayer
+		SccProjectUniqueName3 = DataModels\\DataModels.csproj
+		SccProjectTopLevelParentUniqueName3 = Epizero_NetCore.sln
+		SccProjectName3 = DataModels
+		SccLocalPath3 = DataModels
+		SccProjectUniqueName4 = PanelBusinessLogicLayer\\PanelBusinessLogicLayer.csproj
+		SccProjectTopLevelParentUniqueName4 = Epizero_NetCore.sln
+		SccProjectName4 = PanelBusinessLogicLayer
+		SccLocalPath4 = PanelBusinessLogicLayer
+		SccProjectUniqueName5 = PanelPresentationLayer\\PanelPresentationLayer.csproj
+		SccProjectTopLevelParentUniqueName5 = Epizero_NetCore.sln
+		SccProjectName5 = PanelPresentationLayer
+		SccLocalPath5 = PanelPresentationLayer
+		SccProjectUniqueName6 = PanelViewModels\\PanelViewModels.csproj
+		SccProjectTopLevelParentUniqueName6 = Epizero_NetCore.sln
+		SccProjectName6 = PanelViewModels
+		SccLocalPath6 = PanelViewModels
+		SccProjectUniqueName7 = WebBusinessLogicLayer\\WebBusinessLogicLayer.csproj
+		SccProjectTopLevelParentUniqueName7 = Epizero_NetCore.sln
+		SccProjectName7 = WebBusinessLogicLayer
+		SccLocalPath7 = WebBusinessLogicLayer
+		SccProjectUniqueName8 = WebPresentationLayer\\WebPresentationLayer.csproj
+		SccProjectTopLevelParentUniqueName8 = Epizero_NetCore.sln
+		SccProjectName8 = WebPresentationLayer
+		SccLocalPath8 = WebPresentationLayer
+		SccProjectUniqueName9 = WebViewModels\\WebViewModels.csproj
+		SccProjectTopLevelParentUniqueName9 = Epizero_NetCore.sln
+		SccProjectName9 = WebViewModels
+		SccLocalPath9 = WebViewModels
+		SccProjectUniqueName10 = TeacherPresentationLayer\\TeacherPresentationLayer.csproj
+		SccProjectTopLevelParentUniqueName10 = Epizero_NetCore.sln
+		SccProjectName10 = TeacherPresentationLayer
+		SccLocalPath10 = TeacherPresentationLayer
+	EndGlobalSection
+EndGlobal

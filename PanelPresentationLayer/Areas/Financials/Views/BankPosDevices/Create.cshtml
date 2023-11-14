@@ -1,0 +1,42 @@
+﻿@model PanelViewModels.FinancialsViewModels.BankPosDevicesViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label asp-for="BankId"> </label>
+                        <select asp-for="BankId" type="text" data-bind="value: c().BankId" class="form-control">
+                            <option value="">لطفاً انتخاب کنید</option>
+                            @foreach (var item in ViewBag.Banks)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BankId" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AccountNo"></label>
+                        <input asp-for="AccountNo" class="form-control" data-bind="value: c().AccountNo">
+                        <span asp-validation-for="AccountNo" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <textarea rows="3" asp-for="Description" class="form-control" data-bind="value: c().Description"></textarea>
+                        <span asp-validation-for="Description" class="danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

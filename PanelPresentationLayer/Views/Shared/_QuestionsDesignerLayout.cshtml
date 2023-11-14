@@ -1,0 +1,153 @@
+﻿ 
+@{
+    //ViewData["UserName"] = Context.User.Identity.Name;
+    //var usersService = new AdminUsersService();
+    //var userInfo = usersService.Find(Convert.ToInt32(User.Claims.ToList()[1].Value)).Value;
+    //ViewBag.userInfo = userInfo;
+    ViewData["Name"] = "کاربر سیستم";
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <title>داشبورد</title>
+    <meta name="description" content="Dashboard" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    @*<link rel="shortcut icon" href="/assets/img/favicon.png" type="image/x-icon">*@
+    <!--Basic Styles-->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/assets/css/weather-icons.min.css" rel="stylesheet" />
+
+
+    @*<link href="~/lib/PersianDatePicker/css/pwt-datepicker.css" rel="stylesheet" />*@
+    <!--Fonts-->
+    <!--Beyond styles-->
+    <link href="/assets/css/beyond-rtl.min.css" rel="stylesheet" />
+    <link href="/assets/css/4095-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/typicons.min.css" rel="stylesheet" />
+    <link href="/assets/css/animate.min.css" rel="stylesheet" />
+    <link href="/assets/css/demo.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/assets/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/assets/css/skins/gray.min.css" rel="stylesheet" />
+    <link href="~/lib/chosen_v1.8.7/chosen.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        document.cookie = 'breadcrumbs-fixed=true';
+        document.cookie = 'navbar-fixed-top=true';
+        document.cookie = 'page-header-fixed=true';
+        document.cookie = 'sidebar-fixed=true';
+                                                                        //document.cookie = 'current-skin=/assets/css/skins/teal.min.css';
+    </script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="~/lib/knockout/knockout-3.4.2.js"></script>
+    <script src="~/lib/jquery/dist/jquery-ui.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="~/lib/DataTables/js/datatables.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate-unobtrusive.min.js"></script>
+    <script src="~/assets/js/bootbox/bootbox.min.js"></script>
+    <script src="/assets/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/lib/chosen_v1.8.7/chosen.jquery.min.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+    @await Html.PartialAsync("_TopNavigation")
+    <!-- Main Container -->
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        <div class="page-container">
+
+
+
+            <!-- Page Content -->
+            <div class="page-content" style="margin-right: unset">
+                <!-- Page Header -->
+                <div class="page-header position-relative" style="right: 0px;top:45px;">
+                    <div class="header-title">
+                        <h1 id="hedaerTitle">
+                            @ViewData["Title"]
+                        </h1>
+                    </div>
+                    <!--Header Buttons-->
+                    <div class="header-buttons">
+                        <a class="sidebar-toggler" href="#">
+                            <i class="fa fa-arrows-h"></i>
+                        </a>
+                        <a class="refresh" id="refresh-toggler" href="">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                        <a class="fullscreen" id="fullscreen-toggler" href="#">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
+                        </a>
+                    </div>
+                    <!--Header Buttons End-->
+                </div>
+                <!-- /Page Header -->
+                <!-- Page Body -->
+                <div class="page-body" style="position:relative;">
+                    <div id="pageLoader" style="position:absolute;top:0px;right:0px;left:0px;bottom:0px;z-index:10;direction:rtl;display:none; ">
+                        <div style="text-align:center;margin-top:70px;">
+                            <img src="~/images/page-loading.svg" style="height:220px;width:220px;" />
+                            <br />
+                            <span style="margin-top:3px;">در حال بارگذاری صفحه درخواستی ...</span>
+                            <br />
+                            <img src="~/images/loader.png" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="PageContent" class="col-lg-12 col-sm-12 col-xs-12">
+                            @RenderBody()
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+    </div>
+    <!-- Main Container -->
+
+    <div id="resultLoader" style="position:fixed;top:0px;right:0px;left:0px;bottom:0px;background-color:rgba(0,0,0,0.8);z-index:1000000;direction:rtl;display:none;">
+        <div style="text-align:center;margin-top:70px;">
+            <img src="~/images/page-loading.svg" style="height:220px;width:220px;" />
+            <br />
+            <span style="margin-top:3px;color:white;">در حال اجرای درخواست ...</span>
+            <br />
+            <img src="~/images/loader.png" />
+        </div>
+    </div>
+
+    <div id="topNavbarArea">
+        @{
+            await Html.RenderPartialAsync("_UserChangePasswordPartial.cshtml"); 
+        }
+    </div>
+    <!--Basic Scripts-->
+    <script src="/assets/js/skins.min.js"></script>
+    <script src="/assets/js/beyond.js"></script>
+    <!--Beyond Scripts-->
+</body>
+</html>

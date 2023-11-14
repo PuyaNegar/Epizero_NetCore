@@ -1,0 +1,154 @@
+﻿@model IEnumerable<PanelViewModels.OnlineExamViewModels.LessonTopicsViewModel>
+@{
+    ViewData["Title"] = "‌ترتیب بندی سوالات";
+    ViewData["PageFarsiName"] = "‌ترتیب بندی سوالات";
+    string Area = "OnlineExams";
+    string Controller = "ArrangeQuestions";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    GenerateReturnBtn();
+    MainViewModel.arrageQuestion = ko.observable([]);
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('body').on('click', '#btncomeBack', function () {
+            window.history.back();
+        });
+                function ReadQuestionSelected() {
+             DataTransfer('/OnlineExams/OnlineExamQuestions/Read/' + @ViewBag.OnlineExamId, '', '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.arrageQuestion(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+                    );
+
+        }
+        ReadQuestionSelected();
+        $('body').on('click', '#btnUpdateInx', function () {
+            //var data =new Array();
+            //$('tbody tr td .td-input input').each(function () {
+            //    data.push({QuestionId: $(this).attr('data-questionId'),Inx: $(this).val()});
+            //});
+            //alert(data);
+            var data  =  [];
+            var $inputs =  $('.q-table').find('input[type=number]')  ;
+            for (i = 0; i < $inputs.length; i++) {
+                data.push({ QuestionId: $inputs.eq(i).attr('data-questionId')  , Inx :    $inputs.eq(i).val() });
+            }
+            DataTransfer('/OnlineExams/ArrangeQuestions/Update/', JSON.stringify(data), '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        ReadQuestionSelected();
+                        toastr.success(f.Message);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+                    );
+        });
+
+    });
+</script>
+<style type="text/css">
+    .btn-div {
+        text-align: left;
+        padding-top: 20px;
+        padding-bottom: 15px;
+    }
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    .tbl-tes-img tr td p img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto !important;
+        height: auto !important;
+    }
+</style>
+<div class="row" id="mainArea">
+
+    <div class="col-lg-12">
+        <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+            <div class="btn-div" data-bind="if:  arrageQuestion().length > 0 ">
+                <a id="btncomeBack" class="btn btn-default btn-sm shiny"> <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>بازگشت</a>
+
+                <a id="btnUpdateInx" class="btn btn-success btn-sm shiny"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>ثبت اولویت ها</a>
+            </div>
+            <div data-bind="foreach: arrageQuestion" id="mainArea">
+                <div class="well with-header with-footer">
+                    <div class="header bordered-yellow">
+
+                        <span data-bind="text : ' سوالات درس ' +  '(' +LessonName +')'"></span>
+                    </div>
+                    <table class="q-table table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <i class="fa fa-question"></i>
+                                    متن سوال
+                                </th>
+                                <th style="width: 150px;">
+                                    <i class="fa fa-exchange"></i>
+                                    اولویت
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="tbl-tes-img" data-bind="foreach:  OnlineExamQuestions">
+
+                            <tr>
+                                <td>
+                                    <p data-bind="html : QuestionContext" class="text"> </p>
+                                </td>
+                                <td class="td-input">
+                                    <input style="padding-right: 10px;" data-bind="value : Inx , attr:{'data-questionId': Id}" class="text form-control input-sm" type="number" name="to" placeholder="ترتیب سوال"  >
+                                    <div class="horizontal-space"></div>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- ko if:  arrageQuestion().length == 0 -->
+            <div style="border:1px solid #ddd;border-radius:5px;padding:35px;" class="box-empty">
+                <p style="text-align:center">هیچ سوالی  برای این آزمون ثبت نشده است.</p>
+            </div>
+            <!-- /ko -->
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

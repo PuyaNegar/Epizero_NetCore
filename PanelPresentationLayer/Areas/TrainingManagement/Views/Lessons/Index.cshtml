@@ -1,0 +1,115 @@
+﻿@model IEnumerable<PanelViewModels.TrainingManagementViewModels.LessonsViewModel>
+@{
+    ViewData["Title"] = "دروس";
+    ViewData["PageFarsiName"] = "دروس";
+    string Area = "TrainingManagement";
+    string Controller = "Lessons";
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', false);
+    $(function () {
+        $('#LevelSelectBtn').click(function () {
+            openLevelSelectorModal('AddBox', 'LevelId', 'LevelName');
+        });
+        //***************************************************************************
+        $('#EditLevelSelectBtn').click(function () {
+            openLevelSelectorModal('EditBox', 'Edit_LevelId', 'Edit_LevelName');
+        });
+        $('#Fields ,#Levels').change(function () {
+            $('#applyFilter').click();
+        });
+        $("#LevelGroups").change(function () {
+            CreateComboLoader("/TrainingManagement/Levels/ReadForComboBox/", "#Levels", '', "Value", "Text", $(this).val(), false, function () {  $('#Levels').change(); }, null);
+        });
+        $('#LevelGroups').change();
+        $('#Fields').change();
+    });
+</script>
+<script id="operands" type="text/html">
+    <button class="btn btn-info btn-xs edit" type="button" style="margin-right:5px; margin-top:2px;width:70px; float:right;"> <i class="fa fa-pencil" style="margin-left: 1px;"></i> ویرایش</button>
+
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    @await Html.PartialAsync("~/Views/Shared/_ActionButtonsPartial.cshtml")
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group reletive">
+                                    <label for="LevelGroups">مقطع تحصیلی</label>
+                                    <select id="LevelGroups" class="form-control" data-bind="value: fe().LevelGroupId">
+                                        @foreach (var item in ViewBag.LevelGroups)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group reletive">
+                                    <label for="Levels"> پایه تحصیلی</label>
+                                    <select id="Levels" data-placeholder="پایه تحصیلی را انتخاب کنید" class="form-control" data-bind="value: fe().LevelId">
+                                        <!--load by javascript-->
+                                    </select>
+                                    <i class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom comboBoxIconLoader"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group reletive">
+                                    <label for="ProductCategory">رشته تحصیلی</label>
+                                    <select id="Fields" class="form-control" data-bind="value: fe().FieldId">
+                                        @foreach (var item in ViewBag.Fields)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="custom">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;"></th>
+                                    <th data-viewModel="Name">نام درس</th>
+                                    <th data-viewModel="UnitCount">تعداد واحد</th>
+                                    <th data-viewModel="LevelName">پایه تحصیلی</th>
+                                    <th data-viewModel="FieldName">رشته تحصیلی</th>
+                                    <th style="width: 120px;">عملیات</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Create.cshtml");
+                        await Html.RenderPartialAsync("Edit.cshtml");
+                        await Html.RenderPartialAsync("~/Views/Component/LevelSelectorComponent.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

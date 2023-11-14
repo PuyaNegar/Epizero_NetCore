@@ -1,0 +1,136 @@
+﻿@using PanelViewModels.TeacherTrainingsViewModels
+@using Common.Extentions
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "     ویدیوها |  مدرسه آنلاین اپیزرو";
+    var courses = (List<PanelViewModels.TeacherTrainingsViewModels.TeacherCoursesViewModel>)ViewBag.Courses;
+    var data = (List<TeacherCourseMeetingVideoGroupsViewModel>)ViewBag.Data;
+
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $('#coursesComboBox').val('@Html.Raw(ViewBag.CourseId)');
+            $('#coursesComboBox').change(function () {
+                window.location.href = '/Trainings/CourseVideos/Index/' + $(this).val();
+            });
+            
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        });
+    </script>
+
+}
+
+<style type="text/css">
+    .v-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #ddd;
+        padding: 40px 30px 30px 30px;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+        .v-box .v-img:hover {
+            cursor: pointer !important;
+        }
+
+        .v-box .v-img img {
+            width: 50px;
+        }
+
+        .v-box .v-title {
+            margin-top: 20px;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> ویدیو های من  </span>
+        </div>
+    </div>
+</div>
+<section class="list-student list-homwork-ersali">
+    <div class="container">
+        @if (courses.Count() > 0)
+        {
+            <div class="border-i">
+                <div class="col-md-4">
+                    <div class="btn-r-0">
+                        @*<button type="button" class="btn btn-warning btn-r btn-addHomwork"><i class="fa fa-plus"></i> افزودن جزوه </button>*@
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-12 pull-right">
+                    <div class="form-group">
+                        <div class="select-box">
+                            <select id="coursesComboBox" class="form-control">
+                                @foreach (var course in courses)
+                                {
+                                    <option value="@course.Id">@course.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+
+
+@if (data.Any())
+{
+    <section class="courseMeetingVideo">
+        <div class="container">
+            <div class="row">
+                @foreach (var courseMeeting in data)
+                {
+
+                    @if (courseMeeting.CourseMeetingVideos.Any())
+                    {
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 m-b-25">
+                            <div class="split-c">
+                                <span class="pad-line-s split-liner bg-color-blue">
+                                    @courseMeeting.CourseMeentingName
+                                </span>
+                            </div>
+                            @foreach (var video in courseMeeting.CourseMeetingVideos)
+                            {
+                                <div class="col-md-4 col-sm-6 col-xs-12 m-t-30 pull-right">
+                                    <div class="v-box">
+                                        <div class="v-img" data-Id="@video.Id">
+                                           <a href="/Trainings/SingleCourseVideo/Index/@video.Id"><img src="~/assets/img/play.png" /></a> 
+                                        </div>
+                                        <div class="v-title">
+                                            <p>  @video.Title (@video.TeacherFullName)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                }
+
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <div class="box-empty m-t-30">
+        <div class="empty">
+            <img src="~/assets/img/box-empty.svg" />
+            <p class="place-holder">ویدئویی ای برای شما ثبت نشده است.</p>
+        </div>
+    </div>
+}
+
+

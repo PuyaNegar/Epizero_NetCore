@@ -1,0 +1,119 @@
+﻿@model WebViewModels.ContentsViewModels.OldStudentCommentsViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="StudentUserId"></label>
+                                <select asp-for="StudentUserId" class="form-control" data-bind="value : c().StudentUserId">
+                                    @foreach (var item in ViewBag.StudentUsers)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="StudentUserId" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Tilte"></label>
+                                <input asp-for="Tilte" class="form-control" data-bind="value: c().Tilte">
+                                <span asp-validation-for="Tilte" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="RegDateTimeComment"></label>
+                                <input data-mask="9999/99/99" asp-for="RegDateTimeComment" class="form-control" data-bind="value: c().RegDateTimeComment">
+                                <span asp-validation-for="RegDateTimeComment" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Inx"></label>
+                                <input asp-for="Inx" class="form-control" data-bind="value: c().Inx">
+                                <span asp-validation-for="Inx" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option value="1">فعال</option>
+                                    @*       <option value="0">غیرفعال</option>*@
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="CommentTypeId"></label>
+                                <select asp-for="CommentTypeId" class="form-control" data-bind="value: c().CommentTypeId">
+                                    <option value="1">متن</option>
+                                    <option value="2">فیلم</option>
+                                    <option value="3">صوت</option>
+                                </select>
+                                <span asp-validation-for="CommentTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="commentTextDiv" class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="CommentText"></label>
+                                <textarea rows="2" asp-for="CommentText" class="form-control" data-bind="value: c().CommentText"></textarea>
+                                <span asp-validation-for="CommentText" class="danger"></span>
+                            </div>
+                        </div>
+                        <div id="commentAudioDiv" class="col-md-12">
+
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="CommentAudio"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                                new PanelPresentationLayer.ComponentModel.FileUploader()
+                                {
+                                ButtonFarsiName = "آپلود فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "CommentAudioFilePath",
+                                KnockoutExpressionString = "MainViewModel.c().CommentAudio",
+                                HasDeleteBtn = false,
+                                MaxFileSize = 20480,
+                                Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+                                })
+                            </div>
+                            <span asp-validation-for="CommentAudio" class="danger"></span>
+
+                        </div>
+                        <div id="commentVideoDiv" class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="CommentVideo"></label>
+                                <input asp-for="CommentVideo" class="form-control" data-bind="value: c().CommentVideo">
+                                <span asp-validation-for="CommentVideo" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

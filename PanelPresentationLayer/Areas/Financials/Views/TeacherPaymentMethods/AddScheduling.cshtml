@@ -1,0 +1,26 @@
+﻿@model PanelViewModels.FinancialsViewModels.TeacherSattlementSchedulesViewModel
+
+<div id="addSchedulingModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">افزودن تاریخ تسویه</h4>
+            </div>
+            <form id="AddSchedulingForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="Date"></label>
+                        <input data-mask="9999/99/99" asp-for="Date" class="form-control" data-bind="value: date().Date">
+                        <span asp-validation-for="Date" class="danger"></span>
+                    </div>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">ثبت</button>
+                </div>
+            </form>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

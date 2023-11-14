@@ -1,0 +1,35 @@
+﻿
+<div class="searchBox">
+    <div class="main-search">
+        <div class="input-group ltr mg-t-b">
+            @*<span class="input-group-addon" id="basic-addon2">
+                    <span class="glyphicon glyphicon-search icon-s"></span>
+                </span>*@
+            <div class="input-div">
+                <span class="glyphicon glyphicon-close"></span>
+                <input id="input-s" type="text" class="form-control input-s" placeholder="عبارت جستجوی خود را وارد کنید..." aria-describedby="basic-addon2">
+            </div>
+        </div>
+        <div id="result" class="result">
+            <ul>
+                <!-- ko foreach: courseSearch() -->
+                <li>
+                    <a data-bind="attr: {href : '/Trainings/Courses/Index?CoursesId=' + Id}">
+                        <span class="tag" data-bind="text: Name"></span>
+                    </a>
+                </li>
+                <!-- /ko -->
+                <!-- ko if: courseSearch().length == 0 -->
+                <li style="text-align:center !important;margin-top:25px;">
+                    <a>
+                        <span class="tag">مواردی مطابق با جستجوی شما یافت نشد !</span>
+                        <br />
+                        <span style="font-size:50px;margin-top:10px;" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <!-- /ko -->
+
+            </ul> 
+        </div>
+    </div>
+</div>

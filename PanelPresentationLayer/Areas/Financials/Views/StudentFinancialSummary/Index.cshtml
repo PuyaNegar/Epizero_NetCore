@@ -1,0 +1,1149 @@
+﻿@{
+    ViewData["Title"] = "وضعیت مالی دانش آموز";
+    ViewData["PageFarsiName"] = "وضعیت مالی دانش آموز";
+    string Area = "Financials";
+    string Controller = "StudentFinancialSummary";
+}
+<style type="text/css">
+    .title-y {
+        font-weight: 700;
+        font-size: 14px;
+        display: inline-block;
+        width: 200px;
+        text-align: left;
+        margin-right: 3px;
+    }
+
+    .text-y {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .table-responsive {
+        min-height: 10px;
+        padding-bottom: 15px;
+    }
+
+    .alert {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.financialSummary = ko.observable({});
+    MainViewModel.cash = ko.observable({});
+    MainViewModel.fines = ko.observable({});
+    MainViewModel.manualDebts = ko.observable({});
+    MainViewModel.cheque = ko.observable({});
+    MainViewModel.chequeViewer = ko.observable({});
+    MainViewModel.posPayment = ko.observable({});
+    MainViewModel.posPaymentViewer = ko.observable({});
+    MainViewModel.returnPayment = ko.observable({});
+    MainViewModel.returnPaymentViewer = ko.observable({});
+    MainViewModel.bankTransfer = ko.observable({});
+    MainViewModel.discountPayment= ko.observable({})
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        @if(ViewBag.StudentUserId != null)
+        {
+            <text>
+              $('#Selected_StudentId').val('@Html.Raw(ViewBag.StudentUserId)');
+              setStudentUserId();
+            </text>
+        }
+        function resetForm(formId) {
+            $(formId).validate().resetForm();
+            $('.field-validation-error')
+                .removeClass('field-validation-error')
+                .addClass('field-validation-valid');
+            $('span.field-validation-valid > span').remove();
+            $('.input-validation-error')
+                .removeClass('input-validation-error')
+                .addClass('valid');
+            $('span.input-validation-valid > span').remove();
+        }
+        //*************************************************************************
+        $('#cashModal').on("hidden.bs.modal", function (event) {
+            resetForm('#cashForm');
+            MainViewModel.cash({});
+        });
+        //*************************************************************************
+        $('#bankTransferModal').on("hidden.bs.modal", function (event) {
+            resetForm('#bankTransferForm');
+            MainViewModel.bankTransfer({});
+        });
+         //*************************************************************************
+        $('#chequeModal').on("hidden.bs.modal", function (event) {
+            resetForm('#chequeForm'); 
+            MainViewModel.cheque({});
+        });
+        //*************************************************************************
+        $('#discountModal').on("hidden.bs.modal", function (event) {
+            resetForm('#discountForm');
+            MainViewModel.discountPayment({});
+        });
+         //*************************************************************************
+        $('#posPaymentModal').on("hidden.bs.modal", function (event) {
+            resetForm('#posPaymentForm');
+            MainViewModel.posPayment({});
+        });
+        //*************************************************************************
+        $('#manualDebtsModal').on("hidden.bs.modal", function (event) {
+            resetForm('#manualDebtsForm');
+            MainViewModel.manualDebts({});
+        });
+        //*************************************************************************
+        $('#returnPaymentModal').on("hidden.bs.modal", function (event) {
+            resetForm('#returnPaymentForm');
+            MainViewModel.returnPayment({});
+        }); 
+        //*************************************************************************
+        $('#finesModal').on("hidden.bs.modal", function (event) {
+            resetForm('#finesForm');
+            MainViewModel.fines({});
+        });
+
+        //*************************************************************************
+        $('body').on('click', '.chequeViewer-btn', function () {
+            var Id = $(this).attr('data-Id');
+            var data = { Id: Id };
+            DataTransfer('/Financials/StudentFinancialChequePayments/Find', ko.toJSON(data), '',
+                function (e) {
+                    toastr.remove();
+                    var f = e;
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.remove();
+                        MainViewModel.chequeViewer(f.Value);
+                        $('#chequeViewerModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#chequeViewerModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+        });
+
+        //*************************************************************************
+        $('body').on('click', '.manualDebts-btn', function () {
+            //setStudentUserId();
+            $('#manualDebtsModal').modal({ backdrop: 'static', keyboard: false });
+            $('#manualDebtsModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', '.fines-btn', function () {
+            setStudentUserId();
+            $('#finesModal').modal({ backdrop: 'static', keyboard: false });
+            $('#finesModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', '.discount-btn', function () {
+            MainViewModel.discountPayment().StudentFinancialDebtId = $(this).attr('data-StudentFinancialDebtId');
+            $('#StudentDiscountPayment_PreviousTotalAmount').val($(this).attr('data-TotalAmount'));
+            $('#StudentDiscountPayment_PreviousDiscountAmount').val($(this).attr('data-DiscountAmount'));
+            $('#StudentDiscountPayment_Description').val($(this).attr('data-DiscountDiscription')).change();
+            $('#discountModal').modal({ backdrop: 'static', keyboard: false });
+            $('#discountModal').modal('show');
+        });
+          //*************************************************************************
+        $('#discountForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentDiscounts/Update/' + MainViewModel.discountPayment().StudentFinancialDebtId, ko.toJSON(MainViewModel.discountPayment()), '#resultLoader',
+                    function (f) {
+                        toastr.remove(); 
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.remove();
+                            toastr.success(f.Message);
+                            $('#discountModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }  
+            return false;
+        });
+
+
+        //"*************************************************************************
+        $('body').on('click', '.returnPayment-btn', function () {
+            setStudentUserId();
+            MainViewModel.returnPayment().StudentFinancialPaymentTypeId = $(this).attr('data-StudentFinancialPaymentTypeId');
+            $('#returnPaymentModal').modal({ backdrop: 'static', keyboard: false });
+            $('#returnPaymentModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', ' .posPayment-btn', function () {
+            setStudentUserId();
+            MainViewModel.posPayment().StudentFinancialPaymentTypeId = $(this).attr('data-StudentFinancialPaymentTypeId');
+            $('#posPaymentModal').modal({ backdrop: 'static', keyboard: false });
+            $('#posPaymentModal').modal('show');
+        });
+          //*************************************************************************
+        $('body').on('click', '.chequePayment-btn', function () {
+            setStudentUserId();
+            rebulidChosen("#StudentChequePayment_PaidChequeId");
+            MainViewModel.cash().StudentFinancialPaymentTypeId = $(this).attr('data-StudentFinancialPaymentTypeId');
+            $('#chequeModal').modal({ backdrop: 'static', keyboard: false });
+        });
+          //*************************************************************************
+        $('body').on('click', '.cashPayment-btn', function () {
+            setStudentUserId();
+            MainViewModel.cash().StudentFinancialPaymentTypeId = $(this).attr('data-StudentFinancialPaymentTypeId');
+            $('#cashModal').modal({ backdrop: 'static', keyboard: false });
+            $('#cashModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', '.bankTransferPayment-btn', function () {
+            setStudentUserId();
+            MainViewModel.bankTransfer().StudentFinancialPaymentTypeId = $(this).attr('data-StudentFinancialPaymentTypeId');
+            $('#bankTransferModal').modal({ backdrop: 'static', keyboard: false });
+            $('#bankTransferModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', '.posPaymentViewer-btn', function () {
+            var Id = $(this).attr('data-Id');
+            DataTransfer('/Financials/StudentPosPayments/Find/' + Id, '', '',
+                function (e) {
+                    toastr.remove();
+                    var f = e;
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.remove();
+                        MainViewModel.posPaymentViewer(f.Value);
+                        $('#posViewerModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#posViewerModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+        });
+        //*************************************************************************
+        $('body').on('click', '.returnPaymentViewer-btn', function () {
+            DataTransfer('/Financials/StudentFinancialReturnPayments/Find', ko.toJSON({'Id': $(this).attr('data-Id') }), '',
+                function (e) {
+                    toastr.remove();
+                    var f = e;
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.remove();
+                        MainViewModel.returnPaymentViewer(f.Value);
+                        $('#returnViewerModal').modal({ backdrop: 'static', keyboard: false });
+                        $('#returnViewerModal').modal('show');
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+        });
+        //*************************************************************************
+        $('#StudentSelectorBtn').click(function () {
+            $('#StudentSelectorModal').modal({ backdrop: 'static', keyboard: false });
+            $('#StudentSelectorModal').modal('show');
+        });
+        //*************************************************************************
+        $('body').on('click', '.cashAndBankTransferViewer-btn', function () {
+            $('#CashAndBankTransferModal .modal-title').html($(this).parent().find('.title-value').text());
+            $('#CashAndBankTransferModal #text-value').html($(this).parent().find('.text-value').text());
+            $('#CashAndBankTransferModal #amountPaid').val($(this).parent().find('.amountPaid-value').text());
+            $('#CashAndBankTransferModal #studentUserFullName').val($(this).parent().find('.studentUserFullName-value').text());
+            $('#CashAndBankTransferModal #amountPaidDateTime').val($(this).parent().find('.AmountPaidDateTime-value').text());
+            $('#CashAndBankTransferModal #requestReferenceNumber').val($(this).parent().find('.RequestReferenceNumber-value').text());
+            $('#CashAndBankTransferModal #studentFinancialPaymentTypeName').val($(this).parent().find('.studentFinancialPaymentTypeName-value').text());
+            $('#CashAndBankTransferModal').modal({ backdrop: 'static', keyboard: false });
+            $('#CashAndBankTransferModal').modal('show');
+        });
+
+        //*************************************************************************
+        $('#applySelectedStudent').click(function () {
+            if (IsNullOrEmptyString($('#Selected_StudentId').val())) {
+                toastr.remove();
+                toastr.error('لطفا دانش آموز را انتخاب کنید');
+                return;
+            }
+            $('#selectStudentName').html($('#ComboBoxStudentChosen > .ComboBoxContainer-ul > .ComboBoxContainer-li > span').html());
+            window.location.href = '/Financials/StudentFinancialSummary/Index/' +  $('#Selected_StudentId').val();
+            $('#StudentSelectorModal').modal('hide');
+        });
+       //*************************************************************************
+        $('#cashForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFinancialSummary/Add/', ko.toJSON(MainViewModel.cash()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#cashModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#bankTransferForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFinancialSummary/Add/', ko.toJSON(MainViewModel.bankTransfer()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#bankTransferModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#chequeForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFinancialChequePayments/Add/', ko.toJSON(MainViewModel.cheque()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            MainViewModel.cheque({});
+                            $('#chequeModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+       //*************************************************************************
+        $('#posPaymentForm').submit(function () {
+                if ($(this).valid()) {
+                    DataTransfer('/Financials/StudentPosPayments/Add/', ko.toJSON(MainViewModel.posPayment()), '#resultLoader',
+                        function (f) {
+                            toastr.remove();
+                            if (!f.IsSuccess) {
+                                toastr.error(f.Message);
+                            } else {
+                                toastr.success(f.Message);
+                                MainViewModel.posPayment({});
+                                $('#posPaymentModal').modal('hide');
+                                readStudentFinancialSummary();
+                            }
+                        },
+                        function () {
+                            toastr.remove();
+                            toastr.error("خطا در ارتباط با سرور");
+                        }
+                    );
+                }
+                return false;
+        });
+        //*************************************************************************
+        $('#returnPaymentForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFinancialReturnPayments/Add/', ko.toJSON(MainViewModel.returnPayment()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#returnPaymentModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#finesForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFines/Add/', ko.toJSON(MainViewModel.fines()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            MainViewModel.fines({});
+                            $('#finesModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //*************************************************************************
+        $('#manualDebtsForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Financials/StudentFinancialManualDebts/Add/', ko.toJSON(MainViewModel.manualDebts()), '#resultLoader',
+                    function (f) {
+                        toastr.remove();
+                        if (!f.IsSuccess) {
+                            toastr.error(f.Message);
+                        } else {
+                            toastr.success(f.Message);
+                            $('#manualDebtsModal').modal('hide');
+                            readStudentFinancialSummary();
+                        }
+                    },
+                    function () {
+                        toastr.remove();
+                        toastr.error("خطا در ارتباط با سرور");
+                    }
+                );
+            }
+            return false;
+        });
+        //========================================================
+        function setStudentUserId() {
+            if ($('#Selected_StudentId').val()) {
+                var Id = $('#Selected_StudentId').val();
+                MainViewModel.cash().StudentUserId = Id;
+                MainViewModel.cheque().StudentUserId = Id;
+                MainViewModel.posPayment().StudentUserId = Id;
+                MainViewModel.bankTransfer().StudentUserId = Id;
+                MainViewModel.fines().StudentUserId = Id;
+                MainViewModel.returnPayment().StudentUserId = Id;
+            } else {
+                var Id = -1;
+            }
+            return Id;
+        }
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        function readStudentFinancialSummary() {
+            DataTransfer('/Financials/StudentFinancialSummary/Read/' + $('#Selected_StudentId').val(), '', '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.financialSummary(f.Value);
+                        $('#selectStudentName').text(f.Value.StudentFullName);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    MainViewModel.financialSummary({});
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (!IsNullOrEmptyString( $('#Selected_StudentId').val()))
+        {
+            readStudentFinancialSummary();
+        }
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.delete-debts', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFinancialDebts/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.delete-fines', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFines/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.studentFinancialPaymentsDelete-btn', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFinancialSummary/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.posPaymentDelete-btn', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentPosPayments/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.chequeDelete-btn', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFinancialChequePayments/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.delete-manualDebts', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFinancialManualDebts/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '.returnPaymentDelete-btn', function () {
+            var Id = $(this).attr('data-Id');
+            bootbox.confirm({
+                message: "آیا از حذف رکورد مطمئن هستید؟",
+                buttons: {
+                    confirm: {
+                        label: 'تایید',
+                        className: 'btn-primary'
+                    },
+                    cancel: {
+                        label: 'انصراف',
+                        className: 'btn-default'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var data = { Id: Id }
+                        DataTransfer('/Financials/StudentFinancialReturnPayments/Delete/', ko.toJSON(data), '#resultLoader',
+                            function (f) {
+                                if (!f.IsSuccess) {
+                                    toastr.error(f.Message);
+                                } else {
+                                    toastr.success(f.Message);
+                                    readStudentFinancialSummary();
+                                }
+                            },
+                            function (e) {
+                                toastr.remove();
+                                toastr.error("خطا در ارتباط با سرور");
+                            }
+                        );
+                    }
+                }
+            });
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#StudentChequePayment_PaidChequeId').change(function () { 
+            //$('#StudentChequePayment_RemainingAmount').val($('#StudentChequePayment_PaidChequeId option:selected').attr('data-remainingamount'));
+            if (IsNullOrEmptyString($(this).val())) {
+                $('#StudentChequePayment_RemainingAmount').val('');
+                return false;
+            }
+            DataTransfer('/Financials/PaidCheques/GetRemainingAmount', ko.toJSON({ Id: $(this).val() }), '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        $('#StudentChequePayment_RemainingAmount').val(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('#StudentReturnPayment_PaymentTypeDiv').hide();
+        $('#StudentReturnPayment_ReturnPaymentTypeId').change(function () {
+            if ($(this).val() == 1) {
+                $('#StudentReturnPayment_PaymentTypeDiv').show();
+            } else {
+                $('#StudentReturnPayment_PaymentTypeId').val('1').change();
+                $('#StudentReturnPayment_PaymentTypeDiv').hide();
+            }
+        });
+    });
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+
+                    <div class="row">
+                        <div class="alert alert-warning" style="overflow:hidden">
+                            <div class="col-md-6 col-xs-6">
+                                <label>دانش آموز : </label>
+                                <span id="selectStudentName" style="font-weight: bold;margin-left: 30px;"> انتخاب نشده </span>
+                                <button id="StudentSelectorBtn" style=" margin-left:30px;" type="button" class="btn btn-primary btn-sm">انتخاب دانش آموز</button>
+                                <input id="applyFilter" type="button" style="display:none;" />
+                            </div>
+                            @if (ViewBag.StudentUserId != null)
+                            {
+
+                                <div class="col-md-3 col-xs-3" style="text-align:left">
+                                    <a id="btnReportSchool" href="/Financials/StudentFinancialSummaryReports/GetSchoolVersion/@Html.Raw(ViewBag.StudentUserId)" target="_blank" class="btn btn-info btn-sm exclude-default">چاپ نسخه آموزشگاه</a>
+                                </div>
+                                <div class="col-md-3 col-xs-3">
+                                    <a id="btnReportStudent" href="/Financials/StudentFinancialSummaryReports/GetStudentVersion/@Html.Raw(ViewBag.StudentUserId)" target="_blank" class="btn btn-info btn-sm exclude-default">چاپ نسخه دانش آموز</a>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+                    <!-- ko if: MainViewModel.financialSummary().StudentFinancialDebts != null-->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-danger" role="alert">
+                                بدهـــی ها
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>دانش آموز</th>
+                                            <th>دوره</th>
+                                            <th>نوع ثبت نام</th>
+                                            <th>مبلغ کل</th>
+                                            <th>سهم آموزشگاه و دبیر(تومان)</th>
+                                            <th>سهم همکار فروش (تومان)</th>
+                                            <th>مبلغ تخفیف (تومان)</th>
+                                            <th>بدهی دانش آموز (تومان)</th>
+                                            <th>مسئول ثبت نام</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().StudentFinancialDebts">
+                                        <tr data-bind="style: {'background-color': IsCanceled ? '#cc6b60' : '' , color: IsCanceled ? '#fff' : '#000'}">
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: StudentUserFullName"></td>
+                                            <td data-bind="text: CourseName"></td>
+                                            <td data-bind="text: IsOnlineRegistrated == 1 ? 'آنلاین': 'حضوری'"></td>
+                                            <td data-bind="text: TotalAmount"></td>
+                                            <td data-bind="text: Price"></td>
+                                            <td data-bind="text: SalePartnerPrice"></td>
+                                            <td data-bind="text: DiscountAmount"></td>
+                                            <td data-bind="text: DebtAmount"></td>
+                                            <td data-bind="html: UserEditor"></td>
+                                            <td>
+                                                <!--ko if: !IsCanceled && IsOnlineRegistrated == 0 -->
+                                                <button style="float:right;margin-bottom:5px;" data-bind="attr: {'data-DiscountDiscription' : DiscountDiscription , 'data-DiscountAmount' : DiscountAmount , 'data-StudentFinancialDebtId' : Id , 'data-TotalAmount' : TotalAmount   }" type="button" class="btn btn-warning btn-xs discount-btn"> ویرایش تخفیف</button>
+                                                <!-- /ko  -->
+                                                <!--ko if: !IsCanceled -->
+                                                <button style="float:right " data-bind="attr:{'data-Id':Id}" type="button" class="btn btn-danger btn-xs delete-debts">انصراف از دوره</button>
+                                                <!-- /ko  -->
+                                                <!--ko if: IsCanceled -->
+                                                <span style="color:#fff;float:right ">انصراف از دوره</span>
+                                                <!-- /ko  -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: MainViewModel.financialSummary().StudentFinancialManualDebts != null-->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-danger" role="alert">
+                                بدهـــی های ارزش افزوده
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a style="width:160px" class="btn btn-success btn-sm shiny manualDebts-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>افزودن بدهی ارزش افزوده</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>دوره</th>
+                                            <th>نوع ثبت نام</th>
+                                            <th>تاریخ ثبت</th>
+                                            <th>مبلغ </th>
+                                            <th>مسئول ثبت نام </th>
+                                            <th>شرح سند</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().StudentFinancialManualDebts">
+                                        <tr>
+                                            <td scope="row" data-bind="text: $index() + 1"></td>
+                                            <td data-bind="text: CourseName"></td>
+                                            <td data-bind="text: CourseMeetingStudentType"></td>
+                                            <td data-bind="text: RegDateTime"></td>
+                                            <td data-bind="text: DebtAmount"></td>
+                                            <td data-bind="html: UserEditor"></td>
+                                            <td data-bind="text: Description"></td>
+                                            <td>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm btn-delete delete-manualDebts">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: MainViewModel.financialSummary().StudentFines != null -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-danger" role="alert">
+                                جریمه ها
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-title="جریمه" class="btn btn-success btn-sm shiny fines-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>جریمه</a>
+                            </div>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>دانش آموز</th>
+                                            <th>مبلغ جریمه(تومان)</th>
+                                            <th>تاریخ ثبت</th>
+                                            <th>دوره</th>
+                                            <th>شرح سند</th>
+                                            <th>مسئول ثبت نام</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().StudentFines">
+                                        <tr>
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: StudentFullName"></td>
+                                            <td data-bind="text: Amount"></td>
+                                            <td data-bind="text: RegDateTime"></td>
+                                            <td data-bind="text: CourseName"></td>
+                                            <td data-bind="text: Description"></td>
+                                            <td data-bind="html: UserEditor"></td>
+                                            <td>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm btn-delete delete-fines">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: MainViewModel.financialSummary().StudentFinancialPayments != null -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-success" role="alert">
+                                پرداختی ها
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-StudentFinancialPaymentTypeId="3" data-title="نقدی" class="btn btn-success btn-sm shiny cashPayment-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>نقدی</a>
+                                <a data-StudentFinancialPaymentTypeId="7" data-title="حواله" class="btn btn-info btn-sm shiny bankTransferPayment-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> حواله  </a>
+                                <a data-StudentFinancialPaymentTypeId="4" data-title="کارت خوان" class="btn btn-danger btn-sm shiny posPayment-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>کارت خوان </a>
+                                <a data-StudentFinancialPaymentTypeId="1" data-title="چک" class="btn btn-primary btn-sm shiny chequePayment-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  چک </a>
+                            </div>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>دانش آموز</th>
+                                            <th>تاریخ</th>
+                                            <th>دوره</th>
+                                            <th>درخواست شماره ارجاع</th>
+                                            <th>نحوه پرداخت</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>مسئول ثبت نام</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().StudentFinancialPayments.filter(c=> c.StudentFinancialPaymentTypeId != 5)">
+                                        <tr>
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: StudentUserFullName"></td>
+                                            <td data-bind="text: AmountPaidDateTime"></td>
+                                            <td data-bind="text: CourseName"></td>
+                                            <td data-bind="text: RequestReferenceNumber"></td>
+                                            <td data-bind="text: StudentFinancialPaymentTypeName"></td>
+                                            <td data-bind="text: AmountPaid"></td>
+                                            <td data-bind="html: UserEditor"></td>
+                                            <td>
+                                                <!-- ko if:  StudentFinancialPaymentTypeId == 3 || StudentFinancialPaymentTypeId == 7 || StudentFinancialPaymentTypeId == 8  -->
+                                                <p class="text-value" style="display:none" data-bind="text: Description"></p>
+                                                <span class="title-value" style="display:none" data-bind="text: StudentFinancialPaymentTypeName"></span>
+                                                <span class="amountPaid-value" style="display:none" data-bind="text: AmountPaid"></span>
+                                                <span class="studentUserFullName-value" style="display:none" data-bind="text: StudentUserFullName"></span>
+                                                <span class="AmountPaidDateTime-value" style="display:none" data-bind="text: AmountPaidDateTime"></span>
+                                                <span class="RequestReferenceNumber-value" style="display:none" data-bind="text: RequestReferenceNumber"></span>
+                                                <span class="studentFinancialPaymentTypeName-value" style="display:none" data-bind="text: StudentFinancialPaymentTypeName"></span>
+                                                <!-- /ko-->
+                                                <!-- ko if:  StudentFinancialPaymentTypeId == 3  -->
+                                                <button type="button" class="btn btn-warning btn-sm cashAndBankTransferViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm studentFinancialPaymentsDelete-btn">حذف</button>
+                                                <!-- /ko-->
+                                                <!-- ko if:  StudentFinancialPaymentTypeId == 8  -->
+                                                <button type="button" class="btn btn-warning btn-sm cashAndBankTransferViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm studentFinancialPaymentsDelete-btn">حذف</button>
+                                                <!-- /ko-->
+                                                <!-- ko if:  StudentFinancialPaymentTypeId == 7  -->
+                                                <button type="button" class="btn btn-warning btn-sm cashAndBankTransferViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm studentFinancialPaymentsDelete-btn">حذف</button>
+                                                <!-- /ko-->
+                                                <!-- ko if: StudentFinancialPaymentTypeId == 1 -->
+                                                <button data-bind="attr: {'data-Id':  Id }" type="button" class="btn btn-warning btn-sm btn-view chequeViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm chequeDelete-btn">حذف</button>
+                                                <!-- /ko-->
+                                                <!-- ko if: StudentFinancialPaymentTypeId == 4 -->
+                                                <button data-bind="attr: {'data-Id':  Id }" type="button" class="btn btn-warning btn-sm btn-view posPaymentViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm posPaymentDelete-btn">حذف</button>
+                                                <!-- /ko-->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: MainViewModel.financialSummary().StudentFinancialReturnPayments != null -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-warning" role="alert">
+                                عودتی ها
+                            </div>
+                            <div class="buttons-preview btn-modal">
+                                <a data-title="عودت وجه" class="btn btn-danger btn-sm shiny returnPayment-btn"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>عودت وجه </a>
+                            </div>
+                            <hr />
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>دانش آموز</th>
+                                            <th>تاریخ</th>
+                                            <th>دوره</th>
+                                            <th>نحوه پرداخت</th>
+                                            <th>مبلغ(تومان)</th>
+                                            <th>مسئول ثبت نام</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().StudentFinancialReturnPayments">
+                                        <tr>
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: StudentUserFullName"></td>
+                                            <td data-bind="text: AmountPaidDateTime"></td>
+                                            <td data-bind="text: CourseName"></td>
+                                            <td data-bind="text: ReturnPaymentTypeName"></td>
+                                            <td data-bind="text: ReturnAmount"></td>
+                                            <td data-bind="html: UserEditor"></td>
+                                            <td>
+                                                <p class="description-value" style="display:none" data-bind="text: Description"></p>
+                                                <button data-bind="attr: {'data-Id': Id}" type="button" class="btn btn-warning btn-sm btn-view returnPaymentViewer-btn">مشاهده</button>
+                                                <button data-bind="attr: {'data-Id':  Id}" type="button" class="btn btn-danger btn-sm returnPaymentDelete-btn">حذف</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: (MainViewModel.financialSummary().StudentFinancialPayments != null || MainViewModel.financialSummary().StudentFinancialDebts != null) -->
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 pull-left">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h3 style="text-align:center" class="panel-title">وضعیت مالی</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row" style="direction:ltr">
+
+                                        <div class="col-md-12 col-xsw-12" style="color:green;">
+                                            <div class="form-group">
+                                                <label class="title-y">مجموع پرداختی ها  :</label><label class="text-y" data-bind="text: financialSummary().TotalPayments"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12" style="color:red;">
+                                            <div class="form-group">
+                                                <label class="title-y">مجموع جریمه ها  :</label><label class="text-y" data-bind="text: financialSummary().TotalFines"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12" style="color:red;">
+                                            <div class="form-group">
+                                                <label class="title-y">مجموع عودتی  :</label><label class="text-y" data-bind="text: financialSummary().TotalReturn"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12">
+                                            <div class="form-group" style="color:red;">
+                                                <label class="title-y">مجموع بدهکاری  :</label><label class="text-y" data-bind="text: financialSummary().TotalDebts"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12">
+                                            <div class="form-group" style="color:red;">
+                                                <label class="title-y">مجموع بدهی ارزش افزوده  :</label><label class="text-y" data-bind="text: financialSummary().TotalManualDebts"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12">
+                                            <div class="form-group">
+                                                <label class="title-y">وضعیت مالی  :</label><label class="text-y" data-bind="text: financialSummary().TotalSum,style: { color: financialSummary().IsDebt  ? 'red' : 'green' }"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="text-align:right;font-weight:bold">
+                                            <hr />
+                                            فرمول محاسبه :
+                                            (مجموع جریمه + مجموع بدهکاری ارزش افزوده + مجموع بدهکاری ) - (مجموع عودتی - مجموع پرداختی)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+
+                    @{
+                        await Html.RenderPartialAsync("StudentSelect.cshtml");
+                        await Html.RenderPartialAsync("_CashAndBankTransferViewer.cshtml");
+                        await Html.RenderPartialAsync("_Cheque.cshtml");
+                        await Html.RenderPartialAsync("_Cash.cshtml");
+                        await Html.RenderPartialAsync("_ChequeViewer.cshtml");
+                        await Html.RenderPartialAsync("_PosPayment.cshtml");
+                        await Html.RenderPartialAsync("_PosPaymentViewer.cshtml");
+                        await Html.RenderPartialAsync("_ReturnPayment.cshtml");
+                        await Html.RenderPartialAsync("_ReturnPaymentViewer.cshtml");
+                        await Html.RenderPartialAsync("_Fines.cshtml");
+                        await Html.RenderPartialAsync("_ManualDebts.cshtml");
+                        await Html.RenderPartialAsync("_BankTransfer.cshtml");
+                        await Html.RenderPartialAsync("_Discount.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

@@ -1,0 +1,145 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.FinancialsViewModels.TeacherSattlementSummaryViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span style="vertical-align:middle" class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>  <strong>زمانبدی پرداخت و تسویه</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.TeacherUserFullName"></label>
+                                        <input readonly="readonly" asp-for="Edit.TeacherUserFullName" data-bind="value: e().TeacherUserFullName" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.TeacherUserFullName" class="danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.CourseName"></label>
+                                        <input readonly="readonly" asp-for="Edit.CourseName" data-bind="value: e().CourseName" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.CourseName" class="danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.TeacherPaymentMethodType"></label>
+                                        <input readonly="readonly" asp-for="Edit.TeacherPaymentMethodType" data-bind="value: e().TeacherPaymentMethodType" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.TeacherPaymentMethodType" class="danger"></span>
+                                    </div>
+                                </div>
+                                <!-- ko if: (MainViewModel.e().TeacherPaymentMethodTypeId == 3) -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.Number1"></label>
+                                        <input readonly="readonly" asp-for="Edit.Number1" data-bind="value: e().Number1" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.Number1" class="danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.Number2"></label>
+                                        <input readonly="readonly" asp-for="Edit.Number2" data-bind="value: e().Number2" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.Number2" class="danger"></span>
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if:e().TeacherPaymentMethodTypeId == 1-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.Fee"></label>
+                                        <input readonly="readonly" asp-for="Edit.Fee" data-bind="value: e().Fee" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.Fee" class="danger"></span>
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if:e().TeacherPaymentMethodTypeId == 2-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.Percent"></label>
+                                        <input readonly="readonly" asp-for="Edit.Percent" data-bind="value: e().Percent" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.Percent" class="danger"></span>
+                                    </div>
+                                </div>
+                                <!-- /ko-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.TotalDebtAmount"></label>
+                                        <input readonly="readonly" asp-for="Edit.TotalDebtAmount" data-bind="value: e().TotalDebtAmount" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.TotalDebtAmount" class="danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.TotalSattledAmount"></label>
+                                        <input readonly="readonly" asp-for="Edit.TotalSattledAmount" data-bind="value: e().TotalSattledAmount" type="text" class="form-control">
+                                        <span asp-validation-for="Edit.TotalSattledAmount" class="danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Edit.RemaningDebtAmount"> </label>
+                                        <input readonly="readonly" asp-for="Edit.RemaningDebtAmount" data-bind="value: e().RemaningDebtAmount" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 
+
+                    <button class="btn btn-info btn-block add-Scheduling" style="margin-bottom:15px;">افزودن زمانبندی</button>
+
+                    <!-- ko if: e().TeacherSattlementSchedules != null &&  e().TeacherSattlementSchedules.length > 0 -->
+
+                    <div class="table-responsive" style="padding-bottom:5px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>تاریخ های پرداختی</th>
+                                    <th>مبلغ قابل پرداخت / مبلغ تسویه</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: e().TeacherSattlementSchedules">
+                                <tr data-bind="style: {'background-color': IsSettled  ? '#bcf3bc' : '#e4abab' }">
+                                    <th scope="row" data-bind="text: $index() + 1"></th>
+                                    <td class="dateTime" data-bind="text: Date"></td>
+                                    <td class="settledamount" data-bind="text: SettledAmount + ' تومان',attr:{'data-SettledAmount' : SettledAmount}"></td>
+                                    <td data-bind="text: IsSettled == false ? 'قابل پرداخت' : 'تسویه شده' "> </td>
+                                    <td>
+                                        <!-- ko if: IsSettled == false -->
+                                        <button data-bind="attr:{'data-Id' : Id}" class="btn btn-success btn-xs payment">پرداخت</button>
+                                        <button data-bind="attr:{'data-Id' : Id}" class="btn btn-danger btn-xs deletePaymentBtn">حذف</button>
+                                        <!-- /ko -->
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <!-- /ko-->
+                    <!-- ko ifnot: e().TeacherSattlementSchedules != null &&  e().TeacherSattlementSchedules.length > 0 -->
+                    <div>
+                        <p style="border-radius:5px;border:1px solid #ddd;padding:20px;text-align:center;font-weight:bold;color:#555">
+                            زمانبندی پرداختی برای این معلم ثبت نشده است.
+                        </p>
+                    </div>
+                    <!-- /ko-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+ 
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

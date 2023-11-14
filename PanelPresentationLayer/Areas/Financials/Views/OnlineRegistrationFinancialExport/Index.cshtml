@@ -1,0 +1,111 @@
+﻿ 
+@{
+    ViewData["Title"] = "خروجی اکسل از فروش آنلاین";
+    ViewData["PageFarsiName"] = "خروجی اکسل از فروش آنلاین";
+    string Area = "Financials";
+    string Controller = "OnlineRegistrationFinancialExport";
+} 
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript"> 
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#IsActiveFilter,#CourseCategoryTypeFilter').change(function () {
+            $('#applyFilter').click();
+        });
+        //===============================================
+        $('#btnExcelOrder').click(function () {
+            if ($('tbody> tr > td   input:checked').length > 0) {
+                var list = [];
+                for (i = 0; i < $('#modelList tbody input:checked').length; i++) {
+                    var data = $('#modelList').DataTable().row($('#modelList tbody input:checked').eq(i).parents('tr')).data();
+                    if (list == null || list.length == 0) {
+                        list.push(`?CourseIds=${data.Id}`);
+                    } else {
+                        list.push(`&CourseIds=${data.Id}`);
+                    }
+                }
+                window.location.href = "/Financials/OnlineRegistrationFinancialExport/ExcelExport" + list.toString().replaceAll(",", "");
+            } else {
+                toastr.remove();
+                toastr.error("هیچ موردی را برای چاپ انتخاب نکرده اید");
+            }
+        });
+    });
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمایش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    <div class="row">
+                        <div style="margin:15px;">
+                            <a id="btnExcelOrder" class="btn btn-info"> <span class="fa fa-file-excel-o" aria-hidden="true"></span> خروجی اکسل از آمار فروش </a>
+                        </div>
+                        <hr />
+                    </div>
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group reletive">
+                                    <label for="IsActiveFilter">وضعیت</label>
+                                    <select id="IsActiveFilter" class="form-control" data-bind="value: fe().IsActive">
+                                        <option value="1">فعال</option>
+                                        <option value="0">غیر فعال</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group reletive">
+                                    <label for="CourseCategoryTypeFilter">دوره / آزمون</label>
+                                    <select id="CourseCategoryTypeFilter" class="form-control" data-bind="value: fe().CourseCategoryType">
+                                        <option value="1">دوره</option>
+                                        <option value="2">آزمون</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input id="applyFilter" type="button" style="display:none;" />
+                        </div>
+                    </div>
+                    @await Html.PartialAsync("~/Views/Shared/_GridTools.cshtml")
+                    <div class="table-responsive">
+                        @await Html.PartialAsync("~/Views/Shared/_TableSpinner.cshtml")
+                        <table id="modelList" class="table table-striped table-bordered table-hover dataTable no-footer" style="width:100%">
+                            <thead class="bordered-darkorange" data-actionColumn="false">
+                                <tr>
+                                    <th data-viewModel="Id" style="width: 30px;">
+                                        <div class="checkbox"><label style="font-size: 1.2em"><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>
+                                    </th>
+                                    <th data-viewModel="Name">دوره</th>
+                                    <th data-viewModel="CourseTypeName"> نوع دوره  </th>
+                                    <th data-viewModel="TeacherFullName">استاد</th>
+                                    <th data-viewModel="DiscountPercentOrDiscountAmount">درصد/مبلغ تخفیف</th>
+                                    <th data-viewModel="Price" data-thousandSeparator="true">قیمت</th>
+                                    <th data-viewModel="Inx">اولویت</th>
+                                    <th data-viewModel="IsActiveName">وضعیت</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+ 
+
+
+
+
+

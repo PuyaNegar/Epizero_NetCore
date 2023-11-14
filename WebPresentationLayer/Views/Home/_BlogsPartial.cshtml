@@ -1,0 +1,70 @@
+﻿@using WebViewModels.ContentsViewModels
+@{
+    var rss = (List<RssViewModel>)ViewBag.Data.Rss;
+    var i = 2;
+}
+@if (rss.Any())
+{
+
+
+    <section class="title-color">
+        <div class="container SearchPAll">
+            <div class="split-c">
+                <hr class="hr" />
+                <h2 class="pad-line-s split-liner">
+                    بلاگ
+                </h2>
+            </div>
+        </div>
+        <div class="container-fluid new-course">
+            <div class="row">
+                <div style="clear:both;"></div>
+                <div class="swiper-container swiper-teach">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in rss)
+                        {
+                            <div class="swiper-slide">
+                                <a>
+                                    <div data-aos="fade-right" class="col-md-12 col-sm-12 col-xs-12 main-new-course">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 content-new-course">
+                                            <div class="div-main-img">
+                                                @if (string.IsNullOrEmpty(item.ImageUrl))
+                                                {
+                                                    <a target="_blank" title="@item.Title" href="@item.Link">
+
+                                                        <img title="@item.Title" alt="@item.Title" src="https://blog.epizero.ir/wp-content/uploads/2019/08/01.png" />
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a target="_blank" title="@item.Title" href="@item.Link">
+                                                        <img title="@item.Title" alt="@item.Title" src="@item.ImageUrl">
+                                                    </a>
+                                                }
+                                            </div>
+
+                                            <div class="div-title-content">
+                                                <a target="_blank" title="@item.Title" href="@item.Link">
+                                                    @item.Title
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination-teach"></div>
+                    <!-- Add Arrows -->
+                    @*<div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>*@
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+

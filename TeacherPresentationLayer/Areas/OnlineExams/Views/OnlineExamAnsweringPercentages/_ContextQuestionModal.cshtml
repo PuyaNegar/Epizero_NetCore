@@ -1,0 +1,130 @@
+﻿<style type="text/css">
+    .detail {
+        margin-top: 10px;
+        margin-bottom: 0;
+        padding: 20px;
+    }
+
+
+    .checkbox input {
+        position: absolute;
+        opacity: 1;
+        cursor: pointer;
+        height: 18px;
+        width: 18px;
+        right: 0;
+        display: block;
+    }
+
+    .checkbox .text {
+        display: block;
+        margin-right: 30px;
+        font-size: 16px !important;
+    }
+
+    .modal-body .hr-h  p, .modal-body .hr-h p img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto !important;
+    }
+
+    .widget {
+        position: relative;
+    }
+
+        .widget .widget-header .badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px !important;
+            padding: 7px !important;
+            width: 30px !important;
+            border-radius: 50% !important;
+        }
+
+    .width-30 {
+        width: 30px;
+    }
+
+    .flex-right {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+    }
+
+    .widget-caption p {
+        line-height: 1.9;
+        padding: 5px;
+        font-size: 15px;
+        justify-content: center;
+    }
+
+    .widget .answer-question {
+        position: relative;
+        border: 2px solid #e3dbe8;
+        margin-top: 25px;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        padding: 7px;
+        display: none;
+    }
+
+        .widget .answer-question .img-repeat {
+            content: '';
+            position: absolute;
+            background-image: url('/assets/img/faviconss.png');
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            top: 0;
+            opacity: .1;
+            z-index: -1;
+        }
+
+        .widget .answer-question #close-answer {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+    .btn {
+        border: none;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .hr-h:last-child hr {
+        display: none;
+    }
+</style>
+
+
+<div class="modal fade" id="contextQuestionModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">سوال آزمون</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="hr-h col-lg-12 col-sm-12 col-xs-12 m-b-20">
+                    <p data-bind="html: contextQuestion().QuestionContext">
+
+                    </p>
+                </div>
+
+
+            </div>
+            <div>
+                <hr />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@using WebViewModels.ContentsViewModels
+
+@{
+    var numberOfStudent = (int)ViewBag.Data.NumberOfStudent;
+    var numberOfOnlineExams = (int)ViewBag.Data.NumberOfOnlineExams;
+    var numberOfOnlineClasses = (int)ViewBag.Data.NumberOfOnlineClasses;
+}
+<!-- Start Funfacts Area -->
+<section class="funfacts-area pt-100 m-b-60">
+    <div class="container">
+        <div class="funfacts-inner">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-xs-12 ">
+                    <div class="single-funfact">
+                        <div class="icon">
+                            <i class='bx bxs-group'></i>
+                        </div>
+                        <h3 class="odometer" data-count="@numberOfStudent">00</h3>
+                        <p> تعداد دانش آموزان</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-xs-12 ">
+                    <div class="single-funfact">
+                        <div class="icon">
+                            <i class='bx bx-calendar'></i>
+                        </div>
+                        <h3 class="odometer" data-count="@numberOfOnlineClasses">00</h3>
+                        <p>
+                            ساعات کلاس برگزار شده
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-xs-12 ">
+                    <div class="single-funfact">
+                        <div class="icon">
+                            <i class='bx bx-user-pin'></i>
+                        </div>
+                        <h3 class="odometer" data-count="@numberOfOnlineExams">00</h3>
+                        <p>تعداد آزمون برگزار شده</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="particles-js-circle-bubble"></div>
+        </div>
+    </div>
+</section>
+<!-- End Funfacts Area -->

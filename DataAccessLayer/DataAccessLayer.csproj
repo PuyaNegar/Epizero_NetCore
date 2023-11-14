@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EntityMaps\ReportsMaps\**" />
+    <EmbeddedResource Remove="EntityMaps\ReportsMaps\**" />
+    <None Remove="EntityMaps\ReportsMaps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200628080437_13990408-1234.cs" />
+    <Compile Remove="Migrations\20200628080437_13990408-1234.Designer.cs" />
+    <Compile Remove="Migrations\20200707100401_13990417-1433.cs" />
+    <Compile Remove="Migrations\20200707100401_13990417-1433.Designer.cs" />
+    <Compile Remove="Migrations\20200811112647_13990521-1556.cs" />
+    <Compile Remove="Migrations\20200811112647_13990521-1556.Designer.cs" />
+    <Compile Remove="Migrations\20201102123940_13990812-1609.cs" />
+    <Compile Remove="Migrations\20201102123940_13990812-1609.Designer.cs" />
+    <Compile Remove="Migrations\20210410091820_14000121-1350.cs" />
+    <Compile Remove="Migrations\20210410091820_14000121-1350.Designer.cs" />
+    <Compile Remove="Migrations\20210516130636_14000226-1735.cs" />
+    <Compile Remove="Migrations\20210516130636_14000226-1735.Designer.cs" />
+    <Compile Remove="Migrations\20210725124326_14000503-1710.cs" />
+    <Compile Remove="Migrations\20210725124326_14000503-1710.Designer.cs" />
+    <Compile Remove="Migrations\20210824044621_14000602-0915.cs" />
+    <Compile Remove="Migrations\20210824044621_14000602-0915.Designer.cs" />
+    <Compile Remove="Migrations\20210916053658_14000625-1006.cs" />
+    <Compile Remove="Migrations\20210916053658_14000625-1006.Designer.cs" />
+    <Compile Remove="Migrations\20210923074422_1400701-1114.cs" />
+    <Compile Remove="Migrations\20210923074422_1400701-1114.Designer.cs" />
+    <Compile Remove="Migrations\20211109101500_14000818-1344.cs" />
+    <Compile Remove="Migrations\20211109101500_14000818-1344.Designer.cs" />
+    <Compile Remove="Migrations\20211109102639_14000817-1355.cs" />
+    <Compile Remove="Migrations\20211109102639_14000817-1355.Designer.cs" />
+    <Compile Remove="Migrations\20211109103234_14000818-1401.cs" />
+    <Compile Remove="Migrations\20211109103234_14000818-1401.Designer.cs" />
+    <Compile Remove="Migrations\20230711133139_14020420-1700.cs" />
+    <Compile Remove="Migrations\20230711133139_14020420-1700.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DataModels\DataModels.csproj" />
+  </ItemGroup>
+
+</Project>

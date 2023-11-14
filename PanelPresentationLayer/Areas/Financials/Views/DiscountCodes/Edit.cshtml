@@ -1,0 +1,216 @@
+﻿@model  PanelViewModels.EditPrefix<PanelViewModels.FinancialsViewModels.DiscountCodesViewModel>
+
+    <div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+             <div class="modal-content">
+                <form id="EditForm" role="form">
+                      <div class="modal-header edit-modal">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                        </div>
+                      <div class="modal-body">
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.DiscountCodeTypeId"></label>
+                                      <select disabled="disabled" asp-for="Edit.DiscountCodeTypeId" class="form-control dddd" data-bind="value: e().DiscountCodeTypeId">
+                                          <option value="1">مبلغ</option>
+                                          <option value="2">درصد</option>
+                                      </select>
+                                      <span asp-validation-for="Edit.DiscountCodeTypeId" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.AmountOrPercent"></label>
+                                      <input readonly="readonly" type="text" asp-for="Edit.AmountOrPercent" class="form-control currency" data-bind="value: e().AmountOrPercent">
+                                      <span asp-validation-for="Edit.AmountOrPercent" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.Name"></label>
+                                      <input type="text" asp-for="Edit.Name" class="form-control" data-bind="value: e().Name">
+                                      <span asp-validation-for="Edit.Name" class="danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.MaxDiscountAmount"></label>
+                                      <input readonly="readonly" type="text" asp-for="Edit.MaxDiscountAmount" class="form-control currency" data-bind="value: e().MaxDiscountAmount">
+                                      <span asp-validation-for="Edit.MaxDiscountAmount" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.IsActive"></label>
+                                      <select asp-for="Edit.IsActive" class="form-control" data-bind="value: e().IsActive">
+                                          <option value="1"> فعال</option>
+                                          <option value="2"> غیرفعال</option>
+                                      </select>
+                                      <span asp-validation-for="Edit.IsActive" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.IsUseableForDiscountAcademyProduct"></label>
+                                      <select disabled="disabled" asp-for="Edit.IsUseableForDiscountAcademyProduct" class="form-control" data-bind="value: e().IsUseableForDiscountAcademyProduct">
+                                          <option value="1"> فعال</option>
+                                          <option value="2"> غیرفعال</option>
+                                      </select>
+                                      <span asp-validation-for="Edit.IsUseableForDiscountAcademyProduct" class="danger"></span>
+                                  </div>
+                              </div>
+
+                          </div>
+
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.StartDate"></label>
+                                      <input data-mask="9999/99/99" asp-for="Edit.StartDate" class="form-control" data-bind="value: e().StartDate">
+                                      <span asp-validation-for="Edit.StartDate" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.EndDate"></label>
+                                      <input asp-for="Edit.EndDate" class="form-control" data-bind="value: e().EndDate">
+                                      <span asp-validation-for="Edit.EndDate" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.NumberOfStudentCanBeUse"></label>
+                                      <input readonly="readonly" asp-for="Edit.NumberOfStudentCanBeUse" class="form-control" data-bind="value: e().NumberOfStudentCanBeUse">
+                                      <span asp-validation-for="Edit.NumberOfStudentCanBeUse" class="danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.NumberOfTotalUse"></label>
+                                      <input readonly="readonly" asp-for="Edit.NumberOfTotalUse" class="form-control" data-bind="value: e().NumberOfTotalUse">
+                                      <span asp-validation-for="Edit.NumberOfTotalUse" class="danger"></span>
+                                  </div>
+                              </div>
+
+                          </div>
+
+                          <!-- ko if: e().SalesPartnerShareTypeId != null -->
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.SalePartnerUserId"></label>
+                                      <select disabled="disabled" asp-for="Edit.SalePartnerUserId" class="form-control" data-bind="value: e().SalePartnerUserId">
+                                          <option value="">لطفاً انتخاب کنید</option>
+                                          @foreach (var item in ViewBag.SalesPartnerUsers)
+                                          {
+                                              <option value="@item.Value">@item.Text</option>
+                                          }
+                                      </select>
+                                      <span asp-validation-for="Edit.SalePartnerUserId" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.SalesPartnerShareTypeId"></label>
+                                      <select disabled="disabled" asp-for="Edit.SalesPartnerShareTypeId" class="form-control" data-bind="value: e().SalesPartnerShareTypeId">
+                                          <option value="1">مبلغ</option>
+                                          <option value="2">درصد</option>
+                                      </select>
+                                      <span asp-validation-for="Edit.SalesPartnerShareTypeId" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.SalePartnerAmountOrPercent"></label>
+                                      <input readonly="readonly" type="text" asp-for="Edit.SalePartnerAmountOrPercent" class="form-control currency" data-bind="value: e().SalePartnerAmountOrPercent">
+                                      <span asp-validation-for="Edit.SalePartnerAmountOrPercent" class="danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- /ko -->
+                          <div class="row">
+                              <div class="col-md-4 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.SalePartnerUserId"></label>
+                                      <select disabled asp-for="Edit.SalePartnerUserId" class="form-control" data-bind="value: e().SalePartnerUserId">
+                                          <option value="">بدون همکار فروش</option>
+                                          @foreach (var item in ViewBag.SalesPartnerUsers)
+                                          {
+                                              <option value="@item.Value">@item.Text</option>
+                                          }
+                                      </select>
+                                      <span asp-validation-for="Edit.SalePartnerUserId" class="danger"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-xs-12" id="Edit_PartnerSaleUserCourseBox">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.PartnerSaleUserCourseId"></label>
+                                      <select asp-for="Edit.PartnerSaleUserCourseId" disabled class="form-control" data-bind="value: e().PartnerSaleUserCourseId" data-placeholder="انتخاب کنید ...">
+                                          <option value="">لطفاً انتخاب کنید</option>
+                                          @foreach (var item in ViewBag.Courses)
+                                          {
+                                              <option value="@item.Value">@item.Text</option>
+                                          }
+                                      </select>
+                                      <span asp-validation-for="Edit.PartnerSaleUserCourseId" class="danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+                           
+                          <div id="edit_courseMettingBox">
+                              <div class="row">
+                                  <div class="col-md-12 col-xs-12">
+                                      <div class="form-group">
+                                          <label asp-for="Edit.CourseIds"></label>
+                                          <select multiple asp-for="Edit.CourseIds" disabled class="form-control" data-placeholder="انتخاب کنید ...">
+                                              @foreach (var item in ViewBag.Courses)
+                                              {
+                                                  <option value="@item.Value">@item.Text</option>
+                                              }
+                                          </select>
+                                          <span asp-validation-for="Edit.CourseIds" class="danger"></span>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <div class="col-md-12 col-xs-12">
+                                      <div class="form-group">
+                                          <label asp-for="Edit.CourseMeetingIds"></label>
+                                          <select multiple disabled asp-for="Edit.CourseMeetingIds" class="form-control" data-placeholder="انتخاب کنید ...">
+                                              @foreach (var item in ViewBag.CourseMeetings)
+                                              {
+                                                  <option value="@item.Value">@item.Text</option>
+                                              }
+                                          </select>
+                                          <span asp-validation-for="Edit.CourseMeetingIds" class="danger"></span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      
+                          <div class="row">
+                              <div class="col-md-12 col-xs-12">
+                                  <div class="form-group">
+                                      <label asp-for="Edit.Description"></label>
+                                      <textarea asp-for="Edit.Description" class="form-control" data-bind="value: e().Description"></textarea>
+                                      <span asp-validation-for="Edit.Description" class="danger"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                  <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+             </div>
+            </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

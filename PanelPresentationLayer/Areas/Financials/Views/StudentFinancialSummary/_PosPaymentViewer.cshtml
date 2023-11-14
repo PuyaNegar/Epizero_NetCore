@@ -1,0 +1,63 @@
+﻿
+<div id="posViewerModal" class="modal fade " tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="exampleModalLabel">نمایش اطلاعات پرداختی با کارت خوان</h5>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>مبلغ پرداختی(تومان)</label>
+                            <input readonly="readonly" type="text" placeholder="مبلغ پرداختی(تومان)" class="form-control" data-bind="value: posPaymentViewer().AmountPaid">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>کارت خوان</label>
+                            <input readonly="readonly" type="text" placeholder="بانک" class="form-control" data-bind="value: posPaymentViewer().BankPosDeviceName">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>دانش آموز</label>
+                            <input readonly="readonly" type="text" placeholder="دانش آموز" class="form-control" data-bind="value: posPaymentViewer().StudentUserName">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>شماره تراکنش</label>
+                            <input readonly="readonly" type="text" placeholder="شماره تراکنش" class="form-control" data-bind="value: posPaymentViewer().TrackingNo">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>تاریخ پرداخت</label>
+                            <input readonly="readonly" type="text" placeholder="شماره تراکنش" class="form-control" data-bind="value: posPaymentViewer().RegDateTime">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>دوره</label>
+                            <input readonly="readonly" type="text" placeholder="دوره" class="form-control" data-bind="value: posPaymentViewer().CourseName">
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>شرح سند</label>
+                            <textarea rows="3" readonly="readonly" type="text" class="form-control" data-bind="value: posPaymentViewer().Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

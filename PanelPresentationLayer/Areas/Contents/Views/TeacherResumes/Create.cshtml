@@ -1,0 +1,39 @@
+﻿@model PanelViewModels.ContentsViewModels.TeacherResumesViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body"> 
+                       <div class="form-group">
+                          <label asp-for="Title"></label>
+                          <input asp-for="Title" class="form-control" data-bind="value: c().Title">
+                          <span asp-validation-for="Title" class="danger"></span>
+                       </div>
+                       <div class="form-group">
+                          <label asp-for="Inx"></label>
+                          <input asp-for="Inx" class="form-control" data-bind="value: c().Inx">
+                          <span asp-validation-for="Inx" class="danger"></span>
+                       </div> 
+                       <div class="form-group">
+                          <label asp-for="IsActive"></label>
+                          <select asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                              <option value="1">فعال</option>
+                              <option value="0">غیر فعال</option>
+                          </select>
+                          <span asp-validation-for="IsActive" class="danger"></span>
+                       </div>
+                       
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

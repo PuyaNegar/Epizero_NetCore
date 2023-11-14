@@ -1,0 +1,105 @@
+﻿@using Common.Extentions;
+@{
+    ViewData["Title"] = "اخبار";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var Blogs = (List<WebViewModels.ContentsViewModels.BlogsViewModel>)ViewBag.blogs;
+}
+ 
+<section class="my-account-area ptb-100 min-height-500">
+    <div class="container">
+        <div class="row" style="margin-left:0;margin-right:0">
+            <div class="title-section col-12 d-flex align-items-center justify-content-start">
+
+                <div class="@(ViewBag.GroupTitle != null ? "" : "title-name-y") title-name d-flex align-items-center">
+
+                    <i class="fa fa-newspaper-o"></i>
+                    <h4 class="text-name mb-0">بلاگ</h4>
+
+                </div>
+                @if (ViewBag.GroupTitle != null)
+                {
+                    <p class="desc-title"> دسته بندی  @ViewBag.GroupTitle </p>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+               
+                @if (Blogs.Count == 0)
+                {
+
+                    <div class="box-new-empty">
+                        <img src="~/assets/img/box-empty.svg" />
+                        <p class="center-text-align font-size-26" style="margin-top: 15px;">هیچ خبری یافت نشد!</p>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var item in Blogs)
+                        {
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pull-right">
+                                <div class="single-blog-post mb-30">
+                                    <div class="post-image">
+                                        <a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)" class="d-block">
+                                            <img class="img-blog-d" src="@item.PicPath" alt="@item.BlogGroupName">
+                                        </a>
+
+                                        <div class="tag">
+                                            <a href="/Contents/Blogs?BlogGroupId=@(item.BlogGroupId)">@item.BlogGroupName</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="post-content">
+                                        <ul class="post-meta">
+                                            <li><a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)">@item.RegDateTime</a></li>
+                                        </ul>
+                                        <h3><a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)" class="d-inline-block">@item.Title</a></h3>
+                                        <a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)" class="read-more-btn">ادامه مطلب<i class="fa fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                }
+            </div>
+            <div class="col-lg-4 col-md-12 sticky">
+                <aside class="widget-area">
+
+                    <section class="widget widget_raque_posts_thumb">
+                        <h3 class="widget-title">آخرین اخبار</h3>
+                        @foreach (var item in ViewBag.LastBlogs)
+                        {
+                            <article class="item">
+                                <a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)" class="thumb">
+                                    <span class="fullimage cover" style="background-image: url(@item.PicPath)" role="img"></span>
+                                </a>
+                                <div class="info">
+                                    <time datetime="2019-06-30">@item.RegDateTime</time>
+                                    <h4 class="title usmall"><a href="/Contents/SingleBlog?Id=@(item.Id)&Title=@UrlHealpear.UrlFriendly(item.Title)">@item.Title</a></h4>
+                                </div>
+
+                                <div class="clear"></div>
+                            </article>
+                        }
+                    </section>
+
+                    <section class="widget widget_categories">
+                        <h3 class="widget-title">دسته بندی ها</h3>
+
+                        <ul>
+                            @foreach (var item in ViewBag.BlogGroups)
+                            {
+                                <li><a href="/Contents/Blogs?BlogGroupId=@(item.Id)">@item.Title</a></li>
+                            }
+                        </ul>
+                    </section>
+
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+

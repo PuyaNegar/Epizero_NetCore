@@ -1,0 +1,52 @@
+﻿@{
+    var courseBooklet = (WebViewModels.TrainingsViewModels.CourseBookletsViewModel)ViewBag.CourseBooklet;
+    ViewData["Title"] = "جزوات دوره";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+ 
+}
+
+<script type="text/javascript">
+        $(function () {
+             
+        });
+</script>
+
+<style type="text/css">
+    .modal-title {
+        display:inline-block;
+    }
+    .close{
+        float:left;
+    }
+    .nav-tabs > li > a {
+        border: unset;
+    }
+
+    .box-tab .main-tab .ul-nav .nav-s .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+
+    .nav-tabs > li.active > a {
+        border-bottom: unset;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> مشاهده آنلاین جزوه </span>
+        </div>
+    </div>
+</div>
+<section class="box-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tag-video">
+                    @Html.Raw(courseBooklet.EmbedLink)
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>

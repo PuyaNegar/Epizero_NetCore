@@ -1,0 +1,90 @@
+﻿@using Common.Functions
+@model WebPresentationLayer.ComponentModel.FileUploader
+
+    <script type="text/javascript">
+    function @(Model.Name)ResetFile() {
+        document.getElementById('@(Model.Name)File').src = '@Model.DefualtNullFileImagePath';
+    }
+    //******************************************************************************************************
+    function @(Model.Name)SetFile() {
+        if (@(Model.KnockoutExpressionString) == '' || @(Model.KnockoutExpressionString) == null) {
+            document.getElementById('@(Model.Name)File').src = '@Model.DefualtNullFileImagePath';
+        } else {
+            document.getElementById('@(Model.Name)File').src = '@Model.DefualtSelectedFileImagePath'  ;
+        }
+    }
+    //******************************************************************************************************
+    $(function () {
+        //******************************************************************************************************
+        $('#@(Model.Name)SelectorBtn').click(function () {
+            $('#@(Model.Name)Selector').click();
+        });
+        //******************************************************************************************************
+        $('#@(Model.Name)Selector').change(function () {
+            if ($(this).val() != '' && $(this).val() != null) {
+                getFileSize();
+            }
+        });
+        //******************************************************************************************************
+            function getFileSize() {
+                var size = document.getElementById('@(Model.Name)Selector').files[0].size;
+                if (size > @Model.MaxFileSize*1024) {
+                    toastr.remove();
+                    var errorMessage = 'حجم فايل نبایستی بيش از # کیلوبایت باشد';
+                    errorMessage = errorMessage.replace('#', '@Model.MaxFileSize');
+                    toastr.error(errorMessage);
+                } else {
+                    document.getElementById('@(Model.Name)FileImagePath').src = '@Model.DefualtSelectedFileImagePath';
+                    viewFile();
+                }
+            }
+        //******************************************************************************************************
+            function viewFile() {
+                var file = new FileReader();
+                file.onload = function () {
+                     var file_extensions =  document.getElementById('@(Model.Name)Selector').files[0].name.split('.').pop();
+                    var str = file.result.split(',');
+                    var data = 'data:file/#;base64,'.replace(/#/g, file_extensions) + str[1];
+                    @Model.KnockoutExpressionString = data;
+                    console.log(data);
+                }
+                file.readAsDataURL(document.getElementById('@(Model.Name)Selector').files[0]);
+                document.getElementById('@(Model.Name)FileImagePath').src =   '@Model.DefualtSelectedFileImagePath';
+            }
+         //******************************************************************************************************
+            @if (Model.HasDeleteBtn)
+            {
+                <text>
+                $('#@(Model.Name)RemoveBtn').click(function () {
+                   @Model.KnockoutExpressionString = 'NULL';
+                   $('#@(Model.Name)Selector').val('');
+                    document.getElementById('@(Model.Name)FileImagePath').src = '@Model.DefualtNullFileImagePath';
+                });
+               </text>
+
+            }
+         //******************************************************************************************************
+          $('#@(Model.Name)File').click(function () {
+                window.open($(this).attr('src'), '_blank');
+           });
+         //******************************************************************************************************
+    });
+    </script>
+<center>
+    <div style="margin-bottom:3px;color:#012e80;">@Model.Title</div>
+    <img id="@(Model.Name)FileImagePath" alt="" data-src="" class="img-rounded" style="max-width: 200px;  " src="@Model.DefualtNullFileImagePath" data-holder-rendered="true">
+    <br />
+    <button type="button" id="@(Model.Name)SelectorBtn" class=" btn btn-info btn-sm" style="margin-top:10px;">
+        <span class="glyphicon glyphicon-open" aria-hidden="true"></span>   @(Model.ButtonFarsiName)
+    </button>
+    @if (Model.HasDeleteBtn)
+    {
+        <button type="button" id="@(Model.Name)RemoveBtn" class=" btn btn-danger btn-sm" style="margin-top:10px;">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>  <span> حذف</span>
+        </button>
+    }
+    <div style="margin-top:10px;">
+        <p style="white-space:pre-line; line-height:22px; text-align:center; color:darkgrey">@Model.Description</p>
+    </div>
+    <input id="@(Model.Name)Selector" style="display:none;" type="file">
+</center> 

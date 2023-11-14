@@ -1,0 +1,129 @@
+﻿@model IEnumerable<PanelViewModels.OnlineExamsViewModels.StudentOnlineExamResultsViewModel>
+@using PanelViewModels.OnlineExamViewModels;
+@{
+    ViewData["Title"] = "نتایج آزمون";
+    ViewData["PageFarsiName"] = "نتایج آزمون";
+    string Area = "OnlineExams";
+    string Controller = "StudentOnlineExamResults";
+   
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        $('#create,#delete').remove();
+    });
+</script>
+<style type="text/css">
+    .name-stu {
+        font-weight: bold !important;
+        color: #333;
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #444;
+    }
+
+    .title-all {
+        font-size: 16px;
+    }
+
+    .text {
+        font-size: 13px;
+        font-weight: 400;
+        color: #555;
+    }
+
+    .widget-body {
+        min-height: unset !important;
+    }
+
+    .text-all {
+        font-size: 15px;
+    }
+
+    .rotbe-all {
+        margin-top: 10px;
+        float: left;
+        padding-left: 30px;
+        font-size: 18px;
+    }
+
+    .m-t-20 {
+        padding-right: 20px;
+        margin-top: 20px;
+    }
+
+    .row-title {
+        margin: 0 23px !important;
+    }
+
+    .exam-rotbe :last-child {
+        border-bottom: none;
+    }
+
+    .k-hr {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="overflow: hidden;">
+                <div id="mainArea">
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs nav-justified" id="myTab">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#Present" aria-expanded="true">
+                                            کارنامه حاضرین
+                                        </a>
+                                    </li>
+
+                                    <li class="tab-red">
+                                        <a data-toggle="tab" href="#Absent" aria-expanded="false">
+                                            کارنامه غایبین
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div id="Present" class="tab-pane active">
+                                        @{ await Html.RenderPartialAsync("_Present.cshtml"); }
+                                    </div>
+
+                                    <div id="Absent" class="tab-pane">
+                                        @{ await Html.RenderPartialAsync("_Absent.cshtml"); }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="horizontal-space"></div>
+
+                        </div>
+                    </div> 
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

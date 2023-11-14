@@ -1,0 +1,151 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.OnlineExamsViewModels.OnlineExamsViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Name"></label>
+                                <input asp-for="Edit.Name" class="form-control" data-bind="value: e().Name">
+                                <span asp-validation-for="Edit.Name" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.TeacherFullName"></label>
+                                <input readonly="readonly" asp-for="Edit.TeacherFullName" class="form-control" data-bind="value: e().TeacherFullName">
+                                <span asp-validation-for="Edit.TeacherFullName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.StartDate"></label>
+                                <input data-mask="9999/99/99" asp-for="Edit.StartDate" class="form-control" data-bind="value: e().StartDate">
+                                <span asp-validation-for="Edit.StartDate" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.StartTime"></label>
+                                <input asp-for="Edit.StartTime" class="form-control clockpicker" readonly="readonly" placeholder="جهت انتخاب ساعت کليک کنید" data-autoclose="true" data-bind="value: e().StartTime">
+                                <span asp-validation-for="Edit.StartTime" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.Duration"></label>
+                                <input type="text" asp-for="Edit.Duration" class="form-control" data-bind="value: e().Duration">
+                                <span asp-validation-for="Edit.Duration" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.MaxGrade"></label>
+                                <input type="text" asp-for="Edit.MaxGrade" class="form-control" data-bind="value: e().MaxGrade">
+                                <span asp-validation-for="Edit.MaxGrade" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.AllowedTimeToEnter"></label>
+                                <input type="text" asp-for="Edit.AllowedTimeToEnter" class="form-control" data-bind="value: e().AllowedTimeToEnter">
+                                <span asp-validation-for="Edit.AllowedTimeToEnter" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.QuestionTypeId"></label>
+                                <select disabled asp-for="Edit.QuestionTypeId" class="form-control" data-bind="value: e().QuestionTypeId">
+                                    <option value="">لطفاٌ نوع سوالات  را انتخاب کنید ...</option>
+                                    @*<option value="1">تشریحی</option>*@
+                                    <option value="2">تستی</option>
+                                    @*<option value="3">تستی-تشریحی</option>*@
+                                </select>
+                                <span asp-validation-for="Edit.QuestionTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsRandomQuestions"></label>
+                                <select asp-for="Edit.IsRandomQuestions" class="form-control" data-bind="value: e().IsRandomQuestions">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsRandomQuestions" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.HasNegativePoint"></label>
+                                <select asp-for="Edit.HasNegativePoint" class="form-control" data-bind="value: e().HasNegativePoint">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.HasNegativePoint" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group random-div">
+                                <label style="font-size:12px;" asp-for="Edit.IsRandomOption"></label>
+                                <select disabled asp-for="Edit.IsRandomOption" class="form-control" data-bind="value: e().IsRandomOption">
+                                    @*<option value="1">بلی</option>*@
+                                    <option selected value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsRandomOption" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsAbleToEnterExpiredExam"></label>
+                                <select asp-for="Edit.IsAbleToEnterExpiredExam" class="form-control" data-bind="value: e().IsAbleToEnterExpiredExam">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsAbleToEnterExpiredExam" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsVisibleOnSite"></label>
+                                <select asp-for="Edit.IsVisibleOnSite" class="form-control" data-bind="value: e().IsVisibleOnSite">
+                                    <option value="1">بلی</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsVisibleOnSite" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.AnalysisVideoLink"></label>
+                                <textarea rows="3" asp-for="Edit.AnalysisVideoLink" class="form-control" data-bind="value: e().AnalysisVideoLink"></textarea>
+                                <span asp-validation-for="Edit.AnalysisVideoLink" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

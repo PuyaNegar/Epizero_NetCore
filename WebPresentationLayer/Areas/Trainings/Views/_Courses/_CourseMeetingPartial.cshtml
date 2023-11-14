@@ -1,0 +1,316 @@
+﻿
+@using WebViewModels.TrainingsViewModels
+@using Common.Enums
+@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+}
+<div style="clear:both;"></div>
+@if (Courses.CourseMeetings.Any())
+{
+    @if (Courses.CourseMeetings.Where(c => c.IsAbleToViewOrBuy).Count() > 0)
+    {
+        <div class="col-md-12 hidden-xs title-tbl-div">
+            <div class="float-r width-d-5 text-alight-c min-height-1">
+            </div>
+
+            <div class="float-r width-d-10 text-align-c f-size-13 bold">
+                عنوان
+            </div>
+
+
+            <div class="float-r width-d-20 text-align-c min-height-1 bold">
+                مدرس
+            </div>
+
+            @if (Courses.CourseCategoryType == Common.Enums.CourseCategoryType.Training)
+            {
+                <div class="float-r width-d-5  text-align-c">
+                    جزوه
+                </div>
+
+                <div class="float-r width-d-5  text-align-c">
+                    تکلیف
+                </div>
+            }
+
+
+            <div class="float-r width-d-15  text-align-c">
+                قیمت
+            </div>
+            @if (Courses.CourseTypeId != (int)CourseType.Offline)
+            {
+                <div class="float-r width-d-15  text-align-c">
+                    تاریخ برگزاری
+                </div>
+            }
+            <div class="float-l width-d-5  text-align-l">
+            </div>
+        </div>
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        @foreach (var courseMeeting in Courses.CourseMeetings.Where(c => c.IsAbleToViewOrBuy == (i == 0)))
+        {
+            <div class="col-md-12 col-sm-12 col-xs-12 pageall content0">
+                <div class="col-md-12 col-sm-12 col-xs-12 content-tbl-f">
+                    <div class="hidden-xs float-r width-d-5 text-align-c">
+                        <img src="/assets/img/elemans/tik 1@2x.png" class="width-px-20" alt="جلسه مربوط به دوره  @courseMeeting.Name">
+                    </div>
+                    <div class="hidden-xs float-r width-d-10 text-align-c bold f-size-12">
+                        @courseMeeting.Name
+                    </div>
+
+                    <div class="hidden-sm hidden-md hidden-lg col-xs-12  float-r text-align-r bold f-size-12">
+                        @courseMeeting.Name
+                    </div>
+                    <div class="hidden-xs float-r width-d-20 text-align-c f-size-12 min-height-1">
+                        @if (Courses.IsMultiTeacher)
+                        {
+                            @if (courseMeeting.CourseDedicatedTeacher == null)
+                            {
+                                <span class="showTeachersBtn">چند استادی</span>
+                            }
+                            else
+                            {
+                                <a href="/Contents/TeacherIntroductions?teacherId=@courseMeeting.CourseDedicatedTeacher.TeacherUserId">@courseMeeting.CourseDedicatedTeacher.TeacherFullName</a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"><span>@courseMeeting.TeacherFullName</span></a>
+                        }
+                    </div>
+                    <div class="hidden-sm hidden-md hidden-lg col-xs-12 float-r text-align-r bold f-size-12">
+                        @if (Courses.IsMultiTeacher)
+                        {
+                            @if (courseMeeting.CourseDedicatedTeacher == null)
+                            {
+                                <span class="showTeachersBtn">چند استادی</span>
+                            }
+                            else
+                            {
+                                <a href="/Contents/TeacherIntroductions?teacherId=@courseMeeting.CourseDedicatedTeacher.TeacherUserId">@courseMeeting.CourseDedicatedTeacher.TeacherFullName</a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="/Contents/TeacherIntroductions?teacherId=@Courses.TeacherUserId"><span>@courseMeeting.TeacherFullName</span></a>
+                        }
+                    </div>
+
+                    <div class="hidden-xs float-r width-d-5 text-align-c min-height-1">
+                        @if (courseMeeting.HasBooklet)
+                        {
+                            <img src="~/assets/img/elemans/kitab@2x.png" class="width-px-25" alt="تکلیف  @courseMeeting.Name" />
+                        }
+                        else
+                        {
+                            <img src="/assets/img/elemans/kitab-1@2x.png" class="width-px-25" alt="تکلیف  @courseMeeting.Name">
+                        }
+
+                    </div>
+                    <div class="hidden-md hidden-lg hidden-sm col-xs-3 float-r text-align-r min-height-1">
+                        @if (courseMeeting.HasBooklet)
+                        {
+                            <img src="~/assets/img/elemans/kitab@2x.png" class="width-px-25" alt="تکلیف  @courseMeeting.Name" />
+                        }
+                        else
+                        {
+                            <img src="/assets/img/elemans/kitab-1@2x.png" class="width-px-25" alt="تکلیف  @courseMeeting.Name">
+                        }
+                    </div>
+                    <div class="hidden-xs float-r width-d-5 text-align-c">
+                        @if (courseMeeting.HasHomework)
+                        {
+
+                            <img src="~/assets/img/elemans/taklif-2@2x.png" class="width-px-25" alt="کار در خانه  @courseMeeting.Name">
+                        }
+                        else
+                        {
+                            <img src="/assets/img/elemans/taklif-3@2x.png" class="width-px-25" alt="کار در خانه  @courseMeeting.Name">
+                        }
+
+                    </div>
+                    <div class="hidden-md hidden-lg hidden-sm  col-xs-3 float-r text-align-c min-height-1">
+                        @if (courseMeeting.HasHomework)
+                        {
+                            <img src="~/assets/img/elemans/taklif-2@2x.png" class="width-px-25" alt="کار در خانه  @courseMeeting.Name">
+                        }
+                        else
+                        {
+                            <img src="/assets/img/elemans/taklif-3@2x.png" class="width-px-25" alt="کار در خانه  @courseMeeting.Name">
+                        }
+
+                    </div>
+
+                    <div class="dis-tbl-row hidden-xs width-d-15 float-r text-align-c min-height-1">
+                        @if (!courseMeeting.IsPurchasable)
+                        {
+                            <div class="center">
+                                <span>
+                                    ------
+                                </span>
+                            </div>
+                        }
+                        else
+                        {
+                            @if (courseMeeting.DiscountPrice < courseMeeting.Price)
+                            {
+                                <div class="center price" style="position:relative">
+                                    <div class="discount-price">
+                                        <span>
+                                            @(string.Format("{0:N0}", courseMeeting.Price))  تومان
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>
+                                            @(string.Format("{0:N0}", courseMeeting.DiscountPrice))  تومان
+                                        </span>
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="center">
+                                    <span>
+                                        @( courseMeeting.Price == 0 ? "رایگان" : string.Format("{0:N0} تومان", courseMeeting.Price))
+                                    </span>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="dis-tbl-row hidden-md hidden-lg hidden-sm col-xs-12 float-r text-align-c f-size-14">
+                        @if (!courseMeeting.IsPurchasable)
+                        {
+                            <div class="center">
+                                <span>
+                                    ------
+                                </span>
+                            </div>
+                        }
+                        else
+                        {
+                            @if (courseMeeting.DiscountPrice < courseMeeting.Price)
+                            {
+                                <div class="center price" style="position :relative">
+                                    <div class="discount-price">
+                                        <span>
+                                            @(string.Format("{0:N0}", courseMeeting.Price)) تومان
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>
+                                            @(string.Format("{0:N0}", courseMeeting.DiscountPrice)) تومان
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="center">
+                                    <span>
+                                        @( courseMeeting.Price == 0 ? "رایگان" : string.Format("{0:N0} تومان", courseMeeting.Price))
+                                    </span>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    @if (Courses.CourseTypeId != (int)CourseType.Offline)
+                    {
+                        <div class="hidden-xs width-d-15 float-r text-align-c min-height-1">
+                            <span>
+                                @courseMeeting.StartDateTime
+                            </span>
+                        </div>
+                    }
+                    @if (Courses.CourseTypeId != (int)CourseType.Offline)
+                    {
+                        <div class="hidden-md hidden-lg hidden-sm col-xs-12 float-r text-align-r f-size-14">
+                            <span>
+                                @courseMeeting.StartDateTime
+                            </span>
+                        </div>
+                    }
+
+                    <div class="hidden-xs btn-dore-lg">
+                        @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && !Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any(c => c == courseMeeting.Id))
+                        {
+                            @if (courseMeeting.IsPurchasable)
+                            {
+                                <a class="cart-btn" data-academyProductTypeId="2" data-academyProductId="@courseMeeting.Id">
+                                    <div class="cover">
+                                        <img src="/assets/img/elemans/Group 1@2x.png" alt="خرید جلسه   @courseMeeting.Name" title="خرید جلسه   @courseMeeting.Name">
+                                      خرید <span class="none-xs"> جلسه </span>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="/Trainings/CourseMeetingSections?CourseMeetingId=@courseMeeting.Id">
+                                <div class="cover center btn-back-color-blue">
+                                    <i class="fa fa-eye download"></i>
+                                    <span class="date">مشاهده جلسه</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+
+                    <div class="hidden-md hidden-lg hidden-sm col-xs-9 btn-dore-xs">
+                        @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && !Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any(c => c == courseMeeting.Id))
+                        {
+                            @if (courseMeeting.IsPurchasable)
+                            {
+                                <a class="cart-btn" data-academyProductTypeId="2" data-academyProductId="@courseMeeting.Id">
+                                    <div class="cover">
+                                        <img src="/assets/img/elemans/Group 1@2x.png" alt="خرید جلسه   @courseMeeting.Name" title="خرید جلسه   @courseMeeting.Name">
+                                        خرید <span class="none-xs"> جلسه </span>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="/Trainings/CourseMeetingSections?CourseMeetingId=@courseMeeting.Id">
+                                <div class="cover center btn-back-color-blue">
+                                    <i class="fa fa-eye download"></i>
+                                    <span class="date">مشاهده جلسه</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+
+                    @if (!Courses.StudentAccessToCourse.IsAccessToEntireCourse && !Courses.StudentAccessToCourse.AvalibleCourseMeetingIds.Any(c => c == courseMeeting.Id))
+                    {
+                        @if (courseMeeting.IsPurchasable)
+                        {
+                            <div class="hidden-xs float-l width-d-5 text-align-c">
+                                <i class="fa fa-lock" aria-hidden="true" style="font-size:20px; margin-left:10px; color:#1fb8e4; margin-top: 12px;"></i>
+                            </div>
+                            <div class="hidden-md hidden-lg hidden-sm col-xs-3 float-l text-align-c">
+                                <i class="fa fa-lock" aria-hidden="true" style="font-size:20px; margin-left:10px; color:#1fb8e4; margin-top: 12px;"></i>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+        @if (Courses.CourseMeetings.Where(c => !c.IsAbleToViewOrBuy).Count() > 0 && i == 0)
+        {
+            <div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="split-c">
+                        <hr class="hr">
+                        <span class="pad-line-s split-liner" style=" background-color: #ee3e7c;">
+                            جلسات برگزار نشده
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+<div style="clear:both;"></div>

@@ -1,0 +1,223 @@
+﻿@using PanelViewModels.OnlineExamViewModels;
+@using Common.Enums;
+@{
+    ViewData["Title"] = "جواب دانشجویان به آزمون";
+    ViewData["PageFarsiName"] = "جواب دانشجویان به آزمون";
+    string Area = "OnlineExams";
+    string Controller = "OnlineExamStudentManualAnswers";
+    var i = 0;
+    var Questions = (List<OnlineExamQuestionGroupsViewModel>)ViewBag.Questions;
+    var onlineExamStudentId = ViewBag.onlineExamStudentId;
+}
+<style type="text/css">
+
+    .radio {
+        display: inline-block;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .block {
+        display: block
+    }
+
+    .m-l-15 {
+        margin-left: 15px;
+    }
+
+    .number-count {
+        border: 1px solid #4e9d3e;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 27px;
+        height: 27px;
+        font-size: 15px;
+        font-weight: bold;
+        color: #666 !important;
+    }
+
+    .before-darkorange {
+        width: auto;
+    }
+
+    .title-lesson {
+        margin-bottom: 20px;
+    }
+
+    hr:last-child {
+        display: none;
+    }
+
+    .radio label span p {
+        display: inline-block;
+    }
+</style>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.questionManualAnswers = ko.observable({});
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+
+        $('body').on('click', '.reset-option', function () { 
+              $('input[name="!"]:checked'.replace(/!/g, $(this).attr('name'))).prop('checked', false); 
+        });
+
+
+        $('body').on('click', '#submitResult', function () {
+            var AnswersStedent = new Array();
+            for (i = 1; i < $('.control-group').length + 1; i++) {
+                var currentGroup = "radioOption-" + i;
+                var questionId = $('input:radio[name="' + currentGroup + '"]').attr('data-QuestionId')
+                AnswersStedent.push({ QuestionId: questionId, SelectedOption: $('input:radio[name="' + currentGroup + '"]:checked').val() });
+            }
+            //****************************************************
+            var data = {
+                OnlineExamStudentManualAnswerSelectedOptions: AnswersStedent,
+                OnlineExamStudentId: @ViewBag.onlineExamStudentId
+                };
+            DataTransfer('/OnlineExams/OnlineExamStudentManualAnswers/Add/', JSON.stringify(data), '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.success(f.Message);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+
+
+        });
+    });
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;overflow:hidden">
+                <div id="mainArea">
+                    <div class="alert alert-info" role="alert">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="margin-bottom: 0; color: #a86363; font-size: 14px !important; padding: 7px;" class="form-group">
+                                    <span class="glyphicon glyphicon-list alert-info-icon"></span> سوالات مربوط به آزمون  <span class="alert-info-text">  </span> دانش آموز <span class="alert-info-text">@ViewBag.StudentFullName</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <div class="widget-body" style="min-height: unset;">
+                                @if (Questions.Count() > 0)
+                                {
+                                    @foreach (var question in Questions)
+                                    {
+                                        <div class="m-n-q">
+                                            <div class="row">
+                                                <div class="title-lesson col-md-12 col-xs-12 col-sm-12"> <h5 class="row-title before-darkorange">سوالات درس @question.LessonName</h5></div>
+                                            </div>
+                                            <div>
+                                                <div class="row radio-class">
+                                                    @foreach (var option in question.OnlineExamQuestions)
+                                                    {
+                                                        i++;
+                                                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                                                            <div class="flex">
+                                                                <div><span class="block m-l-15 number-count">@i</span></div>
+                                                                <div class="control-group">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input data-QuestionId="@option.Id" name="radioOption-@i" value="1" type="radio" class="colored-success">
+                                                                            <span class="text">گزینه 1</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input data-QuestionId="@option.Id" name="radioOption-@i" value="2" type="radio" class="colored-success">
+                                                                            <span class="text">گزینه 2</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input data-QuestionId="@option.Id" name="radioOption-@i" value="3" type="radio" class="colored-success">
+                                                                            <span class="text">گزینه 3</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input data-QuestionId="@option.Id" name="radioOption-@i" value="4" type="radio" class="colored-success">
+                                                                            <span class="text">گزینه 4</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        @* <label>
+                                                            <input data-QuestionId="@option.Id" name="radioOption-@i"  value="5" type="radio" class="colored-success">
+                                                            <span class="text">گزینه 5</span>
+                                                            </label>*@
+                                                                        <button data-QuestionId="@option.Id" name="radioOption-@i" type="button" class="btn btn-info btn-xs reset-option">بدون پاسخ</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    }
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-xs-12 center">
+                                            <botton id="submitResult" style="margin-top: 50px; width: 100px;" class="btn btn-azure shiny">ثبت</botton>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="empty-div">
+                                                <p>هیچ سوالی برای این آزمون ثبت نشده است.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--Widget Body-->
+    </div><!--Widget-->
+</div>
+
+
+
+

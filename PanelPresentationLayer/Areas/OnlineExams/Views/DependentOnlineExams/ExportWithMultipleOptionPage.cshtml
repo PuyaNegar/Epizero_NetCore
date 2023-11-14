@@ -1,0 +1,132 @@
+﻿@using PanelViewModels.OnlineExamViewModels
+@{
+    Layout = null;
+    ViewData["Title"] = "ExportPage";
+    var Questions = (List<OnlineExamQuestionGroupsViewModel>)ViewBag.Questions;
+    var i = 0;
+}
+<style type="text/css">
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: baseline;
+    }
+    body {
+        direction:rtl;
+         /*word-break:break-word !important; /**/
+        font-family: 'Times New Roman';
+    }
+    .div-inline {
+        display:inline-block;
+        margin-right:30px;
+    }
+    fieldset .question {
+        display: block;
+        word-break: break-all;
+    }
+
+        fieldset .question pd-r{
+            display: inline-block;
+        }
+
+            fieldset .question p span {
+                font-size: 15px;
+            }
+
+    fieldset > .question:last-child > hr {
+        display: none;
+    }
+    .context-main p,
+    .context-main span,
+    .context-main strong,
+    .context-main h1,
+    .context-main h2,
+    .context-main h3,
+    .context-main h4
+    .context-main h5,
+    .context-main h6,
+    .context-main label {
+        font-weight: 400 !important;
+        font-family: 'Times New Roman';
+    }
+    .div-inline p{
+        display: inline-block;
+    }
+    @@media print {
+        body {
+            font-family: 'Times New Roman';
+            margin: 0;
+            box-shadow: 0;
+        }
+        .flex {
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+        }
+        .div-inline {
+            display: inline-block;
+            margin-right: 30px;
+        }
+
+        fieldset .question {
+            page-break-inside: avoid;
+            word-break: break-all;
+        }
+
+        fieldset > .question:last-child > hr {
+            display: none;
+        }
+
+
+
+            fieldset .question p span {
+                font-size: 15px;
+            }
+        .context-main p,
+        .context-main span,
+        .context-main strong,
+        .context-main h1,
+        .context-main h2,
+        .context-main h3,
+        .context-main h4
+        .context-main h5,
+        .context-main h6,
+        .context-main label
+        {
+            font-weight: 400 !important;
+              font-family: 'Times New Roman';
+        }
+        .div-inline p {
+            display:inline-block;
+        }
+    }
+</style>
+
+@foreach (var Question in Questions)
+{
+    <fieldset>
+        <legend>@Html.Raw(Question.LessonName)</legend>
+        @foreach (var OnlineExamQuestion in Question.OnlineExamQuestions)
+        {
+            i++;
+            <div class="question">
+                <div class="context-main">
+                    <div class="flex"><span>@i) </span>  <span> @Html.Raw(OnlineExamQuestion.QuestionContext)</span> </div>  
+                </div>
+                <div contenteditable="true" class="div-inline"><span class="tag-title">A) </span><p contenteditable="true">@Html.Raw(OnlineExamQuestion.MultipleOptions.Option1)</p></div>
+                <div contenteditable="true" class="div-inline"><span class="tag-title">B) </span><p contenteditable="true"> @Html.Raw(OnlineExamQuestion.MultipleOptions.Option2)</p></div> 
+                <div contenteditable="true" class="div-inline"><span class="tag-title">C) </span><p contenteditable="true">  @Html.Raw(OnlineExamQuestion.MultipleOptions.Option3)</p></div>
+                <div contenteditable="true" class="div-inline"><span class="tag-title">D) </span> <p contenteditable="true"> @Html.Raw(OnlineExamQuestion.MultipleOptions.Option4)</p></div> 
+                <hr />
+            </div>
+        }
+    </fieldset>
+
+}
+
+
+
+
+
+
+

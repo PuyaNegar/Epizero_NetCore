@@ -1,0 +1,3 @@
+﻿User-agent:*
+Disallow:/test
+Sitemap:url sitmap full

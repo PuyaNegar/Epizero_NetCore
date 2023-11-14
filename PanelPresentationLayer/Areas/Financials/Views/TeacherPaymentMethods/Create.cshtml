@@ -1,0 +1,66 @@
+﻿@model PanelViewModels.FinancialsViewModels.TeacherPaymentMethodsViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label asp-for="CourseName"></label>
+                        <input readonly="readonly" value="@ViewBag.CourseName" class="form-control">
+                        <span asp-validation-for="CourseName" class="danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TeacherId"></label>
+                        <select asp-for="TeacherId" class="form-control" data-bind="value: c().TeacherId">
+                            <option value="">لطفا انتخاب کنید ...</option>
+                            @foreach (var item in ViewBag.Teachers)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TeacherId" class="danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="TeacherPaymentMethodTypeId"></label>
+                        <select asp-for="TeacherPaymentMethodTypeId" class="form-control" data-bind="value: c().TeacherPaymentMethodTypeId">
+                            <option value="1" selected="selected">جلسه ایی</option>
+                            <option value="2">به ازای هر فروش با درصد ثابت</option>
+                            <option value="3">به ازای هر فروش با درصد متغییر</option>
+                        </select>
+                        <span asp-validation-for="TeacherPaymentMethodTypeId" class="danger"></span>
+                    </div>
+                    <div class="form-group percentOrFee">
+                        <label class="title-PercentOrFee">مبلغ به ازای هر جلسه</label>
+                        <input asp-for="PercentOrFee" type="text" data-bind="value: c().PercentOrFee" class="form-control currency">
+                        <span asp-validation-for="PercentOrFee" class="danger"></span>
+                    </div>
+                    <div class="number" style="display:none">
+                        <div class="form-group">
+                            <label asp-for="Number1"></label>
+                            <input asp-for="Number1"  data-bind="value: c().Number1" class="form-control">
+                            <span asp-validation-for="Number1" class="danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Number2"></label>
+                            <input asp-for="Number2"  data-bind="value: c().Number2" class="form-control">
+                            <span asp-validation-for="Number2" class="danger"></span>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

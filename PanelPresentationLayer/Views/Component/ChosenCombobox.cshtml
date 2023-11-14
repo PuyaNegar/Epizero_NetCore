@@ -1,0 +1,483 @@
+﻿@model PanelPresentationLayer.ComponentModel.ComboBoxOptions
+
+@{
+    var ComboName = Model.ComboBoxName;
+    Layout = null;
+}
+<!-------------------------------------------------------------------------*******************************************************---------------------------------->
+<script type="text/javascript">
+     @*var isMultiComboBox =   '@Model.IsMultiSelect.ToString()'*@
+    function  @(Model.ComboBoxName)InitialSingleComponent(text, value) {
+        $(function () {
+            if (value + text != null && value + text != '') {
+                var str = '<li class="ComboBoxContainer-li" data-val="!"><span>#</span> <span class="glyphicon glyphicon glyphicon-remove closeReciver"></span></li> ';
+                str = str.replace('!', value);
+                str = str.replace('#', text);
+                $('#ComboBox' + '@Model.ComboBoxName' + ' > .ComboBoxContainer-ul').html(str);
+            }
+        });
+    }
+
+    function  @(Model.ComboBoxName)InitialMultiComponent(itemList) {
+        $(function () {
+            var html = '';
+            var ValueIds = '';
+            for (i = 0; i < itemList.length; i++) {
+                var str = '<li class="ComboBoxContainer-li" data-val="!"><span>#</span> <span class="glyphicon glyphicon glyphicon-remove closeReciver"></span></li> ';
+                str = str.replace('!', itemList[i].Value);
+                str = str.replace('#', itemList[i].Text);
+                html += str;
+                if (i == 0) {
+                    ValueIds += itemList[i].Value;
+                } else {
+
+                    ValueIds += ',' + itemList[i].Value;
+                }
+            }
+            $('#@Model.TargetValueInputId').val(ValueIds).change();
+            $('#ComboBox' + '@Model.ComboBoxName' + ' > .ComboBoxContainer-ul').html(html);
+
+        });
+    }
+
+        function @(Model.ComboBoxName)ResetComponent() {
+            $(function () {
+                $('#ComboBox' + '@Model.ComboBoxName' + ' > .ComboBoxContainer-ul').html('');
+                    $('#@Model.TargetValueInputId').val('').keyup().change();
+            });
+
+    }
+</script>
+<script type="text/javascript">
+
+    $(function () {
+
+
+
+        var @(ComboName)ReciverTable = null;
+
+        function pagingDisableCheck() {
+            $('#@(ComboName)Previous').prop('disabled', $('#ComboBox@(ComboName)Table_previous').hasClass('disabled'));
+            $('#@(ComboName)Next').prop('disabled', $('#ComboBox@(ComboName)Table_next').hasClass('disabled'));
+        }
+
+        $('#ComboBox@(ComboName)Container .searchText').keyup(function () {
+            $('#ComboBox@(ComboName)Table_filter input[type=search]').val($('#ComboBox@(ComboName)Container .searchText').val()).change().keyup();
+        });
+        $('#@(ComboName)SearchWith').change(function () {
+            if ($('#ComboBox@(ComboName)Container .searchText').val() != '') {
+                $('#ComboBox@(ComboName)Table').DataTable().ajax.reload();
+            }
+        });
+        $('#@(ComboName)Previous').click(function () {
+            $('#ComboBox@(ComboName)Table_previous').children('a').click();
+            pagingDisableCheck();
+        });
+
+        $('#@(ComboName)Next').click(function () {
+            $('#ComboBox@(ComboName)Table_next').children('a').click();
+            pagingDisableCheck();
+        });
+
+
+        function tableConfig() {
+            @(ComboName)ReciverTable = $('#ComboBox@(ComboName)Table').DataTable({
+                'processing': true,
+                'serverSide': true,
+                ajax: {
+                    "url": '@Model.Url',
+                    "type": "post",
+                    'beforeSend': function (request) {
+                         $('#@(ComboName)_spinner').show(); 
+                    },
+                    data: function (d) {
+                        d.searchWith =  $('#@(ComboName)SearchWith').val();
+                        d.RequestColumns = getRequestColumns();
+                        @if(!string.IsNullOrEmpty(Model.CascadingComboIds))
+                        {
+                            <text>
+                            d.Filters = ko.toJSON({ relatedField : $('#@Model.CascadingComboIds').val() });
+                            </text>
+                        }
+
+                    },
+                    'complete': function (xhr, textStatus ) {
+                        if (xhr.status == 401) {
+                            window.location.href = '/Account/Index/';
+                        }
+                        $('#@(ComboName)_spinner').hide();
+                    },
+
+                    error: function () {
+                        toastr.remove();
+                        toastr.error('خطا در ارتباط با سرور');
+                    },
+                    "dataSrc": function (json) {
+                        if (!json.IsSuccess) {
+                             $('#@(ComboName)_spinner').hide();
+                            toastr.error(json.Message);
+                            $('#ComboBox@(ComboName)Container .searchText').prop('disabled', true);
+                            $('#ComboBox@(ComboName)Table > tbody > tr').remove();
+                            $('#ComboBox@(ComboName)Table_processing').hide();
+                        }
+                        json.draw = json.Value.draw;
+                        json.recordsTotal = json.Value.recordsTotal;
+                        json.recordsFiltered = json.Value.recordsFiltered;
+                        return json.Value.data;
+                    }
+                },
+                "columns": getDataGridColumns(),
+                columnDefs: [{ "type": 'pstring', targets: '_all' }],
+                fixedHeader: true ,
+                language: {
+                    "sEmptyTable": "هیچ داده ای در جدول وجود ندارد",
+                    "sInfo": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                    "sInfoEmpty": "نمایش 0 تا 0 از 0 رکورد",
+                    "sInfoFiltered": "(فیلتر شده از _MAX_ رکورد)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "نمایش _MENU_ رکورد",
+                    "sLoadingRecords": "",
+                    "sProcessing": "در حال پردازش...",
+                    "sSearch": "جستجو:",
+                    "sZeroRecords": "رکوردی با این مشخصات پیدا نشد",
+                    "oPaginate": {
+                        "sFirst": "ابتدا",
+                        "sLast": "انتها",
+                        "sNext": "بعدی",
+                        "sPrevious": "قبلی"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": فعال سازی نمایش به صورت صعودی",
+                        "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
+                    }
+                },
+            });
+            @(ComboName)ReciverTable.on('draw', function () {
+                pagingDisableCheck();
+                $('#@(ComboName)LoadedResult').html($('#ComboBox@(ComboName)Table_info').html());
+                Table_Set();
+            });
+        }
+
+        function getDataGridColumns() {
+            var list = [];
+            @foreach (var Column in Model.ComboBoxDataColumn)
+            {
+                <text>
+            list.push({ "data": '@Html.Raw(Column.ColumnName)', visible: @(Column.IsVisible? "true" : "false") , orderable: @(Column.IsOrderable? "true" : "false")  });
+                </text>
+            }
+            return list;
+        }
+
+        function getRequestColumns() {
+            var list = [];
+            @foreach (var Column in Model.ComboBoxDataColumn)
+            {
+                <text>
+                  list.push('@Html.Raw(Column.ColumnName)');
+                </text>
+            }
+
+            return list;
+        }
+
+        function checkExistValue(elemetId, checkVal) {
+            var count = $(elemetId + ' > .ComboBoxContainer-ul > li').length;
+            var exist = false;
+            for (i = 0; i < count; i++) {
+                if ($(elemetId + ' > .ComboBoxContainer-ul > li').eq(i).attr('data-val') == checkVal) {
+                    exist = true;
+                    break;
+                }
+            }
+            return exist;
+        }
+        function getMultiList() {
+            var c = $('#ComboBox@(ComboName) .ComboBoxContainer-ul').children('li').length;
+            var childElement = $("#ComboBox@(ComboName) .ComboBoxContainer-ul").children('li');
+
+            var listValueStr = '';
+            for (i = 0; i < c; i++) {
+                listValueStr += childElement.eq(i).attr('data-val');
+                if (i != c - 1) {
+                    listValueStr += ',';
+                }
+            }
+            $('#@Model.TargetValueInputId').val(listValueStr).keyup().change();
+        }
+
+
+        $('body').on('click', '#ComboBox@(ComboName)Table > tbody tr', function () {
+            var value = $('#ComboBox@(ComboName)Table').DataTable().row($(this)).data()['@Model.ValueField'];
+            var text = $('#ComboBox@(ComboName)Table').DataTable().row($(this)).data()['@Model.TextField'];
+            if (!checkExistValue("#ComboBox@(ComboName)", value)) {
+                var str = '<li class="ComboBoxContainer-li" data-val="!"><span>#</span> <span class="glyphicon glyphicon glyphicon-remove closeReciver"></span></li> ';
+                str = str.replace('!', value);
+                str = str.replace('#', text);
+
+                @if (Model.IsMultiSelect) {
+                <text>
+                $('#ComboBox@(ComboName) .ComboBoxContainer-ul').append(str);
+                getMultiList();
+                </text>
+                }
+                else
+                {
+                <text>
+                $('#ComboBox@(ComboName) .ComboBoxContainer-ul').html(str);
+                $('#@Model.TargetValueInputId').val(value).keyup().change();
+                </text>
+
+                }
+                $('body').click();
+
+            } else {
+                toastr.remove();
+                toastr.warning(text + '  قبلاً در لیست افزوده شده است');
+            }
+        });
+        $('#ComboBox@(ComboName)Container').on('click', '.closeReciver', function (e) {
+            e.stopPropagation();
+            $(this).parents('li').remove();
+             @if (Model.IsMultiSelect)
+             {
+                <text>
+            getMultiList();
+                </text>
+             }
+             else{
+                  <text>
+                 var temp = $('#ComboBox@(ComboName) .ComboBoxContainer-ul').html().trim();
+                 $('#@Model.TargetValueInputId').val('').keyup().change();
+                 </text>
+             }
+
+             });
+        $(document).on('click', '#ComboBox@(ComboName)Container .dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+        //*************************************************************
+
+        //*************************************************************
+        $('#ComboBox@(ComboName)').click(function (e) {
+
+          if (e.target !== e.currentTarget) return;
+
+           $('#@(ComboName)_spinner').hide();
+           toastr.remove();
+            @if (Model.CascadingComboIds != "") {
+                <text>
+           if ($('#@Model.CascadingComboIds').val() == '' || $('#@Model.CascadingComboIds').val() == null) {
+                     toastr.error('@Model.CascadingEmptyErrorMessage');
+                     $('#@(ComboName)_dropdownMenu').children().hide();
+                      return;
+                }
+                 $('#@(ComboName)_dropdownMenu').children().show();
+                 </text>
+                }
+
+
+
+            if (!$('#ComboBox@(ComboName)Container').hasClass('open')) {
+                    if (@(ComboName)ReciverTable == null) {
+                        tableConfig();
+                        Table_Set();
+                    } else {
+                    $('#ComboBox@(ComboName)Table').DataTable().ajax.reload();
+
+                    }
+                }
+            });
+        //****************************************************************
+         $('#@Model.CascadingComboIds').on('change', function () {
+
+          //   if ($(this).val() == '' || $(this).val() == null) {
+              //  $('#ComboBox@(ComboName) .ComboBoxContainer-ul').html('');
+              //  $('#@Model.TargetValueInputId').val('').keyup().change();
+           //  }
+        });
+
+        //**********************
+        $(window).resize(function () {
+            Table_Set();
+        });
+        function Table_Set() {
+            $('#ComboBox@(ComboName)Table_wrapper > div').removeClass('row');
+            $('#ComboBox@(ComboName)Table2').width($('#ComboBox@(ComboName)Table').width());
+            var clone = $("#ComboBox@(ComboName)Table > thead").clone();
+            $("#ComboBox@(ComboName)Table2 > thead").html(clone.html());
+            $("#ComboBox@(ComboName)Table").parent('div').removeClass('col-xs-12').removeClass('col-sm-12').css('padding', '0px;');
+        }
+        $('#ComboBox@(ComboName)Container').on('click', '#ComboBox@(ComboName)Table2 > thead > tr > th', function () {
+                $('#ComboBox@(ComboName)Table > thead > tr > th').eq($(this).index()).click();
+        });
+        $('#ComboBox@(ComboName)Table').parent('div').scroll(function () {
+            var a = $(this).scrollLeft();
+            $('#ComboBox@(ComboName)Table2').parent('div').scrollLeft(a);
+
+        });
+       //*************************************************************************************
+    });
+
+</script>
+<style type="text/css">
+
+               #ComboBox@(ComboName)Container .dataTables_wrapper > div:first-child , #ComboBox@(ComboName)Container .dataTables_wrapper > div:last-child  {
+                 display: none;
+            }
+
+     #ComboBox@(ComboName)Container .dataTables_wrapper{
+    padding-bottom: 0px !important;
+    }
+            #ComboBox@(ComboName)Container .glyphicon-remove {
+                color: gray;
+            }
+
+                #ComboBox@(ComboName)Container .glyphicon-remove:hover {
+                    color: #000;
+                    cursor: pointer;
+                }
+
+            #ComboBox@(ComboName)Container #ComboBox@(ComboName)Table tr {
+                cursor: pointer;
+            }
+
+                #ComboBox@(ComboName)Container #ComboBox@(ComboName)Table > tbody > tr:hover {
+                    background-color: #eee;
+                }
+
+
+
+            #ComboBox@(ComboName)Container .table-consider {
+                border: 1px solid lightgray;
+                margin: 15px;
+                border-radius: 3px;
+            }
+
+
+                  .ComboBoxContainer-ul {
+                    margin: 0px;
+                    padding: 0px;
+                    list-style-type: none;
+
+                }
+
+                .ComboBoxContainer-li {
+                    display: inline-block;
+                    float: right;
+                    margin-right: 3px;
+                    background-color: #eee;
+                    padding-top: 3px;
+                    padding-bottom: 3px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    border-radius: 2px;
+                    color: black;
+                    font-size: 13px;
+                    border: 1px solid lightgray;
+                    margin-top: 3px;
+                    margin-bottom: 3px;
+                }
+           #ComboBox@(ComboName)Container input[type="text"]:disabled {
+            background-color: #fff;
+        }
+    #ComboBox@(ComboName)Container{
+     font-size:11px !important;
+    }
+
+            #ComboBox@(ComboName)Container table {
+                width: 100%;
+font-size:12px !important;
+            }
+
+    #ComboBox@(ComboName)Container  .dropdown-menu{
+          left:0px;
+
+     }
+       #ComboBox@(ComboName)Container table th {
+                  background-color: #fff;
+   border-bottom: 1px solid #ddd !important ;
+    font-size:12px !important;
+            }
+
+    .reciverPanel{
+     font-size:11px !important;
+    }
+    #@(ComboName)Previous:disabled ,  #@(ComboName)Next:disabled {
+        cursor: not-allowed;
+    }
+</style>
+
+<div id="ComboBox@(ComboName)Container" class="btn-group" style="width:100%;cursor:pointer;">
+    <div id="ComboBox@(ComboName)" class="form-control" style=" height: auto;padding-top:0px !important; padding-bottom:0px !important;min-height:37px;" data-toggle="dropdown">
+        <ul class="ComboBoxContainer-ul"></ul>
+        <div style="clear: both;"></div>
+    </div>
+    <div id="@(ComboName)_dropdownMenu" class="dropdown-menu" role="menu" style=" overflow-y:hidden;overflow-x:hidden;max-height: 500px;">
+        <div class="row" style="background-color:#eee;">
+
+            <div class="col-xs-12 reciverPanel">
+                <div class="input-group input-sm" style="margin:2px;">
+                    <span class="input-group-addon" style="font-size:12px;">جستجو براساس: </span>
+                    <select id="@(ComboName)SearchWith" type="text" class="form-control  ">
+                        @foreach (var Column in Model.ComboBoxDataColumn)
+                        {
+                            if (Column.IsSearchable)
+                            {
+                                <option value="@Column.ColumnName"> @(Column.ColumnTitle)</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+                <div class="input-group input-sm" style="margin:2px;">
+                    <span class="input-group-addon" style="font-size:12px;">عبارت جستجو: </span>
+                    <input type="text" class="form-control searchText">
+                    <span class="input-group-addon"> <span class="glyphicon glyphicon-search"></span></span>
+                </div>
+
+
+                <div class="btn-group pull-left" style="margin-left:12px;margin-bottom:3px; margin-top:1px;">
+                    <button title="قبلی" id="@(ComboName)Previous" class="btn btn-white btn-sm" type="button" disabled="disabled"><i class="fa fa-arrow-right"></i></button>
+                    <button title="بعدی" id="@(ComboName)Next" class="btn btn-white btn-sm" type="button" disabled="disabled"><i class="fa fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="table-consider" style="margin:3px;padding:5px; overflow-y:hidden;overflow-x:hidden;position:relative;">
+            <div id="@(ComboName)_spinner" style="position:absolute; top:0px;right:0px;left:0px;bottom:0px;z-index:100;">
+
+                <div style="position:absolute;right: 45%;left: 45%;top:100px;height:40px;width:40px;">
+                    <div class='double-bounce1'></div>
+                    <div class='double-bounce2'></div>
+                </div>
+
+            </div>
+            <div style="overflow-x:hidden;overflow-y:hidden;">
+                <table id="ComboBox@(ComboName)Table2" class="table table-striped   table-hover rtl dataTable no-footer" style="width:100%">
+                    <thead></thead>
+                </table>
+            </div>
+            <div style="max-height:200px;min-height:200px;overflow-y:auto; ">
+
+                <table id="ComboBox@(ComboName)Table" class="table table-striped  table-hover rtl dataTable no-footer" style="width:100%; ">
+                    <thead class="bordered-darkorange" style="visibility:collapse;">
+                        <tr>
+                            @foreach (var Column in Model.ComboBoxDataColumn)
+                            {
+                                <th>@Column.ColumnTitle</th>
+                            }
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div style="margin-top:15px;">
+                <label id="@(ComboName)LoadedResult"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

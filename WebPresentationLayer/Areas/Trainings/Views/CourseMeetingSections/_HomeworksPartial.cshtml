@@ -1,0 +1,289 @@
+﻿@model WebViewModels.TrainingsViewModels.HomeworkFilePathViewModel
+@{
+    var CourseMeetingSections = (WebViewModels.TrainingsViewModels.CourseMeetingSectionsViewModel)ViewBag.Data;
+}
+<style type="text/css">
+    .loaderBox .icon-loader img {
+        width: 30px;
+    }
+
+    .title-file {
+        font-size: 16px;
+        margin-bottom: 25px;
+        margin-top: 20px;
+    }
+
+    .fileHomework {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loaderBox {
+        display: inline-block;
+    }
+
+        .loaderBox .icon-loader {
+            border-radius: 0;
+        }
+
+        .loaderBox .icon-loader {
+            top: 7px;
+        }
+    .homeworks .box-h .title {
+        padding: 20px 20px 15px 20px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 17px;
+        width: 100%;
+        background: #414b59;
+        left: 0;
+        top: 0;
+        overflow: unset;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .homeworks .homework-img img {
+        width: 100px;
+    }
+    .homeworks .homework-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('.btn-file-modal').click(function () {
+            var HomeWorkId = $(this).attr('data-Id');
+            mainViewModel.fileHomework().HomeWorkId = HomeWorkId;
+            $('.text-title').html($(this).attr('data-title'));
+            $('#fileHomworkModal').modal({ backdrop: 'static', keyboard: false });
+            $('#fileHomworkModal').modal('show');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('.isAnswered').click(function () {
+            toastr.remove();
+            toastr.error("قبلا به این تکلیف پاسخ داده شده است.");
+            return false;
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('#fileHomeworkForm').submit(function () {
+            if ($(this).valid()) {
+                DataTransfer('/Trainings/Homeworks/AddAnswer', 'post', ko.toJSON(mainViewModel.fileHomework()), '.loader',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        var current = mainViewModel.fileHomework().HomeWorkId;
+                        var $btn = $('.btn-i').find(`[data-Id='${current}']`);
+                        $($btn).prop('disabled', true);
+
+                        mainViewModel.fileHomework({});
+                        $('#HomeworkFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.png');
+                        setTimeout(function () {
+                            $('#fileHomworkModal').modal('hide');
+                            $('#fileHomworkModal').modal('hide');
+                            window.location.reload();
+                        }, 300);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            }
+            return false;
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('#fileHomworkModal').on("hidden.bs.modal", function (event) {
+            $('#HomeworkFilePathFileImagePath').attr('src', '/assets/img/DefaultUploadFile.png');
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+        $('.btn-homework-description').click(function () {
+            var $title = $(this).parent().parent().parent().parent().parent().find('.title').text();
+
+            var $text = $(this).find('.descripthomwork').text();
+            $('.modal-title').html(' توضیحات مربوط به   ' + $title);
+            $('.p-descroiption').html($text);
+            $('#homeworkModal').modal({ backdrop: 'static', keyboard: false });
+            $('#homeworkModal').modal('show');
+        });
+    });
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=
+
+
+</script>
+
+<section class="homeworks">
+    <!-- Modal -->
+    <div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">   </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="p-descroiption">
+
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="split-c">
+            <hr class="hr">
+            <span class="pad-line-s split-liner bg-color-newyellow">
+                تکالیف من
+            </span>
+        </div>
+        <div class="row">
+            @if (CourseMeetingSections.Homeworks.Any())
+            {
+                @foreach (var item in CourseMeetingSections.Homeworks)
+                {
+                    <div class="col-md-4 col-xs-12 pull-right">
+                        <div class="box-h">
+                            <div class="title">
+                                <span>@item.Title</span>
+                            </div>
+                            <div class="content">
+
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="homework-img">
+
+                                            <img src="~/assets/img/homework.png" alt="تکالیف دانش آموز"/>  
+                                        </div>
+                                    </div>
+                                    <div class="center col-md-6 col-sm-12 col-xs-12">
+                                        <a class="btn-o btn-homework-description" data-toggle="modal" data-target="#exampleModal">
+                                            <p>
+                                                <span class="none descripthomwork">@item.Description</span>
+                                                <span class="bg"></span>
+                                                <span class="base"></span>
+                                                <span class="text">توضیحات</span>
+                                            </p>
+                                        </a>
+
+                                    </div>
+                                    <div class="center col-md-6 col-sm-12 col-xs-12">
+                                        <a target="_blank" class="btn-o" href="@item.FilePath">
+                                            <p>
+                                                <span class="bg"></span>
+                                                <span class="base"></span>
+                                                <span class="text">دریافت فایل</span>
+                                            </p>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="btn-i col-md-12 col-sm-12 col-xs-12">
+                                    <div class="center col-md-6 col-sm-12 col-xs-12">
+                                        @if (!item.IsAnswered)
+                                        {
+                                            <button data-title="@item.Title" data-Id="@item.Id" @(item.IsAnswered ? "disabled" : "") class="btn btn-info btn-block btn-sm btn-file-modal">ارسال فایل</button>
+                                        }
+                                        else
+                                        {
+                                            <a target="_blank" href="@item.FilePathAnswered " class="btn btn-info btn-block btn-sm btn_showfile">مشاهده پاسخ ارسالی</a>
+
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grade">
+                                <span class="number"> @(item.Grade == null ? "---" : item.Grade.ToString()) </span>       <span class="text"> : نمره  </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="box-empty">
+                    <div class="empty">
+                        <img src="~/assets/img/box-empty.svg" alt="تکالیفی ثبت نشده"/>
+                        <p>تکلیفی برای شما ثبت نشده است .</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal fade" id="fileHomworkModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ارسال تکلیف</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="fileHomework" id="fileHomeworkForm">
+                        <div class="row">
+                            <div class="center col-md-12 col-sm-12 col-xs-12">
+                                <p class="title-file">ارسال فایل برای تکلیف <span class="text-title"></span></p>
+                            </div>
+                            <div class="center col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+new WebPresentationLayer.ComponentModel.FileUploader()
+{
+    ButtonFarsiName = "آپلود فایل",
+    DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+    DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+    Name = "HomeworkFilePath",
+    KnockoutExpressionString = "mainViewModel.fileHomework().FilePath",
+    HasDeleteBtn = false,
+    MaxFileSize = 20480,
+    Description = "حداکثر حجم مجاز فایل : 20 مگابایت"
+})
+                                </div>
+                                <span asp-validation-for="FilePath" class="danger"></span>
+
+                            </div>
+                            <div class="center col-md-12 col-sm-12 col-xs-12">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+
+                                    <div class="loaderBox">
+                                        <div class="loader">
+                                            <div class="icon-loader">
+                                                <img src="/assets/img/loader.svg" alt="ارسال فایل تکلیف">
+                                            </div>
+                                        </div>
+                                        <button type="submit" style=" height: 25px; margin-top: 7px; padding-top: 3px;" class="btn btn-warning btn-sm">
+                                            ارسال فایل
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+

@@ -1,0 +1,56 @@
+﻿@model PanelViewModels.TeacherTrainingsViewModels.TeacherHomeworkAnswerGradesViewModel
+
+<div class="modal fade modal-btn " id="addGardeModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ثبت نمره</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="fileHomework" id="addGradForm">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label>نام نام خانوادگی</label>
+                                <input readonly="readonly" type="text" class="form-control" id="studentFullName">
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label asp-for="Grade"> </label>
+                                <input asp-for="Grade" type="text" class="form-control" data-bind="value: addGradStudents().Grade">
+                                <span class="validation" asp-validation-for="Grade"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="center col-md-12 col-sm-12 col-xs-12">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger " data-dismiss="modal">بستن</button>
+                                <div class="loaderBox">
+                                    <div class="loader">
+                                        <div class="icon-loader">
+                                            <img src="/assets/img/loader.svg">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning btn-sm ">
+                                        ثبت
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

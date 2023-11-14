@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "  امور مالی دوره/آزمون های مشترک  |  مدرسه آنلاین اپیزرو";
+    var TeacherMultiCoursesShare = (PanelViewModels.TeacherFinancialsViewModels.TeacherMultiCoursesShareViewModel)ViewBag.TeacherMultiCoursesShare;
+    var i = 1;
+    var j = 1;
+}
+<style type="text/css">
+    .dashboard {
+        margin-top: 34px;
+    }
+</style>
+<script>
+    $(function () {
+
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> امور مالی دوره/آزمون های مشترک </span>
+        </div>
+    </div>
+</div>
+<section class="dashboard m-b-50">
+    <div class="container box-right">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                <div class="box">
+                    <div class="title-box box-blue-strong">
+                        <span>مجموع کل دریافتی</span>
+                    </div>
+                    <div class="content-box">
+                        <div class="price-c">
+                            <span class="price">@string.Format("{0:N0}", @TeacherMultiCoursesShare.TotalShare)</span>   <span class="toman">تومان</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                <div class="box">
+                    <div class="title-box box-red">
+                        <span>مجموع کل دریافتی دوره/آزمون درصدی</span>
+                    </div>
+                    <div class="content-box">
+                        <div class="price-c">
+                            <span class="price">@string.Format("{0:N0}", @TeacherMultiCoursesShare.TotalPercentageShare)</span>   <span class="toman">تومان</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-12 pull-right m-b-15">
+                <div class="box">
+                    <div class="title-box box-orange">
+                        <span>مجموع کل دریافتی دوره/آزمون جلسه ای</span>
+                    </div>
+                    <div class="content-box">
+                        <div class="price-c">
+                            <span class="price">@string.Format("{0:N0}", @TeacherMultiCoursesShare.TotalMeetingShare)</span>   <span class="toman">تومان</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (TeacherMultiCoursesShare.PercentageMultiTeacherShares.Any())
+{
+    <section class="list-student list-homwork-ersali">
+
+        <div class="box-menu homwork-b">
+            <div class="container">
+                <div class="legend col-md-12">
+                    <div class="title-o">
+                        <i class="fa fa-percent"></i>
+                        <span>دوره/آزمون های درصدی </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="center">نام دوره/آزمون</th>
+                                    <th class="center">نام نام خانوادگی </th>
+                                    <th class="center">درصد همکاری</th>
+                                    <th class="center">مبلغ(تومان)</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var percentageMultiTeacherShares in TeacherMultiCoursesShare.PercentageMultiTeacherShares)
+                                {
+                                    <tr>
+                                        <td class="left">@i</td>
+                                        <td style="text-align: center;">@percentageMultiTeacherShares.CourseOrExamName</td>
+                                        <td style="text-align: center;">@percentageMultiTeacherShares.TeacherFullName</td>
+                                        <td class="center">@percentageMultiTeacherShares.Percent درصد</td>
+                                        <td class="center">@string.Format("{0:N0}", @percentageMultiTeacherShares.CalculatedAmount) تومان</td>
+
+                                    </tr>
+                                    i++;
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+
+
+
+
+
+@if (TeacherMultiCoursesShare.MeetingMultiTeacherShares.Any())
+{
+    <section class="list-student list-homwork-ersali">
+
+        <div class="box-menu homwork-b">
+            <div class="container">
+                <div class="legend col-md-12">
+                    <div class="title-o">
+                        <i class="fa fa-server"></i>
+                        <span>دوره/آزمون های جلسه ای </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="center">نام دوره/آزمون</th>
+                                    <th class="center">نام نام خانوادگی</th>
+                                    <th class="center">مبلغ به ازای جلسه ای(تومان)</th>
+                                    <th class="center">تعداد جلسه</th>
+                                    <th class="center">مبلغ(تومان)</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var meetingMultiTeacherShres in TeacherMultiCoursesShare.MeetingMultiTeacherShares)
+                                {
+                                <tr>
+                                    <td class="left">@j</td>
+                                    <td style="text-align: center;">@meetingMultiTeacherShres.CourseOrExamName</td>
+                                    <td style="text-align: center;">@meetingMultiTeacherShres.TeacherFullName</td>
+                                    <td class="center">@string.Format("{0:N0}", @meetingMultiTeacherShres.Amount)</td>
+                                    <td class="center">@meetingMultiTeacherShres.CourseMeetingsCount</td>
+                                    <td class="center">@string.Format("{0:N0}", @meetingMultiTeacherShres.TotalAmount) تومان</td>
+
+                                </tr>
+                                    j++;
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+}

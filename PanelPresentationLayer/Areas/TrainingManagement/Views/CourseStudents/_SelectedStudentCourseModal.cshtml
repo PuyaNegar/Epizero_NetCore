@@ -1,0 +1,76 @@
+﻿<div id="studentCourseModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>دوره</label>
+                        <select id="CourseId" class="form-control">
+                            <option value="">لطفاً انتخاب کنید ...</option>
+                            @foreach (var item in ViewBag.Courses)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="checkbox all-student">
+                                <label>
+                                    <input type="checkbox" class="colored-warning">
+                                    <span style="z-index:0;" class="text">انتخاب همه دانشجویان برای آزمون</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <table id="studentList" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;">ردیف</th>
+                                    <th>نام دانش آموز</th>
+                                    <th>دوره</th>
+                                    <th>جنسیت</th>
+                                    <th>نوع ثبت نام</th>
+                                    <th>شهر</th>
+                                    <th style="width:30px;">انتخاب</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: studentCourse()">
+                                <tr>
+                                    <td data-bind="text: $index() +1 ">  </td>
+                                    <td data-bind="text: StudentFullName"> </td>
+                                    <td data-bind="text: CourseName"></td>
+                                    <td data-bind="text: GenderName"> </td>
+                                    <td data-bind="text: CourseMeetingStudentType"> </td>
+                                    <td data-bind="text: CityName"> </td>
+                                    <td>
+                                        <div class="checkbox" style="margin:0px;">
+                                            <label>
+                                                <input class="colored-danger" type="checkbox" data-bind="attr: {'data-studentUserId' : StudentUserId }" />
+                                                <span class="text"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button id="submitstudentCourseBtn" type="button" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

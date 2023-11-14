@@ -1,0 +1,234 @@
+﻿@{
+    ViewData["Title"] = "امور مالی دوره های چند دبیره";
+    ViewData["PageFarsiName"] = "امور مالی دوره های چند دبیره";
+    string Area = "Financials";
+    string Controller = "CalculateCourseMultiTeacherShares";
+}
+<style type="text/css">
+    .title-y {
+        font-weight: 700;
+        font-size: 14px;
+        display: inline-block;
+        width: 200px;
+        text-align: left;
+        margin-right: 3px;
+    }
+
+    .text-y {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .table-responsive {
+        min-height: 10px;
+        padding-bottom: 15px;
+    }
+
+    .alert {
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script type="text/javascript">
+    MainViewModel.financialSummary = ko.observable({ MeetingMultiTeacherShres: [], PercentageMultiTeacherShares: [], CourseTotalShare: 0, TotalMeetingsShare: 0, CourseRemainingShare: 0, TotalPercentageShare:0});
+
+    DataBind('/@Area/@Controller/Add/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    $(function () {
+        @if(ViewBag.CourseId != null)
+        {
+            <text>
+        $('#Selected_CourseId').val('@Html.Raw(ViewBag.CourseId)');
+        $('#selectCourseName').text('@Html.Raw(ViewBag.CourseName)');
+            </text>
+        }
+        //*************************************************************************
+        $('#CourseSelectorBtn').click(function () {
+            $('#CourseSelectorModal').modal({ backdrop: 'static', keyboard: false });
+            $('#CourseSelectorModal').modal('show');
+        });
+
+        //*************************************************************************
+        $('#applySelectedCourse').click(function () {
+            if (IsNullOrEmptyString($('#Selected_CourseId').val())) {
+                toastr.remove();
+                toastr.error('لطفا دوره یا آزمون را انتخاب کنید');
+                return;
+            }
+            $('#selectCourseName').html($('#ComboBoxCourseChosen > .ComboBoxContainer-ul > .ComboBoxContainer-li > span').html());
+            window.location.href = '/Financials/CalculateCourseMultiTeacherShares/Index/' +  $('#Selected_CourseId').val();
+            $('#CourseSelectorModal').modal('hide');
+        });
+       //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        function readCourseFinancialSummary() { 
+            DataTransfer('/Financials/CalculateCourseMultiTeacherShares/Read/' + $('#Selected_CourseId').val(), '', '#resultLoader',
+                function (f) {
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                        MainViewModel.financialSummary({ MeetingMultiTeacherShres: [], PercentageMultiTeacherShares: [], CourseTotalShare: 0, TotalMeetingsShare: 0, CourseRemainingShare: 0, TotalPercentageShare: 0 });
+                    } else {
+                        MainViewModel.financialSummary(f.Value); 
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    MainViewModel.financialSummary({});
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (!IsNullOrEmptyString($('#Selected_CourseId').val())) {
+            readCourseFinancialSummary();
+        }
+     //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    });
+</script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header">
+                <span class="widget-caption">نمايش اطلاعات</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+
+                    <div class="row">
+                        <div class="alert alert-warning" style="overflow:hidden">
+                            <div class="col-md-6 col-xs-6">
+                                <label>دوره یا آزمون : </label>
+                                <span id="selectCourseName" style="font-weight: bold;margin-left: 30px;"> انتخاب نشده </span>
+                                <button id="CourseSelectorBtn" style=" margin-left:30px;" type="button" class="btn btn-primary btn-sm">انتخاب دوره / آزمون </button>
+                                <input id="applyFilter" type="button" style="display:none;" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-success" role="alert">
+                                سهم جلسه ای ها
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>مدرس</th>
+                                            <th>تعداد جلسه</th>
+                                            <th>مبلغ هر جلسه (تومان)</th>
+                                            <th>جمع کل (تومان)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().MeetingMultiTeacherShres">
+                                        <tr>
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: TeacherFullName"></td>
+                                            <td data-bind="text: CourseMeetingsCount"></td>
+                                            <td data-bind="text: Amount"></td>
+                                            <td data-bind="text: TotalAmount"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="alert alert-success" role="alert">
+                                سهم درصدی ها
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>مدرس</th>
+                                            <th>درصد همکاری</th>
+                                            <th>مبلغ پرداختی (تومان)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-bind="foreach: financialSummary().MeetingMultiTeacherShres">
+                                        <tr>
+                                            <th scope="row" data-bind="text: $index() + 1"></th>
+                                            <td data-bind="text: TeacherFullName"></td>
+                                            <td data-bind="text: Percent"></td>
+                                            <td data-bind="text: CalculatedAmount"></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 pull-left">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <h3 style="text-align:center" class="panel-title">وضعیت مالی</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row" style="direction:ltr">
+
+                                        <div class="col-md-12 col-xsw-12" style="color:green;">
+                                            <div class="form-group">
+                                                <label class="title-y">مبلغ کل صندوق (تومان)  :</label><label class="text-y" data-bind="text: financialSummary().CourseTotalShare"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12" style="color:green;">
+                                            <div class="form-group">
+                                                <label class="title-y">مجموع سهم جلسه ای ها (تومان)  :</label><label class="text-y" data-bind="text: financialSummary().TotalMeetingsShare"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12" style="color:green;">
+                                            <div class="form-group">
+                                                <label class="title-y">مجموع سهم درصدی ها (تومان)  :</label><label class="text-y" data-bind="text: financialSummary().TotalPercentageShare"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-xsw-12">
+                                            <div class="form-group" style="color:red;">
+                                                <label class="title-y">مانده صندوق (تومان)  :</label><label class="text-y" data-bind="text: financialSummary().CourseRemainingShare"></label> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12" style="text-align:right;font-weight:bold;direction:rtl">
+                                            <hr />
+                                            فرمول محاسبه :
+                                            <br /> 
+                                            مانده صندوق = (مبلغ کل صندوق) – (سهم کل جلسه ای ها + سهم کل درصدی ها)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @{
+                        await Html.RenderPartialAsync("CourseSelect.cshtml");
+                    }
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

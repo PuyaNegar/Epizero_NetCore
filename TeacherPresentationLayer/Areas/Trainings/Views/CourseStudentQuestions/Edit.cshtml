@@ -1,0 +1,113 @@
+﻿@model PanelViewModels.EditPrefix<PanelViewModels.TrainingManagementViewModels.StudentCourseQuestionConfirmViewModel>
+
+<div id="EditBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="EditForm" role="form">
+                <div class="modal-header edit-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="fa fa-edit" aria-hidden="true"></span>  <strong>ويرايش</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.CourseName"></label>
+                                <input readonly="readonly" asp-for="Edit.CourseName" class="form-control" data-bind="value: e().CourseName">
+                                <span asp-validation-for="Edit.CourseName" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.StudentUserFullName"></label>
+                                <input readonly="readonly" asp-for="Edit.StudentUserFullName" class="form-control" data-bind="value: e().StudentUserFullName">
+                                <span asp-validation-for="Edit.StudentUserFullName" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.VerifiedDateTime"></label>
+                                <input readonly="readonly" asp-for="Edit.VerifiedDateTime" class="form-control" data-bind="value: e().VerifiedDateTime">
+                                <span asp-validation-for="Edit.VerifiedDateTime" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.RegDateTime"></label>
+                                <input readonly="readonly" asp-for="Edit.RegDateTime" class="form-control" data-bind="value: e().RegDateTime">
+                                <span asp-validation-for="Edit.RegDateTime" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:center; ">
+
+                        <div class="col-md-6 col-xs-12">
+                            <!-- ko if:e().QuestionFilePath != null-->
+                            <div class="form-group">
+                                <div>
+                                    <a style="width:100%" data-bind="attr: {'href' :e().QuestionFilePath ,'target':'_blank' }" class="btn btn-success download-filePath">مشاهده فایل ارسالی دانش آموز</a>
+                                </div>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                        <div class="col-md-6 col-xs-12" style="text-align:center;margin-bottom:15px; ">
+                            <!-- ko if:e().AudioPath  != null-->
+
+                            <audio controls style="width:100%;">
+                                <source data-bind="attr:{'src':e().AudioPath}" type="audio/ogg">
+                                <source data-bind="attr:{'src':e().AudioPath}" type="audio/mpeg">
+                            </audio>
+
+                            <!-- /ko -->
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+
+                            <!-- ko if:e().QuestionPicPath != null-->
+                            <img style="width:100%" data-bind="attr:{'src':e().QuestionPicPath}" />
+                            <div class="form-group">
+                                <div style="text-align:center;margin-bottom:25px;margin-top:30px">
+                                    <a data-bind="attr: {'href' :e().QuestionPicPath ,'target':'_blank' }" class="btn btn-success download-picPath">مشاهده عکس ارسالی دانش آموز</a>
+                                </div>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.QuestionContext"></label>
+                                <textarea rows="3" readonly="readonly" asp-for="Edit.QuestionContext" class="form-control" data-bind="value: e().QuestionContext"></textarea>
+                                <span asp-validation-for="Edit.QuestionContext" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Edit.IsVerified"></label>
+                                <select asp-for="Edit.IsVerified" class="form-control" data-bind="value: e().IsVerified">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    <option value="1">تایید</option>
+                                    <option value="0">رد</option>
+                                </select>
+                                <span asp-validation-for="Edit.IsVerified" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-info btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

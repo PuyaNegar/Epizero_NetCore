@@ -1,0 +1,218 @@
+﻿@using WebViewModels.IdentitiesViewModels
+@model WebViewModels.IdentitiesViewModels.IncreaseSmsCreditViewModel
+@{
+    ViewData["Title"] = "تنظیمات پیامکی";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    var StudentUserSms = (StudentUserSmsViewModel)ViewBag.StudentUserSms;
+}
+<style type="text/css">
+    .section-payamak ul li {
+        list-style-type: none;
+    }
+
+    .section-payamak ul {
+        padding-right: 0;
+    }
+
+    .section-payamak .box-r, .section-payamak .box-l {
+        position: relative;
+    }
+
+    .box-r .t-r {
+        background-color: #1eb6db;
+    }
+
+    .box-l .t-l {
+        background-color: #3cd4c5;
+    }
+
+    .section-payamak .div-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        color: #fff;
+        padding: 10px 0 10px 0;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+        text-align: center;
+    }
+
+        .section-payamak .div-title .title-payamak {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    .section-payamak .option-payamak ul li {
+        margin-bottom: 5px;
+        line-height: 1.5;
+    }
+
+    .section-payamak .option-payamak .checkbox input {
+        position: absolute;
+        opacity: 1;
+        cursor: pointer;
+        height: 18px;
+        width: 18px;
+        right: 0;
+        display: block;
+    }
+
+    .section-payamak .option-payamak .checkbox span {
+        width: 100%;
+        display: block;
+        margin-right: 25px;
+        font-size: 14px;
+    }
+
+    .section-payamak .option-payamak .checkbox {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        font-size: 15px;
+    }
+
+    .section-payamak .option-payamak .loaderBox {
+        display: inline-table;
+    }
+
+    .section-payamak .loaderBox .icon-loader {
+        border-radius: 3px;
+    }
+
+    .section-payamak .btn-main {
+        text-align: center;
+        margin-top: 35px;
+    }
+
+    .section-payamak .inp-price-charge {
+        margin-right: 5px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#saveChange').click(function () {
+            var arr = [];
+            for (i = 0; i < $('.smsOptionId').length; i++) {
+                if ($('.smsOptionId').eq(i).prop('checked'))
+                    arr.push($('.smsOptionId').eq(i).val());
+            }
+            DataTransfer('/api/Identities/StudentUserSms/Add', 'post', ko.toJSON(arr), '.wrapper-parent',
+                function (f) {
+                    toastr.remove();
+                    toastr.success(f.Message); 
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error(e.responseJSON.Message);
+                }
+            );
+        });
+        //==========================================
+        $('#increaseCreditForm').submit(function () {
+            if ($(this).valid()) {
+                var data = {
+                    Amount : $('#Amount').val(),
+                };
+                DataTransfer('/api/Identities/StudentUserSms/IncreaseCredit', 'post', ko.toJSON(data), '.wrapper-parent',
+                    function (f) {
+                        toastr.remove();
+                        toastr.success(f.Message);
+                        $('#increaseCreditBtn').prop('disabled', true);
+                        setTimeout(function () { window.location.reload(); }, 1000);
+                    },
+                    function (e) {
+                        toastr.remove();
+                        toastr.error(e.responseJSON.Message);
+                    }
+                );
+            } 
+            return false;
+        });
+         //==========================================
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a">تنظیمات پیامکی</span>
+        </div>
+    </div>
+</div>
+<section class="box-calendar section-payamak">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-xs-12 pull-right option-payamak m-b-20">
+                <div class="box-shodow-1 p-20 radius-7 box-r">
+                    <div class="div-title t-r">
+                        <span class="title-payamak">تنظیمات اطلاع رسانی</span>
+                    </div>
+                    <form class="m-t-35" id="">
+                        <ul>
+                            @foreach (var studentUserSmsOption in StudentUserSms.StudentUserSmsOptions)
+                            {
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input class="smsOptionId" type="checkbox" value="@studentUserSmsOption.Id" @(studentUserSmsOption.IsAvailable ? "checked='checked'" : "")>
+                                            <span class="text"> @Html.Raw(studentUserSmsOption.Title) </span>
+                                            <span style="font-size:11px;">قیمت پیامک : @Html.Raw(studentUserSmsOption.Price) تومان </span>
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <div class="btn-main">
+                            <div class="loaderBox">
+                                <div class="loader">
+                                    <div class="icon-loader">
+                                        <img src="/assets/img/loader.svg" alt="ثبت تغییرات">
+                                    </div>
+                                </div>
+                                <input id="saveChange" type="button" class="btn btn-warning" value="ثبت تغییرات">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                <div class="box-shodow-1 p-20 radius-7 box-l">
+                    <div class="div-title t-l">
+                        <span class="title-payamak">شارژ پیامک  </span>
+                    </div>
+                    <form id="increaseCreditForm" class="m-t-35" >
+                        <div>
+                            <div class="form-group text-right m-b-25">
+                                <label class="title-y">مبلغ کیف پول :</label> <label class="text-y">@string.Format("{0:N0} تومان", StudentUserSms.StudentUserCredit) </label>
+                                <a class="f-l charg-bag" href="/Financials/Transactions/Index">شارژ کیف پول</a>
+                            </div>
+                            <div class="form-group text-right m-b-25">
+                                <label class="title-y"> اعتبار باقیمانده پیامک : </label> <label class="text-y">@string.Format("{0:N0} تومان", StudentUserSms.UserSmsCredit)</label>
+                            </div>
+                            <div class="form-group text-right  ">
+                                <div>
+                                    <label class="title-y">مبلغ شارژ پیامک  : </label>
+                                </div>
+                                <div class="m-t-20">
+                                    <div class="form-group inp-price-charge">
+                                        <input asp-for="Amount" type="text" placeholder="مبلغ شارژ (تومان)" class="form-control currency">
+                                        <span class="validation" asp-validation-for="Amount"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-main">
+                            <div class="loaderBox">
+                                <div class="loader">
+                                    <div class="icon-loader">
+                                        <img src="/assets/img/loader.svg" alt="شارژ اعتبار">
+                                    </div>
+                                </div>
+                                <input id="increaseCreditBtn" type="submit" class="btn btn-warning" value="شارژ اعتبار ">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

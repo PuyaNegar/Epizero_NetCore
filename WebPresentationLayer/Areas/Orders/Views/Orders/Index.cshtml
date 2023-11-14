@@ -1,0 +1,294 @@
+﻿@model WebViewModels.OrdersViewModel.OrdersViewModel
+@{
+    ViewData["Title"] = "سبد خرید";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var Data = (WebViewModels.OrdersViewModel.OrdersViewModel)ViewBag.Data;
+    int row_counter = 1;
+}
+<style type="text/css">
+    .loaderBox .icon-loader img {
+        width: 45px;
+    }
+
+    .loaderBox .icon-loader {
+        border-radius: 4px;
+    }
+
+    .table > tbody > tr > td {
+        padding: 15px 8px 8px 8px;
+    }
+
+    h1 {
+        display: inline-block;
+    }
+
+    .h1-title {
+        margin: 0px;
+    }
+
+    .split-liner {
+        line-height: 29px;
+    }
+</style>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('body').on('click', '.remove-all-cart', function () {
+                bootbox.confirm({
+                    message: "آیا از حذف سبد خرید مطمئن هستید؟",
+                    buttons: {
+                        confirm: {
+                            label: 'تایید',
+                            className: 'btn-primary'
+                        },
+                        cancel: {
+                            label: 'انصراف',
+                            className: 'btn-default'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            DataTransfer('/api/Orders/Orders/Delete/', 'post', '', '.wrapper-parent', function (e) {
+                                window.location.reload();
+                            }, function (e) {
+                                toastr.error(e.responseJSON.Message);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        //============================================================
+        $('body').on('click', '#paymentBtn', function () {
+            DataTransfer('/api/Orders/PayPingOrderPayment/GetBankPaymentUrl', 'post', ko.toJSON({ UseCredit: $('#useCredit').prop('checked'), UseScore: $('#useScore').prop('checked') }), '.wrapper-parent', function (e) {
+                window.location.href = e.Value.PaymentUrl;
+            }, function (e) {
+                toastr.error(e.responseJSON.Message);
+            });
+        });
+                //============================================================
+    </script>
+}
+
+@if (!Data.IsEmptyOrder)
+{
+    <section class="cart">
+        <div class="container">
+            <div class="split-c">
+                <hr class="hr" />
+                <h1 class="pad-line-s split-liner bg-color-blue h1-title">
+                    سبد خرید من
+                </h1>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover" style="width:100%;">
+                    <thead>
+                        <tr>
+
+                            <th class="head10">ردیف</th>
+                            <th class="head10">عکس محصول</th>
+                            <th class="head10">نام محصول</th>
+                            <th class="head10"> مدرس</th>
+                            <th class="head10">قیمت</th>
+                            <th class="head10">درصد تخفیف</th>
+                            <th class="head10">مبلغ کد تخفیف</th>
+                            <th class="head10">قیمت نهایی</th>
+                            <th class="head10"> حذف</th>
+                            <th class="head10">
+                                <a class="btn btn-info remove-all-cart "> پاک کردن سبد خرید </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var orderDetail in Data.OrderInfo.OrderDetails)
+                        {
+                            <tr>
+                                <td>@(row_counter++)</td>
+                                <td class="img-logo">
+                                    <img src="@orderDetail.AcademyProductPicPath">
+                                </td>
+                                <td>
+                                    @orderDetail.AcademyProductName
+                                </td>
+                                <td>
+                                    @orderDetail.TecherFullName
+                                </td>
+                                <td>
+                                    <div class="price">
+                                        @if (orderDetail.DiscountPercent != 0)
+                                        {
+                                            <div class="discount-price">
+                                                <span>@(orderDetail.Price == 0 ? "رایگان" : string.Format("{0:N0} تومان", orderDetail.Price)) </span>
+                                            </div>
+                                        }
+                                        <div>
+                                            <span>@(orderDetail.PriceWithDiscount == 0 ? "رایگان" : string.Format("{0:N0} تومان", orderDetail.PriceWithDiscount)) </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span></span>@(orderDetail.DiscountPercent == 0 ? "---" : string.Format("{0:N0}", orderDetail.DiscountPercent) + "%")
+                                </td>
+                                <td>
+                                    @(string.Format("{0:N0}", orderDetail.DiscountCodeAmount))
+                                    @if (orderDetail.DiscountCodeAmount > 0)
+                                    {
+                                        <span> تومان</span>
+                                    }
+                                </td>
+                                <td>
+                                    @(orderDetail.FinalPrice == 0 ? "رایگان" : string.Format("{0:N0} تومان", orderDetail.FinalPrice)) <span></span>
+                                </td>
+                                <td>
+                                    <a class="remove remove-cart-item" data-cartDetailId="@orderDetail.Id">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td></td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-md-12 col-xs-12">
+                <hr />
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-md-6 col-sm-7 col-xs-12 pull-right">
+                @if (!Data.OrderInfo.IsDiscountCodeApplied)
+                {
+                    <div class="box-main">
+                        <div class="lable"><span>کد تخفیف : </span></div>
+                        <div class="box-dix">
+                            <input id="CouponCode" style="direction:ltr !important" type="text" class="form-control">
+                            <a id="addCouponBtn" class="btn btn-info" style="width:80px;">افزودن  </a>
+                        </div>
+                    </div>
+                }
+
+                @if (Data.OrderInfo.IsDiscountCodeApplied)
+                {
+                    <div class="box-main">
+                        <div class="lable"><span>کد تخفیف : </span></div>
+                        <div class="box-dix">
+                            <input readonly="readonly" id="CouponCode" type="text" value="@Data.OrderInfo.DiscountCode" style="direction:ltr !important" class="form-control">
+                            <a id="removeCouponBtn" class="btn btn-danger" style="width:80px;">حذف  </a>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-md-12 col-xs-12">
+                <hr />
+            </div>
+        </div>
+
+
+
+        <div class="container">
+            <div class="row m-b-50">
+                <div class="col-md-6 col-sm-7 col-xs-12 pull-right">
+                    <div class="factor">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+
+                            @if (ViewBag.ScoreBalance != 0)
+                            {
+                                <div>
+                                    <label class="checkbox">
+                                        <span class="title-bag">استفاده از اپیزرو کوین : </span>
+                                        <input id="useScore" type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+
+                                    <span class="numbric"> @string.Format("{0:N0}", ViewBag.ScoreBalance) کوین</span>
+                                </div>
+                            }
+
+
+                            @if (ViewBag.Balance != 0)
+                            {
+                                <div>
+                                    <label class="checkbox">
+                                        <span class="title-bag">استفاده از کیف پول : </span>
+                                        <input id="useCredit" type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+
+                                    <span class="numbric"> @string.Format("{0:N0}", ViewBag.Balance) تومان</span>
+                                </div>
+                            }
+
+                        }
+
+                        <div class="row m-b-m-20">
+                            <div class="col-md-8 col-xs-12 pull-right">
+                                <span class="title">مبلغ کل فاکتور (بدون احتساب تخفیف) : </span>
+                            </div>
+                            <div class="col-md-4 col-xs-12 pull-left">
+                                <span class="numbric">@(string.Format("{0:N0}", Data.OrderInfo.SubTotal)) تومان</span>
+                            </div>
+                        </div>
+                        <div class="row  m-b-m-20">
+                            <div class="col-md-8 col-xs-12 pull-right">
+                                <span class="title">مبلغ کل فاکتور (با احتساب تخفیف) : </span>
+                            </div>
+                            <div class="col-md-4 col-xs-12 pull-left">
+                                <span class="numbric">@(string.Format("{0:N0}", Data.OrderInfo.TotalPriceWithDiscount)) تومان</span>
+                            </div>
+                        </div>
+                        <div class="row  m-b-m-20">
+                            <div class="col-md-8 col-xs-12 pull-right">
+                                <span class="title">مبلغ کد تخفیف : </span>
+                            </div>
+                            <div class="col-md-4 col-xs-12 pull-left">
+                                <span class="numbric">@(string.Format("{0:N0}", Data.OrderInfo.TotalDiscountCodeAmount)) تومان</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row  m-b-m-20">
+                            <div class="col-md-8 col-xs-12 pull-right">
+                                <span class="title  bold">مبلغ قابل پرداخت : </span>
+                            </div>
+                            <div class="col-md-4 col-xs-12 pull-left">
+                                <span class="numbric">@(string.Format("{0:N0}", Data.OrderInfo.PaymentAmount)) تومان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-5 col-xs-12 pull-left">
+                    <div class="m-t-30">
+                        <div class="loaderBox">
+                            <div class="loader"><div class="icon-loader"><img src="~/assets/img/loader.svg" alt="عملیات پرداخت سفارش" /></div></div>
+                            <input id="paymentBtn" type="submit" class="btn btn-success pardakht" value="@(User.Identity.IsAuthenticated ? "عملیات پرداخت" : "برای خرید و پرداخت وارد شوید")">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+}
+else
+{
+    <section class="container">
+        <div class="cart-empty">
+            <div class="cart-empty-icon">
+                <img src="~/assets/img/empty-cart.svg" alt="سبد خرید " />
+            </div>
+            <div class="cart-empty-title">
+                سبد خرید شما خالیست!
+            </div>
+        </div>
+    </section>
+}

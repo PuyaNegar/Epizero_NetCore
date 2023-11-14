@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "پرداخت ناموفق";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<script>
+    $(function () {
+        $('.btn-register').hide();
+    });
+</script>
+
+<div class="error-404-area">
+    <div class="container">
+        <div class="notfound">
+            @*<div class="notfound-bg">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>*@
+            <div class="m-b-25">
+                <img alt="پرداخت ناموفق در سایت اپیزرو " src="~/assets/img/Not_Ok.png" style="width: 150px;" />
+            </div>
+            <h1>پرداخت ناموفق</h1>
+            <h3>پرداخت  شما انجام نشد</h3>
+            <a href="/" class="btn btn-border">برگشت به صفحه اصلی</a>
+        </div>
+    </div>
+</div>
+<!-- End Error 404 Area -->

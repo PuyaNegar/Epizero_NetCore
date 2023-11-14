@@ -1,0 +1,119 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.ProductsViewModel
+
+<div id="AddBox" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="AddForm" role="form">
+                <div class="modal-header create-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>افزودن</strong>   </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="ProductTypeId"></label>
+                                <select asp-for="ProductTypeId" class="form-control" data-bind="value: c().ProductTypeId">
+                                    <option value="">لطفا انتخاب کنید ...</option>
+                                    @foreach (var item in ViewBag.ProductTypes)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ProductTypeId" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" data-bind="value: c().Name">
+                                <span asp-validation-for="Name" class="danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Price"></label>
+                                <input type="text" asp-for="Price" class="form-control currency" data-bind="value: c().Price">
+                                <span asp-validation-for="Price" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="DiscountPrice"></label>
+                                <input type="text" asp-for="DiscountPrice" class="form-control currency" data-bind="value: c().DiscountPrice">
+                                <span asp-validation-for="DiscountPrice" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="IsActive"></label>
+                                <select asp-for="IsActive" class="form-control" data-bind="value: c().IsActive">
+                                    <option value="1">فعال</option>
+                                    <option value="0">غیر فعال</option>
+                                </select>
+                                <span asp-validation-for="IsActive" class="danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="PicPath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/ImageUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.ImageUploader()
+                                    {
+                                        ButtonFarsiName = "آپلود عکس",
+                                   DefualuNullImagePath = "/images/DefaultFlag.png",
+                                   Name = "ProductPicPath",
+                                   KnockoutExpressionString = "MainViewModel.c().PicPath",
+                                   MaxImageHeight = 1000,
+                                   MaxImageWidth = 1000,
+                                   MinImageHeight = 1,
+                                   MinImageWidth = 1,
+                                   MaxImageSize = 500,
+                                   HasDeleteBtn = true,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و GIF \r\n حداقل اندازه مجاز تصویر : 1 در 1 پیکسل \r\n حداکثر اندازه مجاز تصویر : 1000 در 1000 پیکسل \r\n حداکثر حجم مجاز تصویر : 50 کیلوبایت"
+                               })
+                            </div>
+                            <span asp-validation-for="PicPath" class="danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block" asp-for="FilePath"></label>
+                            <div class="form-group">
+                                @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                               new PanelPresentationLayer.ComponentModel.FileUploader()
+                               {
+                                   ButtonFarsiName = "آپلود فایل",
+                                   DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+                                   DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                   Name = "ProductFilePath",
+                                   KnockoutExpressionString = "MainViewModel.c().FilePath",
+                                   MaxFileSize = 10240,
+                                   HasDeleteBtn = false,
+                                   Description = "فرمت‌های قابل قبول : JPG، JPEG و Pdf \r\n   حداکثر حجم مجاز فایل : 10 مگابایت"
+                               })
+                            </div>
+                            <span asp-validation-for="FilePath" class="danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-success btn-sm">ثبت اطلاعات</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

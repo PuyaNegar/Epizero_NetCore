@@ -1,0 +1,17 @@
+﻿@model PanelViewModels.TrainingManagementViewModels.SelectedLessonViewModel
+
+ 
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="LessonId"></label>
+            <div class="input-group">
+                <input asp-for="LessonId" type="hidden" class="form-control" data-bind="value: fe().LessonId" />
+                <input asp-for="LessonName" readonly="readonly" type="text" class="form-control" data-bind="value: fe().LessonName" />
+                <span class="input-group-btn">
+                    <button id="LessonSelectBtn" class="btn btn-primery" type="button">انتخاب</button>
+                </span>
+            </div>
+            <span asp-validation-for="LessonId" class="danger"></span>
+        </div>
+    </div>
+  

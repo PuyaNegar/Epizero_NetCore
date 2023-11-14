@@ -1,0 +1,264 @@
+﻿@model PanelViewModels.IdentitiesViewModels.MessagesViewModel
+@{
+    ViewData["Title"] = "پیام ها";
+    ViewData["PageFarsiName"] = "پیام ها";
+    string Area = "Identities";
+    string Controller = "Messages";
+    var ReceiverUsers = ViewBag.ReceiverUsers;
+    var Tags = ViewBag.Tags;
+}
+<script src="~/js/DataBindingServerSide.min.js"></script>
+<script src="~/lib/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    MainViewModel.m = ko.observable({});
+    MainViewModel.listStudents = ko.observable({});
+    isDefaultCreateBtn = false;
+    DataBind('/@Area/@Controller/Create/',
+        '/@Area/@Controller/Read/',
+        '/@Area/@Controller/Find/',
+        '/@Area/@Controller/Update/',
+        '/@Area/@Controller/Delete/', '', true);
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    $(function () {
+        rebulidChosen("#ReceiverUsersId");
+        rebulidChosen("#MessageTagsId");
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('change', '#MessageTypeId', function () {
+            var value = $(this).attr('selected', 'selected').val();
+            if (value == 2)
+                $('.ReceiverUsersDiv').slideDown();
+            else if (value == 1)
+                $('.ReceiverUsersDiv').slideUp();
+        });
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('change', '.all-student input[type=checkbox]', function () {
+            var $checkbox = $('#studentList').find('input[type=checkbox]');
+            if ($(this).is(':checked')) {
+                for (i = 0; i < $checkbox.length; i++) {
+                    $checkbox.eq(i).prop('checked', true);
+                }
+            } else {
+                for (i = 0; i < $checkbox.length; i++) {
+                    $checkbox.eq(i).prop('checked', false);
+                }
+            }
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+        $('body').on('change', '#CourseId', function () {
+            if (IsNullOrEmptyString($(this).val()))
+                return;
+            DataTransfer('/TrainingManagement/CourseAndCourseMeetingStudents/ReadCourseStudents/' + $(this).val(), '', '',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        MainViewModel.listStudents(f.Value);
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#addMessage', function () {
+              var $checkbox = $('#studentList').find('input[type=checkbox]:checked');
+            var studentUserIds = new Array();
+            for (i = 0; i < $checkbox.length; i++) {
+                studentUserIds.push(parseInt($checkbox.eq(i).attr('data-studentUserId')));
+            }
+            if (studentUserIds.length == 0 && MainViewModel.m().MessageTypeId == 2) {
+                toastr.remove();
+                toastr.error("لیست دانش آموزان نبایستی خالی باشد.");
+                return false;
+            }
+            var data = {
+                ReceiverUsersId: studentUserIds,
+                Title: MainViewModel.m().Title,
+                MessageTypeId: MainViewModel.m().MessageTypeId,
+                MessageTagsId : $('#MessageTagsId').val(),
+                Message: CKEDITOR.instances.Message.getData()
+            }
+
+            DataTransfer('/Identities/AddMessages/Create', JSON.stringify(data), '',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                    } else {
+                        toastr.success(f.Message);
+                        setTimeout(function () {
+                            window.location.href = "/Identities/Messages/Index";
+                        }, 2000)
+
+
+                    }
+                },
+                function (e) {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+
+        });
+    });
+
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-header  bg-carbon">
+                <span class="widget-caption">افزودن پیام</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                </div><!--Widget Buttons-->
+            </div><!--Widget Header-->
+            <div class="widget-body bordered-top bordered-gray" style="height: auto;">
+                <div id="mainArea">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group ">
+                                <label asp-for="MessageTypeId"></label>
+                                <select asp-for="MessageTypeId" class="form-control" data-bind="value: m().MessageTypeId">
+                                    <option value="1">عمومی</option>
+                                    <option value="2">خصوصی</option>
+                                </select>
+                                <span asp-validation-for="MessageTypeId" class="danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Title"></label>
+                                <input asp-for="Title" class="form-control" data-bind="value: m().Title">
+                                <span asp-validation-for="Title" class="danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="MessageTagsId"></label>
+                                <select asp-for="MessageTagsId" class="form-control" data-bind="c().MessageTagsId" data-placeholder="تگ‌ها را انتخاب کنید" multiple>
+                                    @foreach (var item in Tags)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="MessageTagsId" class="danger"></span>
+                            </div>
+                        </div>
+                        @* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Message"></label>
+                                <textarea asp-for="Message" rows="10" cols="80">
+                                   
+                                </textarea>
+                                <span asp-validation-for="Message" class="danger"></span>
+
+
+                                <div>
+                                    <script>
+                                        var roxyFileman = '/FileManager/Index';
+                                        var config = {
+                                            filebrowserBrowseUrl: roxyFileman,
+                                            on: {
+                                                instanceReady: function (ev) {
+                                                    document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                                    ev.editor.on('focus', function (e) {
+                                                        document.getElementById(ev.editor.id + '_top').style.display = 'block';
+                                                    });
+                                                    ev.editor.on('blur', function (e) {
+                                                        document.getElementById(ev.editor.id + '_top').style.display = 'none';
+                                                    });
+                                                }
+                                            }
+                                        };
+                                        CKEDITOR.replace('Message', config);
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= *@
+
+                        <div style="display:none" class="form-group ReceiverUsersDiv">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>دوره</label>
+                                    <select id="CourseId" class="form-control">
+                                        <option value="">لطفاً انتخاب کنید ...</option>
+                                        @foreach (var item in ViewBag.Courses)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="checkbox all-student">
+                                    <label>
+                                        <input type="checkbox" class="colored-warning">
+                                        <span style="z-index:0;" class="text">انتخاب همه دانشجویان برای آزمون</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <table id="studentList" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:30px;">ردیف</th>
+                                                <th>نام دانش آموز</th>
+                                                <th>دوره</th>
+                                                <th>جنسیت</th>
+                                                <th>نوع ثبت نام</th>
+                                                <th>شهر</th>
+                                                <th style="width:30px;">انتخاب</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-bind="foreach: listStudents()">
+                                            <tr>
+                                                <td data-bind="text: $index() +1 ">  </td>
+                                                <td data-bind="text: StudentFullName"> </td>
+                                                <td data-bind="text: CourseName"></td>
+                                                <td data-bind="text: GenderName"> </td>
+                                                <td data-bind="text: CourseMeetingStudentType"> </td>
+                                                <td data-bind="text: CityName"> </td>
+                                                <td>
+                                                    <div class="checkbox" style="margin:0px;">
+                                                        <label>
+                                                            <input class="colored-danger" type="checkbox" data-bind="attr: {'data-studentUserId' : StudentUserId }" />
+                                                            <span class="text"></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+                        <div style="text-align: center;" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <a style="margin-top:25px" id="addMessage" class="btn btn-success shiny"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> افزودن </a>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+                    </div>
+                </div>
+            </div><!--Widget Body-->
+        </div><!--Widget-->
+    </div>
+</div>
+
+
+

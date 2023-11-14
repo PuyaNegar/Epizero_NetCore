@@ -1,0 +1,94 @@
+﻿
+@using WebViewModels.TrainingsViewModels
+@using Common.Enums
+@{
+    var Courses = (CoursesViewModel)ViewBag.Courses;
+
+}
+<style type="text/css">
+    #teachersModal .main-b-box .img-pro, #teachersModal .main-b-box .txt-pro {
+        display: inline-block;
+    }
+    .showTeachersBtn:hover {
+        cursor:pointer;
+    }
+    #teachersModal .main-b-box .img-pro img {
+        width: 70px;
+        height: 70px;
+        background-color: #fff;
+        text-align: center;
+        margin-right: 20px;
+        border-radius: 100%;
+        border: 2px solid #fecc02;
+    }
+
+    .main-b-box {
+        margin-bottom: 25px;
+    }
+
+    #teachersModal .main-b-box .txt-pro .title {
+        font-size: 13px;
+        color: #666;
+    }
+
+    #teachersModal .main-b-box .txt-pro .title {
+        font-size: 14px;
+        color: #444;
+    }
+    .t-h-page:hover {
+       color: #69747d;
+    }
+    .not-index {
+        border: 2px solid #1fb8d4 !important;
+    }
+</style>
+<div class="modal fade" id="teachersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اطلاعات دبیران</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach (var item in Courses.CourseDedicatedTeachers.Where(c => c.IsIndexTeacher))
+                    {
+                        <div class="col-md-6 pull-right">
+                            <div class="main-b-box">
+                                <div class="img-pro">
+                                    <img src="@item.PersonalPicPath" />
+                                </div>
+                                <div class="txt-pro">
+
+                                    <a class="t-h-page" href="/Contents/TeacherIntroductions?teacherId=@item.TeacherUserId"> <span class="text">@item.TeacherFullName</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                        @foreach (var item in Courses.CourseDedicatedTeachers.Where(c => !c.IsIndexTeacher))
+                        {
+                            <div class="col-md-6 pull-right">
+                                <div class="main-b-box">
+                                    <div class="img-pro">
+                                        <a href="/Contents/TeacherIntroductions?teacherId=@item.TeacherUserId">
+                                        <img class="not-index" src="@item.PersonalPicPath" alt="اطلاعات دبیر @item.TeacherFullName " />
+                                        </a>
+                                    </div>
+                                    <div class="txt-pro">
+
+                                        <a class="t-h-page" href="/Contents/TeacherIntroductions?teacherId=@item.TeacherUserId">  <span class="text">@item.TeacherFullName</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                @*<button type="button" class="btn btn-success " data-dismiss="modal">ثبت</button>*@
+            </div>
+        </div>
+    </div>
+</div>

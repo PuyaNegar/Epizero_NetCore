@@ -1,0 +1,43 @@
+﻿
+@using WebViewModels.ContentsViewModels
+@{
+    var homePageNotifications = (HomePageNotificationsViewModel)ViewBag.Data.HomePageNotification;
+}
+@if (homePageNotifications == null)
+{
+    <script type="text/javascript">
+        $(function () {
+            document.cookie = "_StartPageAdvertise=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        });
+    </script>
+}
+<style type="text/css">
+    .js-wheel-floating-box h1 {
+        color: #fff;
+        font-size: 15px;
+        line-height: 1.8;
+        font-weight: 500;
+        width: 100%;
+    }
+
+</style>
+@if (homePageNotifications != null)
+{
+<div class="js-wheel-floating-box">
+    <div class="c-fmcg-voucher-box__free-shipping-holder js-wheel-floating-box-close"></div>
+    <div class="c-fmcg-voucher-box--free-shipping js-wheel-floating-box-click">
+        <a class="link-watsap" href="@homePageNotifications.Link" target="_blank">
+            @if (!string.IsNullOrEmpty(homePageNotifications.PicPath))
+            { 
+                <img src="@homePageNotifications.PicPath" alt="نوتفیکیشن اپیزرو" />
+            }
+        </a>
+        <h1>
+            @Html.Raw(homePageNotifications.Description)
+        </h1>
+        @*<button class="js-wheel-floating-box-close">
+            <i class="bx bx-arrow-back"></i>
+        </button>*@
+    </div>
+</div>
+}

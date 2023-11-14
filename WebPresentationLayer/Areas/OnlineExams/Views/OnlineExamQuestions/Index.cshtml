@@ -1,0 +1,242 @@
+﻿@{
+    ViewData["Title"] = "پاسخ تشریحی آزمون";
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    var OnlineExamQuestions = (List<WebViewModels.OnlineExamsViewModels.OnlineExamQuestionsViewModel>)ViewBag.OnlineExamQuestions;
+    var StudentOnlineExamAnswers = (List<WebViewModels.OnlineExamsViewModels.StudentMultipeChoiceAnswerViewModel>)ViewBag.StudentOnlineExamAnswers;
+    int i = 1;
+}
+@section Styles{
+    <style type="text/css">
+        .answer-student {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            margin-right: 20px;
+            background-color: blanchedalmond;
+            overflow: hidden;
+            border-radius: 9px;
+            border: 1px solid #ddd;
+        }
+        .answer-student span {
+            font-size: 14px;
+            display: block;
+   
+            padding: 10px;
+      
+        }
+        .checkbox input {
+            position: absolute;
+            opacity: 1;
+            cursor: pointer;
+            height: 18px;
+            width: 18px;
+            right: 0;
+            display: block;
+        }
+
+        .checkbox .text {
+            display: block;
+            margin-right: 30px;
+            font-size: 16px !important;
+        }
+
+        .widget-caption p img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto !important;
+        }
+
+        .widget {
+            position: relative;
+        }
+
+            .widget .widget-header .badge {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 15px !important;
+                padding: 7px !important;
+                width: 30px !important;
+                border-radius: 50% !important;
+            }
+
+        .width-30 {
+            width: 30px;
+        }
+
+        .flex-right {
+            display: flex;
+            justify-content: right;
+            align-items: center;
+        }
+
+        .widget-caption p {
+            line-height: 1.9;
+            padding: 5px;
+            font-size: 15px;
+            justify-content: center;
+        }
+
+        .widget .answer-question {
+            position: relative;
+            border: 2px solid #e3dbe8;
+            margin-top: 25px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            padding: 7px;
+            display: none;
+        }
+
+            .widget .answer-question .img-repeat {
+                content: '';
+                position: absolute;
+                background-image: url('/assets/img/faviconss.png');
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                top: 0;
+                opacity: .1;
+                z-index: -1;
+            }
+
+            .widget .answer-question #close-answer {
+                margin-left: 30px;
+                margin-bottom: 15px;
+            }
+
+        .btn {
+            border: none;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .hr-h:last-child hr {
+            display: none;
+        }
+    </style>
+}
+<script type="text/javascript">
+    $(function () {
+        $('body').on('click', '#show-answer', function () {
+            $(this).parent().parent().find('.answer-question').show();
+            $(this).hide();
+        });
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        $('body').on('click', '#close-answer', function () {
+            $('.answer-question').hide();
+            $(this).parent().parent().parent().find('#show-answer').show();
+        });
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="box-title-t">
+            <span class="t-a"> پاسخ های تشریحی آزمون </span>
+        </div>
+    </div>
+</div>
+@if (OnlineExamQuestions.Any())
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var item in OnlineExamQuestions)
+            {
+                <div class="hr-h col-lg-12 col-sm-12 col-xs-12 m-b-20">
+                    <div class="widget">
+                        <div class="widget-header" style="text-align:right">
+                            <span class="badge badge-success graded flex-div">
+                                @i
+                            </span>
+                            <div style="border-right: none" class="widget-buttons buttons-bordered">
+                                <div style="margin-top:10px;margin-bottom:10px">
+                                    <span class="widget-caption">
+                                        @Html.Raw(item.ContextQuestion)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-body" style="min-height: unset;">
+
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 col-xs-12 float-r flex-right">
+
+                                    <div class="width-30">1 )</div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input disabled="" type="checkbox" @(item.CorrentOption == 1 ? "checked" : "") class="colored-darkorange" autocomplete="off">
+                                            <span class="text"><span class=""> @Html.Raw(item.Option1)</span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-xs-12 float-r flex-right">
+
+                                    <label class="width-30">2 )</label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input disabled="" type="checkbox" class="colored-darkorange" @(item.CorrentOption == 2 ? "checked" : "") autocomplete="off">
+                                            <span class="text"><span class=""> @Html.Raw(item.Option2)</span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-6 col-xs-12 float-r flex-right">
+
+                                    <label class="width-30">3 )</label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input disabled="" type="checkbox" class="colored-darkorange" @(item.CorrentOption == 3 ? "checked" : "") autocomplete="off">
+                                            <span class="text"><span class="">  @Html.Raw(item.Option3)</span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-6 col-xs-12 float-r flex-right">
+                                    <label class="width-30">4 )</label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input disabled="" type="checkbox" class="colored-darkorange" @(item.CorrentOption == 4 ? "checked" : "") autocomplete="off">
+                                            <span class="text"><span class=""> @Html.Raw(item.Option4)</span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="answer-student">
+                                    @{
+                                        var result = StudentOnlineExamAnswers.FirstOrDefault(c => c.OnlineExamQuestionId == item.Id);
+                                        if (result != null)
+                                        {
+                                            <span>گزینه (@result.SelectedOption) را انتخاب کرده اید</span>
+                                        }
+                                        else
+                                        {
+                                            <span>شما به این سوال پاسخ نداده اید</span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="answer-question">
+                            <div class="img-repeat"></div>
+                            <div>
+                                <span class="widget-caption">
+                                    @Html.Raw(item.DescriptiveAnswer)
+                                </span>
+                            </div>
+                            <div class="text-align-l">
+                                <button id="close-answer" class="btn btn-danger">بستن پاسخ تشریحی</button>
+                            </div>
+                        </div>
+                        <div class="text-align-l">
+                            <button id="show-answer" class="btn btn-info">مشاهده پاسخ تشریحی</button>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+                { i++; }
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,56 @@
+﻿
+<div id="returnViewerModal" class="modal fade " tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="exampleModalLabel">نمایش وجه عودت شده</h5>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>مبلغ عودتی(تومان)</label>
+                            <input readonly="readonly" type="text" class="form-control" data-bind="value: returnPaymentViewer().ReturnAmount">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>نحوه عودت</label>
+                            <select class="form-control" disabled data-bind="value: returnPaymentViewer().ReturnPaymentTypeId">
+                                <option value=""> لطفا انتخاب کنید ...</option>
+                                <option value="1"> نقدی </option>
+                                <option value="2"> کارت به کارت </option>
+                                <option value="3"> چک </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>تاریخ پرداخت </label>
+                            <input readonly="readonly" type="text" placeholder="تاریخ پرداخت" class="form-control" data-bind="value: returnPaymentViewer().RegDateTime">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>دوره </label>
+                            <input readonly="readonly" type="text" placeholder="تاریخ پرداخت" class="form-control" data-bind="value: returnPaymentViewer().CourseName">
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 pull-right">
+                        <div class="form-group text-right">
+                            <label>شرح سند</label>
+                            <textarea rows="3" readonly="readonly" type="text" class="form-control" data-bind="value: returnPaymentViewer().Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">بستن</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

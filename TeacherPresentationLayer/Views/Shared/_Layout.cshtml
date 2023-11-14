@@ -1,0 +1,52 @@
+﻿@using TeacherBusinessLogicLayer.BusinessComponents.IdentitiesComponents
+@{
+    var user = User.Identity.IsAuthenticated ? Teacher_UsersComponent.GetLastName(Convert.ToInt32(Context.User.Claims.ToList()[1].Value)) : null;
+}
+<!DOCTYPE html>
+<html dir="rtl" lang="fa-IR">
+
+<head>
+    <title>@ViewData["Title"]</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="مدرسه آنلاین اپیزرو، کلاسهای اساتید برتر را در خانه تجربه کنید. فرصت برابر آموزشی با دسترسی آسان به تمامی اساتید مطرح کشور و منابع بروز آموزشی." />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="epizero_default.html" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="مدرسه آنلاین اپیزرو" />
+    <meta property="og:description" content="مدرسه آنلاین اپیزرو، کلاسهای اساتید برتر را در خانه تجربه کنید. فرصت برابر آموزشی با دسترسی آسان به تمامی اساتید مطرح کشور و منابع بروز آموزشی." />
+    <meta property="og:url" content="https://epizero.ir" />
+    <meta property="og:site_name" content="مدرسه آنلاین اپیزرو" />
+    <meta property="article:modified_time" content="2020-09-20T17:23:59+00:00" />
+    <meta name="twitter:card" content="summary_large_image" />
+    @{ await Html.RenderPartialAsync("_StylesPartial"); }
+    @RenderSection("Styles", required: false)
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/lib/knockout/knockout-3.4.2.js"></script>
+    <script src="~/assets/lib/chosen_v1.8.7/chosen.jquery.js"></script>
+
+</head>
+
+
+<body id="mainArea">
+    <div class="wrapper-parent">
+        <div class="wrapper-child">
+            <img src="~/assets/img/main-loader.svg" alt="لطفا منتظر بمانید" title="لطفا منتظر بمانید" />
+            @*<p>لطفا منتظر بمانید...</p>*@
+        </div>
+    </div>
+    @{ await Html.RenderPartialAsync("_HeaderPartial", new ViewDataDictionary(ViewData) { { "LastName", user == null ?  string.Empty :  user.LastName } });}
+    @{ await Html.RenderPartialAsync("_TeacherMenus", new ViewDataDictionary(ViewData) { { "IsShowFinancial", user == null ? false : user.TeacherUserProfile.IsShowFinancial } });}
+    <main>
+        @RenderBody()
+    </main>
+    @{ await Html.RenderPartialAsync("_ChangePasswordModal.cshtml"); }
+    @{ await Html.RenderPartialAsync("_FooterPartial");}
+    @{ await Html.RenderPartialAsync("_ScriptsPartial");}
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
