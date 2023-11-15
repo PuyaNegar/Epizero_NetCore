@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DataModels.TrainingManagementModels;
 using WebViewModels.TrainingsViewModels;
+using Common.Objects;
+using DataModels.ContentsModels;
 
 namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
 {
@@ -30,6 +32,22 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                 //VideoUniqueId = c.VideoUniqueId,
             }).ToList();
             return result;
+        }
+        //===========================================
+        public CourseMeetingVideosViewModel Find(int id)
+        {
+            var result = courseMeetingVideosRepository.SingleOrDefault(c => c.Id == id);
+            if (result == null)
+                throw new CustomException(SystemCommonMessage.DataWasNotFound);
+            var model = new CourseMeetingVideosViewModel()
+            {
+                Id = result.Id,
+                BannerPicPath = string.IsNullOrEmpty(result.BannerPicPath) ? string.Empty : AppConfigProvider.CdnUrl() + result.BannerPicPath,
+                Title = result.Title,
+                Description = result.Description,
+                Link = result.Link,
+            };
+            return model;
         }
         //=============================================================================== Disposing
         #region DisposeObject

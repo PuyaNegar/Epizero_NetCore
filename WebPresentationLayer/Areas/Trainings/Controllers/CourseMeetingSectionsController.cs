@@ -26,6 +26,7 @@ namespace WebPresentationLayer.Areas.Trainings.Controllers
             return await Task.Run<IActionResult>(() =>
             {
                 int courseMeetingId = Request.Query["CourseMeetingId"].ToString().ToIntegerIdentifier();
+                ViewBag.CourseMeetingId = courseMeetingId;
                 ViewBag.Data = studentHomeworksService.Read(GetCurrentUserId() , courseMeetingId).Value;
                 return View();
             });

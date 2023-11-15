@@ -27,6 +27,7 @@ namespace WebBusinessLogicLayer.BusinessServices.IdentitiesServices
             {
                 UserHashId = user.Id.ToString().EncriptWithDESAlgoritm() ,
                 FirstName = user.FirstName,
+                UserName = user.UserName,
                 LastName = user.LastName,
                 Gender = user.Gender.ToActiveStatus(),
                 NationalCode = user.NationalCode,
