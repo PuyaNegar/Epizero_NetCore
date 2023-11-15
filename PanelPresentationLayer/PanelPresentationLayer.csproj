@@ -108,4 +108,6 @@
     <_ContentIncludedByDefault Remove="Areas\Financials\Views\StudentUserScores\ChangeCredit.cshtml" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appconfig_1json__JsonSchema="https://api.airplane.dev/v0/schemas/task.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
