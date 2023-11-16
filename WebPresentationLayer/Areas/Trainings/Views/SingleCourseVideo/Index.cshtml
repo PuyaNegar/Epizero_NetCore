@@ -1,0 +1,41 @@
+﻿@using Common.Extentions
+@using WebViewModels.IdentitiesViewModels;
+@{
+    var video = (CourseMeetingVideosViewModel)ViewBag.VideoDetail;
+    var userInfo = (StudentUserProfileViewModel)ViewBag.UserInfo;
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    ViewData["Title"] = " مدرسه آنلاین اپیزرو" + " | " + video.Title;
+
+}
+<script>
+    window.onload = function () {
+        var media_obj = null;
+        media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(video.Link.GetKavemoId())");
+        media_obj.api.DRMText({
+            text: ["@Html.Raw(userInfo.UserName)", "@Html.Raw(userInfo.FullName)", "آموزشگاه اپیزرو"],
+            time: 2.5,
+            color: "red",
+            fontSize: "17px",
+            fontStyle: "bold",
+            fontName: "arial",
+            opacity: 0.7,
+        });
+    }
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <hr />
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tag-video">
+                @Html.Raw(video.Link)
+            </div>
+
+        </div>
+    </div>
+</div>
+

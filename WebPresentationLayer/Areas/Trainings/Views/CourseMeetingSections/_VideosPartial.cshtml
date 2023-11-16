@@ -1,5 +1,5 @@
 ﻿@using Common.Extentions
- 
+
 @{
     var CourseMeetingSections = (WebViewModels.TrainingsViewModels.CourseMeetingSectionsViewModel)ViewBag.Data;
     int i = 0;
@@ -10,7 +10,25 @@
         margin-bottom: 70px !important;
     }
 </style>
+<style type="text/css">
+    .v-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #ddd;
+        padding: 40px 30px 30px 30px;
+        flex-direction: column;
+        border-radius: 7px;
+    }
 
+        .v-box .v-img img {
+            width: 50px;
+        }
+
+        .v-box .v-title {
+            margin-top: 20px;
+        }
+</style>
 @if (CourseMeetingSections.CourseMeetingVideos.Any())
 {
     <section class="courseMeetingVideo">
@@ -24,31 +42,38 @@
             <div class="row">
                 @foreach (var item in CourseMeetingSections.CourseMeetingVideos)
                 {
-                    <div class="col-md-4 col-sm-6 col-xs-12 m-b-25">
-                        @Html.Raw(item.Link)  
+                    <div class="col-md-4 col-sm-6 col-xs-12 m-t-30 pull-right">
+                        <div class="v-box">
+                            <div class="v-img" data-Id="@item.Id">
+                                <a href="/Trainings/SingleCourseVideo/Index?Id=@item.Id&CourseMeetingId=@ViewBag.CourseMeetingId"><img src="~/assets/img/play.png" /></a>
+                            </div>
+                            <div class="v-title">
+                                <p>  @item.Title  </p>
+                            </div>
+                        </div>
                     </div>
-                } 
-                <script>
-                window.onload = function () {
-                var media_obj = null ;
-                @foreach (var item in CourseMeetingSections.CourseMeetingVideos)
-                { 
-                    <text>
-                                media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(item.Link.GetKavemoId())");
-                                media_obj.api.DRMText({
-                                    text: ["@Html.Raw(CourseMeetingSections.StudentMobNo)", "@Html.Raw(CourseMeetingSections.StudentUserFullName)", "آموزشگاه اپیزرو" ] , 
-                                    time: 2.5,
-                                    color: "red",
-                                    fontSize: "17px",
-                                    fontStyle: "bold",
-                                    fontName: "arial",
-                                    opacity: 0.7,
-                                });
-                    
-                    </text>
-                  }
-               }
-                </script> 
+                }
+                @* <script>
+            window.onload = function () {
+            var media_obj = null ;
+            @foreach (var item in CourseMeetingSections.CourseMeetingVideos)
+            {
+            <text>
+            media_obj = window.Vis.libraryMedias.getByHash("@Html.Raw(item.Link.GetKavemoId())");
+            media_obj.api.DRMText({
+            text: ["@Html.Raw(CourseMeetingSections.StudentMobNo)", "@Html.Raw(CourseMeetingSections.StudentUserFullName)", "آموزشگاه اپیزرو" ] ,
+            time: 2.5,
+            color: "red",
+            fontSize: "17px",
+            fontStyle: "bold",
+            fontName: "arial",
+            opacity: 0.7,
+            });
+
+            </text>
+            }
+            }
+            </script> *@
             </div>
 
         </div>
