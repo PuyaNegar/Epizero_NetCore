@@ -32,5 +32,10 @@ namespace PanelViewModels.TeacherFinancialsViewModels
         /// </summary>
         public string TeacherPaymentMethod { get; set; }
         //===================================================
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Comment { get; set; }
+        //===================================================
     }
 }

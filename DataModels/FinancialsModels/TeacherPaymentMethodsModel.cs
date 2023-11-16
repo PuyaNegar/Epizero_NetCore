@@ -32,6 +32,11 @@ namespace DataModels.FinancialsModels
         /// <summary>
         /// 
         /// </summary>
+        public string Comment { get; set; }
+        //======================================
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual UsersModel TeacherUser { get; set; }
         //======================================
         /// <summary>

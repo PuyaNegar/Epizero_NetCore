@@ -80,7 +80,14 @@ namespace PanelViewModels.FinancialsViewModels
         /// </summary>
         public long TotalDebtAmount { get; set; }
         //=======================================================
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Display(Name = "توضیحات")]
+        [StringLength(600,ErrorMessage ="توضیحات نباید بالای 600 کارکتر باشد")]
+        public string Comment { get; set; }
+        //=======================================================
+
 
     }
 }
