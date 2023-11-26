@@ -69,7 +69,7 @@ namespace PanelBusinessLogicLayer.BusinessComponents.OnlineExamsComponents
                     TotalRank = d.TotalRank,
                     AverageBalance = d.AvrageBalance
                 }).ToList()
-            }).OrderByDescending(c => c.TotalRank).ToList();
+            }).OrderByDescending(c => c.TotalBalance).ToList();
             return query;
         }
         //============================================== 
