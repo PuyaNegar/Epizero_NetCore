@@ -14,7 +14,7 @@ namespace DataAccessLayer.EntityMaps.TrainingManagementMaps
             entity.Property(c => c.Id).HasColumnType("int").ValueGeneratedOnAdd().IsRequired(); 
             entity.Property(c => c.Description).HasColumnType("nvarchar(Max)");
             entity.Property(c => c.IsActive).HasColumnType("bit").IsRequired();
-            //entity.Property(c => c.CourseOrCourseMeetingTypeId).HasColumnType("int");
+            entity.Property(c => c.Inx).HasColumnType("int").HasDefaultValue(0).IsRequired();
             entity.Property(c => c.DiscountPercent).HasColumnType("float").IsRequired();
             entity.Property(c => c.CourseId).HasColumnType("int").IsRequired();
             entity.Property(c => c.TeacherUserId).HasColumnType("int").IsRequired();

@@ -50,6 +50,7 @@ namespace PanelBusinessLogicLayer.BusinessComponents.TrainingManagementComponent
             var result = courseMeetingsRepository.SingleOrDefault(c => c.Id == model.Id);
             if (result == null)
                 throw new CustomException(SystemCommonMessage.DataWasNotFound);
+            result.Inx = model.Inx;
             result.Price = model.Price;
             result.Name = model.Name;
             result.Description = model.Description;

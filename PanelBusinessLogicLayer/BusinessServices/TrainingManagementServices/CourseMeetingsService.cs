@@ -27,6 +27,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
             var result = courseMeetingsComponent.Read(CourseId).Select(c => new CourseMeetingsViewModel()
             {
                 Id = c.Id,
+                Inx = c.Inx,
                 IsActiveName = c.IsActive ? "فعال" : "غیر فعال",
                 IsPurchasableName = c.IsPurchasable ? "بلی" : "خیر",
                 Name = c.Name,
@@ -35,7 +36,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
                 DiscountType = c.DiscountAmount == 0 ? "درصدی" : "مبلغی",
                 DiscountPercentOrDiscountAmount = c.DiscountAmount == 0 ? c.DiscountPercent : c.DiscountAmount,
                 UserEditor = c.ModDateTime != null ? c.ModUser.FirstName + " " + c.ModUser.LastName + "(" + c.ModDateTime.Value.ToLocalDateTimeShortFormatString() + ")" : c.ModUser.FirstName + " " + c.ModUser.LastName + "(" + c.RegDateTime.ToLocalDateTimeShortFormatString() + ")"
-            }).ToList();
+            }).OrderBy(c=> c.Inx).ToList();
             return new SysResult() { IsSuccess = true, Message = SystemCommonMessage.InformationFetchedSuccessfully, Value = result };
         }
         //===============================================================================
@@ -53,7 +54,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
             {
                 DiscountAmount = discountAmount,
                 DiscountPercent = discountPercent,
-
+                Inx = request.Inx,  
                 StartDateTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, request.StartTime.ToTimeSpan().Hours, request.StartTime.ToTimeSpan().Minutes, 0).ToUtcDateTime(),
                 Price = request.Price,
                 Description = request.Description,
@@ -74,6 +75,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
             var model = new CourseMeetingsViewModel()
             {
                 Id = result.Id,
+                Inx = result.Inx,
                 StartDate = result.StartDateTime.ToLocalDateTime().ToDateShortFormatString(),
                 StartTime = result.StartDateTime.ToLocalDateTime().TimeOfDay.ToTimeString(),
                 CourseId = result.CourseId,
@@ -110,6 +112,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
                 Name = request.Name,
                 CourseId = request.CourseId,
                 IsActive = request.IsActive.ToBoolean(),
+                Inx = request.Inx,
                 IsPurchasable = request.IsPurchasable.ToBoolean()
             };
             courseMeetingsComponent.Update(model, currentUserId);

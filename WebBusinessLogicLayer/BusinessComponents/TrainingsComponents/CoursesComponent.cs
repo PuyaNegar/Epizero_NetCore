@@ -171,6 +171,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                     .Select(c => new CourseMeetingsViewModel()
                     {
                         Id = c.Id,
+                        Inx = c.Inx, 
                         NumberQuestions = c.OnlineExam == null ? "ثبت نشده" : c.OnlineExam.OnlineExamQuestions.Count().ToString(),
                         AnalysisVideoLink = c.OnlineExam == null ? null : c.OnlineExam.AnalysisVideoLink,
                         IsPurchasable = c.IsPurchasable,
@@ -200,7 +201,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                             TeacherUserId = c.CourseMeetingDedicatedTeacher.TeacherUser.Id,
                             PersonalPicPath = string.IsNullOrEmpty(c.CourseMeetingDedicatedTeacher.TeacherUser.PersonalPicPath) ? string.Empty : CdnUrl + c.CourseMeetingDedicatedTeacher.TeacherUser.PersonalPicPath
                         }
-                    }).OrderBy(c=> c.Id).ToList();
+                    }).OrderBy(c=> c.Inx).ToList();
                     return result;
                 }
             });

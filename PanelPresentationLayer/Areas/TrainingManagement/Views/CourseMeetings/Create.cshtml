@@ -53,9 +53,8 @@
                                 <span asp-validation-for="Price" class="danger"></span>
                             </div>
                         </div>
-                         
-                    </div>
-                    <div class="row">
+
+                    
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
                                 <label asp-for="IsPurchasable"></label>
@@ -66,7 +65,13 @@
                                 <span asp-validation-for="IsPurchasable" class="danger"></span>
                             </div>
                         </div>
-                        
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                <label asp-for="Inx"></label>
+                                <input asp-for="Inx" type="text" class="form-control" data-bind="value: c().Inx">
+                                <span asp-validation-for="Inx" class="danger"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-xs-12">
@@ -93,11 +98,7 @@
                         </div><!-- /.col-lg-6 -->
                     </div><!-- /.row -->
 
-
-
-
-
-
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">انصراف</button>
