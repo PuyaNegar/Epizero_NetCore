@@ -79,6 +79,11 @@ namespace DataModels.TrainingManagementModels
         /// 
         /// </summary>
         public DateTime StartDateTime { get; set; }
+        //=======================================================
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Inx { get; set; }
         //======================================================= ارتباطات
         /// <summary>
         /// 

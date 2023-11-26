@@ -77,12 +77,12 @@ namespace PanelViewModels.TrainingManagementViewModels
         public int Price { get; set; }
         //===================================================== 
         /// <summary>
-        /// درصد تخفیف
+        /// اولویت نمایش
         /// </summary>
-        //[Display(Name = "قیمت با تخفیف")]
-        ////[Required(ErrorMessage = "فیلد نبایستی خالی باشد")]
-        //[JsonConverter(typeof(CurrencyIntegerConvertor))]
-        //public int DiscountPrice { get; set; }
+        [Display(Name = "اولویت نمایش")]
+        [Required(ErrorMessage = "فیلد نبایستی خالی باشد")]
+        [RegularExpression(pattern: @"^\d{0,5}$", ErrorMessage = "فیلد بایستی بصورت عددی و حداکثر ۵ رقمی باشد")]
+        public int Inx { get; set; }
         //===================================================== 
         /// <summary>
         /// تاریخ شروع

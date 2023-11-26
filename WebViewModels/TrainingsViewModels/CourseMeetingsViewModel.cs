@@ -7,6 +7,7 @@ namespace WebViewModels.TrainingsViewModels
 {
    public class CourseMeetingsViewModel
     {
+        public int Inx { get; set; }
         public int Id { get; set; }
         /// <summary>
         /// 
