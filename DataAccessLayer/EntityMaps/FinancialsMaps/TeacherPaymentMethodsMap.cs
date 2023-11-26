@@ -22,6 +22,7 @@ namespace DataAccessLayer.EntityMaps.FinancialsMaps
             entity.Property(c => c.ModDateTime).HasColumnType("datetime");
             entity.Property(c => c.RegDateTime).HasColumnType("datetime").IsRequired();
             entity.Property(c => c.ModUserId).HasColumnType("int").IsRequired();
+            entity.Property(c => c.Comment).HasColumnType("nvarchar(600)");
             //=====================================================================ارتباطات
             entity.HasOne(c => c.ModUser).WithMany().HasForeignKey(c => c.ModUserId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(c => c.Course).WithMany(c => c.TeacherPaymentMethods).HasForeignKey(c => c.CourseId).OnDelete(DeleteBehavior.Restrict);

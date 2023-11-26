@@ -45,7 +45,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
                 TeacherPaymentMethodTypeId = viewModel.TeacherPaymentMethodTypeId,
                 RegDateTime = DateTime.UtcNow,
                 ModUserId = CurrentUserId,
-
+                Comment = viewModel.Comment,
             };
             if (viewModel.TeacherPaymentMethodTypeId == 1)
             {
@@ -105,7 +105,8 @@ namespace PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices
                 Id = viewModel.Id,
                 TeacherUserId = viewModel.TeacherId,
                 CourseId = viewModel.CourseId,
-                TeacherPaymentMethodTypeId = viewModel.TeacherPaymentMethodTypeId
+                TeacherPaymentMethodTypeId = viewModel.TeacherPaymentMethodTypeId,
+                Comment = viewModel.Comment,
             };
             teacherPaymentMethodsComponent.Update(model);
             return new SysResult() { IsSuccess = true, Message = SystemCommonMessage.InformationWasSuccessfullyEdited };

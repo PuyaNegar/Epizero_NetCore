@@ -19,7 +19,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TeacherFinancialsServices
         }
         //=============================================== 
         public SysResult<List<TeacherSattlements2ViewModel>> Read(int teacherUserId, DateFiltersViewModel viewModel)
-        { 
+        {
             DateTime? fromDate = string.IsNullOrEmpty(viewModel.FromDate) ? (DateTime?)null : new DateTime(viewModel.FromDate.CharacterAnalysis().ToDate().Year, viewModel.FromDate.CharacterAnalysis().ToDate().Month, viewModel.FromDate.CharacterAnalysis().ToDate().Day, 0, 0, 0).ToUtcDateTime();
             DateTime? toDate = string.IsNullOrEmpty(viewModel.ToDate) ? (DateTime?)null : new DateTime(viewModel.ToDate.CharacterAnalysis().ToDate().Year, viewModel.ToDate.CharacterAnalysis().ToDate().Month, viewModel.ToDate.CharacterAnalysis().ToDate().Day, 23, 59, 59).ToUtcDateTime();
             var result = teacherSattlementsComponent.Read(teacherUserId, fromDate, toDate).Select(c => new TeacherSattlements2ViewModel()
@@ -29,6 +29,7 @@ namespace PanelBusinessLogicLayer.BusinessServices.TeacherFinancialsServices
                 SattledAmount = c.SettledAmount,
                 CourseName = c.TeacherSattlementSchedules.TeacherPaymentMethod.Course.Name,
                 TeacherPaymentMethod = c.TeacherSattlementSchedules.TeacherPaymentMethod.TeacherPaymentMethodType.Name,
+                Comment = c.TeacherSattlementSchedules.TeacherPaymentMethod.Comment
             }).ToList();
             return new SysResult<List<TeacherSattlements2ViewModel>>() { IsSuccess = true, Message = SystemCommonMessage.InformationFetchedSuccessfully, Value = result };
         }

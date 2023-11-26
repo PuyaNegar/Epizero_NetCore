@@ -42,6 +42,11 @@
                         <input asp-for="PercentOrFee" type="text" data-bind="value: c().PercentOrFee" class="form-control currency">
                         <span asp-validation-for="PercentOrFee" class="danger"></span>
                     </div>
+                    <div class="form-group Comment">
+                        <label class="title-Comment">توضیحات</label>
+                        <textarea asp-for="Comment" type="text" data-bind="value: c().Comment" class="form-control currency"></textarea>
+                        <span asp-validation-for="Comment" class="danger"></span>
+                    </div>
                     <div class="number" style="display:none">
                         <div class="form-group">
                             <label asp-for="Number1"></label>

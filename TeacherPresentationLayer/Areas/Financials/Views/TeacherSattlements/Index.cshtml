@@ -251,7 +251,7 @@
                                             <th style="text-align: center; ">مبلغ تسویه</th>
                                             <th style="text-align: center;">دوره</th>
                                             <th style="text-align: center;">نحوه پرداخت</th>
-                                            <th></th>
+                                            <th style="text-align: center;">توضیحات</th>
                                         </tr>
                                     </thead>
                                     <tbody data-bind="foreach: sattlements()">
@@ -261,6 +261,7 @@
                                             <td class="center" data-bind="text: SattledAmount">    </td>
                                             <td class="center" data-bind="text: CourseName">   </td>
                                             <td class="center" data-bind="TeacherPaymentMethod">    </td>
+                                            <td class="center" data-bind="text: Comment">    </td>
                                         </tr>
                                     </tbody>
 
