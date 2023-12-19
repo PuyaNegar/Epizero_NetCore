@@ -96,7 +96,7 @@ namespace PanelBusinessLogicLayer.BusinessComponents.OnlineExamsComponents
                     result.ModUserId = currentUserId;
                     result.OnlineExam.AnalysisVideoLink = model.OnlineExam.AnalysisVideoLink;
                     result.OnlineExam.IsAvailableForSpecificFields = model.OnlineExam.IsAvailableForSpecificFields;
-                  
+                    result.PDFQuestionPath = model.PDFQuestionPath;
                     if (model.OnlineExam.IsAvailableForSpecificFields)
                     {
                         onlineExamFieldsRepository.Delete(c => c.OnlineExamId == model.OnlineExam.Id);

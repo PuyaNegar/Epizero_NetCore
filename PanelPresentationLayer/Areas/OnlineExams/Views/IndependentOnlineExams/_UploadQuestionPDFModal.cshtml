@@ -1,0 +1,69 @@
+﻿<div id="UploadQuestionPDFModal" class="modal fade modal-darkorange" tabindex="-1" role="dialog">
+
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header create-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  <strong>آپلود فایل PDF سوالات</strong>   </h4>
+            </div>
+            <form id="addForm">
+                <input type="hidden" id="OnlineExamId" />
+                <div class="form-group">
+                    <label for="exampleInputEmail1">نام آزمون</label>
+                    <input type="text" class="form-control" id="OnlineExamName" readonly>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label style="margin-top:15px;margin-bottom:20px;text-align:center;display:block"></label>
+                        <div class="form-group">
+                            @await Html.PartialAsync("~/Views/Component/FileUploader.cshtml",
+                                     new PanelPresentationLayer.ComponentModel.FileUploader()
+                            {
+                                ButtonFarsiName = "آپلود فایل",
+                                DefualtNullFileImagePath = "/assets/img/DefaultUploadFile.png",
+                                DefualtSelectedFileImagePath = "/assets/img/Ok.png",
+                                Name = "ExcelFilePath",
+                                KnockoutExpressionString = "MainViewModel.ex().FileData",
+                                MaxFileSize = 10240,
+                                HasDeleteBtn = false,
+                                Description = "فرمت‌های قابل قبول : PDF \r\n   حداکثر حجم مجاز فایل : 10 مگابایت"
+                            })
+                        </div>
+                        <span class="danger"></span>
+                    </div>
+                    <div class="col-md-12" style="text-align:center">
+                        <button type="submit" class="btn btn-success btn-sm">ثبت فایل</button>
+
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    MainViewModel.ex = ko.observable({});
+    $('#addForm').submit(function () {
+        if ($(this).valid()) {
+            DataTransfer('/OnlineExams/IndependentOnlineExams/UploadPDFUploadQuestion?OnlineExamId=' + $("#OnlineExamId").val(), ko.toJSON(MainViewModel.ex()), '#resultLoader',
+                function (f) {
+                    toastr.remove();
+                    if (!f.IsSuccess) {
+                        toastr.error(f.Message);
+                        $('#ExcelFilePathFileImagePath').attr("src", "/assets/img/DefaultUploadFile.png");
+
+                    } else {
+                        toastr.success(f.Message);
+                        $('#ExcelFilePathFileImagePath').attr("src", "/assets/img/DefaultUploadFile.png");
+                    }
+                },
+                function () {
+                    toastr.remove();
+                    toastr.error("خطا در ارتباط با سرور");
+                }
+            );
+        }
+        return false;
+    });
+
+
+</script>

@@ -70,6 +70,11 @@ namespace WebViewModels.TrainingsViewModels
         public bool HasExam { get; set; }
         //=====================================================
         /// <summary>
+        /// شروع
+        /// </summary>
+        public bool IsStarted { get; set; }
+        //=====================================================
+        /// <summary>
         /// 
         /// </summary>
         public bool IsPurchasable { get; set; }

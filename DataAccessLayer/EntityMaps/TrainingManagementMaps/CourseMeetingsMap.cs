@@ -24,6 +24,7 @@ namespace DataAccessLayer.EntityMaps.TrainingManagementMaps
             entity.Property(c => c.IsPurchasable).HasColumnType("bit").IsRequired();
             entity.Property(c => c.HasHomework).HasColumnType("bit").IsRequired();
             entity.Property(c => c.DiscountAmount).HasColumnType("int").IsRequired();
+            entity.Property(c => c.PDFQuestionPath).HasColumnType("nvarchar(300)");
             entity.Property(c => c.StartDateTime).HasColumnType("datetime").IsRequired();
             entity.Property(c => c.ModDateTime).HasColumnType("datetime");
             entity.Property(c => c.ModUserId).HasColumnType("int").IsRequired();

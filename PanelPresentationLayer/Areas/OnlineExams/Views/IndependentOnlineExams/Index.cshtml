@@ -10,6 +10,7 @@
     .none {
         display: none;
     }
+
     .popover {
         right: auto !important;
     }
@@ -38,9 +39,10 @@
             <li><a class="tagnestedPro btnOnlineExamResultAllStuedent"><span class="glyphicon glyphicon-record" aria-hidden="true"></span>کارنامه جزئی</a></li>
             <li><a class="tagnestedPro btnOnlineExamTopRankingResults"><span class="glyphicon glyphicon-file" aria-hidden="true"></span>کارنامه کلی</a></li>
             <li><a class="tagnestedPro btnOnlineExamAnsweringPercentages"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>درصد پاسخگویی</a></li>
+                 <li><a class="tagnestedPro btnUploadPDF questions"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>آپلود فایل PDF سوالات</a></li>
             @if (ViewBag.IsMultiTeacher == true)
             {
-                <li class="teacherAssignment"><a class="teacherAssignmentBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> انتساب دبیر </a></li>
+                    <li class="teacherAssignment"><a class="teacherAssignmentBtn"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> انتساب دبیر </a></li>
             }
             </ul>
     </div>
@@ -87,12 +89,12 @@
             $('#Edit_OnlineExamFieldIds > option').prop("selected", false);
             $('#Edit_OnlineExamFieldIds').trigger("chosen:updated");
         }
-          //**********************************************
+        //**********************************************
         AddBoxModalOnHide = function () {
             $('#OnlineExamFieldIds > option').prop("selected", false);
             $('#OnlineExamFieldIds').trigger("chosen:updated");
         }
-        
+
         //**********************************************
         $('body').on('change', '#IsAvailableForSpecificFields,#Edit_IsAvailableForSpecificFields', function () {
             if ($(this).val() == 0) {
@@ -121,12 +123,12 @@
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
             pageLoader('#PageContent', '#pageLoader', '/TrainingManagement/CourseMeetingStudents/Index/' + id, true);
         });
-         //**********************************************
+        //**********************************************
         $('body').on('click', '.btnOlineExamStuedents', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/OnlineExamStudents/Index/' + id, true);
         });
-          //**********************************************
+        //**********************************************
         $('body').on('click', '.btnOnlineExamTopRankingResults', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/OnlineExamTopRankingResults/Index/' + id, true);
@@ -136,16 +138,25 @@
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/OnlineExamAnsweringPercentages/Index/' + id, true);
         });
         //**********************************************
+        $('body').on('click', '.btnUploadPDF', function () {
+            var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Id;
+            var Name = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().Name;
+            $("#OnlineExamId").val(id);
+            $("#OnlineExamName").val(Name);
+            $('#UploadQuestionPDFModal').modal({ backdrop: 'static', keyboard: false });
+            $('#UploadQuestionPDFModal').modal('show');
+        });
+        //**********************************************
         $('body').on('click', '.btnOlineExamQuestions', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/OnlineExamQuestions/Index/' + id, true);
         });
-         //**********************************************
+        //**********************************************
         $('body').on('click', '.btnArrangeQuestions', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/ArrangeQuestions/Index/' + id, true);
         });
-         //**********************************************
+        //**********************************************
         $('body').on('click', '.btnExportQuestions', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             window.open('/OnlineExams/OnlineExams/ExportWithMultipleOptionPage/' + id, '_blank');
@@ -155,7 +166,7 @@
             var id = $('#modelList').DataTable().row($(this).parents('tr').eq(0)).data().OnlineExamId;
             pageLoader('#PageContent', '#pageLoader', '/OnlineExams/StudentOnlineExamResults/ShowAllResultPage/' + id, true);
         });
-         //**********************************************
+        //**********************************************
         $('body').on('click', '.teacherAssignmentBtn', function () {
             var id = $('#modelList').DataTable().row($(this).parents('tr')).data().Id;
 
@@ -301,6 +312,7 @@
                         await Html.RenderPartialAsync("Create.cshtml");
                         await Html.RenderPartialAsync("Edit.cshtml");
                         await Html.RenderPartialAsync("_TeacherAssignmentModal.cshtml");
+                        await Html.RenderPartialAsync("_UploadQuestionPDFModal.cshtml");
                     }
                 </div>
             </div><!--Widget Body-->

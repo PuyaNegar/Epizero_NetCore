@@ -188,6 +188,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                         EndDateTime = c.OnlineExam != null ? c.OnlineExam.StartDateTime.AddMinutes(/*c.OnlineExam.Duration +*/ (c.OnlineExam.AllowedTimeToEnter == null ? 0 : c.OnlineExam.AllowedTimeToEnter.Value)).ToLocalDateTimeShortFormatString().Replace("ساعت", "-") : "ثیت نشده",
                         StartDateTimeOrginal = c.OnlineExam != null ? c.OnlineExam.StartDateTime : (DateTime?)null,
                         IsShowQuestionAnswer = c.OnlineExam != null ? (c.OnlineExam.StartDateTime.AddMinutes(c.OnlineExam.Duration + (c.OnlineExam.AllowedTimeToEnter == null ? 0 : c.OnlineExam.AllowedTimeToEnter.Value)) < DateTime.UtcNow && StudentOnlineExamFinalizeComponent.IsFinalized(c.OnlineExam.Id, studentUserId)) : false,
+                        IsStarted = c.OnlineExam.StartDateTime < DateTime.UtcNow,
                         IsAvailableForSpecificFields = c.OnlineExam != null ? c.OnlineExam.IsAvailableForSpecificFields : false,
                         HasExam = c.HasExam,
                         HasHomework = c.HasHomework,

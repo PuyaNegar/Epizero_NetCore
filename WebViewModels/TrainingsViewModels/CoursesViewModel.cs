@@ -89,7 +89,7 @@ namespace WebViewModels.TrainingsViewModels
         /// تاریخ شروع
         /// </summary>
         public string StartDate { get; set; }
-        //=====================================================
+        //===================================================== 
         /// <summary>
         /// تاریخ پايان
         /// </summary>

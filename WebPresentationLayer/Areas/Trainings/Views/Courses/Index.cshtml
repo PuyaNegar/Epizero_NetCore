@@ -1094,9 +1094,16 @@
                                                                             <a class="enterExamBtn btn-back-color-blue" data-redirectUrl="@(AppConfigProvider.GetOnlineExamUrl() + "?RefId=" + EncriptRefId(courseMeeting.OnlineExamId.Value, ViewBag.UserId))" data-onlineExamId="@courseMeeting.OnlineExamId">
                                                                                 <span>ورود به آزمون</span>
                                                                             </a>
+                                                                            @if (courseMeeting.IsStarted)
+                                                                            {
+                                                                                <a class="enterExamBtn btn-back-color-blue" data-redirectUrl="@(AppConfigProvider.GetOnlineExamUrl() + "?RefId=" + EncriptRefId(courseMeeting.OnlineExamId.Value, ViewBag.UserId))" data-onlineExamId="@courseMeeting.OnlineExamId">
+                                                                                    <span>دریافت سوالات آزمون</span>
+                                                                                </a>
+                                                                            }
                                                                             <a class="showOnlineExamResultBtn bg-color-red" data-onlineExamId="@courseMeeting.OnlineExamId">
                                                                                 <span class="date">مشاهده نتایج</span>
                                                                             </a>
+
 
 
                                                                             @if (courseMeeting.IsShowQuestionAnswer)

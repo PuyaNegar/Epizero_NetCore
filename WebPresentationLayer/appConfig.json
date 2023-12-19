@@ -1,8 +1,8 @@
 ﻿{
 
-   "connectionString": "Data Source=185.190.39.241;Initial Catalog=Test_epizeroDB;UID=sahadap2_epizeroDB_USR;PWD=Kk_3ml23",
+ // "connectionString": "Data Source=185.190.39.241;Initial Catalog=Test_epizeroDB;UID=sahadap2_epizeroDB_USR;PWD=Kk_3ml23",
   // "connectionString": "Data Source=185.190.39.241;Initial Catalog=sahadap2_epizeroDB;UID=sahadap2_epizeroDB_USR;PWD=Kk_3ml23",
-  //  "connectionString": "Data Source=185.55.224.44;Initial Catalog=Punas_epizeroDevelope;UID=Punas_USR;PWD=abc_123",
+  "connectionString": "Data Source=185.190.39.241;Initial Catalog=sahadap2_epizeroDB;UID=sahadap2_epizeroDB_USR;PWD=Kk_3ml23",
   "appFilePath": "c:\\epizero\\files\\files",
   "smsUserName": "epizero",
   "smsPassword": "171701",

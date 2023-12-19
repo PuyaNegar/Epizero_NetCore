@@ -9,6 +9,7 @@ using PanelBusinessLogicLayer.BusinessServices.OnlineExamsServices;
 using PanelBusinessLogicLayer.BusinessServices.TrainingManagementServices;
 using PanelPresentationLayer.Infrastracture.Filters;
 using PanelPresentationLayer.Infrastracture.Functions;
+using PanelViewModels;
 using PanelViewModels.BaseViewModels;
 using PanelViewModels.TrainingManagementViewModels;
 using System;
@@ -50,7 +51,7 @@ namespace PanelPresentationLayer.Areas.OnlineExams.Controllers
                     ViewBag.CourseName = courseModel.Name;
                     ViewBag.TeacherUserId = courseModel.TeacherUserId;
                     ViewBag.CourseId = Id;
-                    ViewBag.IsMultiTeacher =(bool) courseModel.IsMultiTeacher.ToBoolean();
+                    ViewBag.IsMultiTeacher = (bool)courseModel.IsMultiTeacher.ToBoolean();
                     return View();
                 }
             });
@@ -103,6 +104,13 @@ namespace PanelPresentationLayer.Areas.OnlineExams.Controllers
                 var result = independentOnlineExamsService.Delete(viewModel);
                 return Json(result);
             });
+        }
+        //===========================================================================
+        [HttpPost]
+        public IActionResult UploadPDFUploadQuestion([FromQuery] int OnlineExamId, [FromBody] FileDataViewModel viewModel)
+        {
+            independentOnlineExamsService.UploadPDFUploadQuestion(OnlineExamId, viewModel, GetCurrentUserId());
+            return Ok();
         }
         //===========================================================================
         public int GetCurrentUserId()

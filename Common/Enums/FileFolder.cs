@@ -28,6 +28,7 @@ namespace Common.Enums
         AcceptedStudentInEntranceExams,
         AudioCourseStudentQuestions,
         HomePageNotifications,
-        CommentAudio
+        CommentAudio,
+        QuestionPDF
     }
 }

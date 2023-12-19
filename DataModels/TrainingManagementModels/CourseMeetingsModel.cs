@@ -93,6 +93,11 @@ namespace DataModels.TrainingManagementModels
         /// <summary>
         /// 
         /// </summary>
+        public string PDFQuestionPath { get; set; }
+        //=======================================================
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual UsersModel TeacherUser { get; set; }
         //=======================================================
         /// <summary>

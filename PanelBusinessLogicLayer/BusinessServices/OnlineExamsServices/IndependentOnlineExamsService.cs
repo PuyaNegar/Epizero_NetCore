@@ -5,6 +5,8 @@ using DataModels.OnlineExamModels;
 using DataModels.TrainingManagementModels;
 using PanelBusinessLogicLayer.BusinessComponents.OnlineExamsComponents;
 using PanelBusinessLogicLayer.BusinessComponents.TrainingManagementComponents;
+using PanelBusinessLogicLayer.UtilityComponent;
+using PanelViewModels;
 using PanelViewModels.BaseViewModels;
 using PanelViewModels.TrainingManagementViewModels;
 using System;
@@ -33,13 +35,13 @@ namespace PanelBusinessLogicLayer.BusinessServices.OnlineExamsServices
                 Name = c.Name,
                 Price = c.Price,
                 DiscountType = c.DiscountAmount == 0 ? "درصدی" : "مبلغی",
-                DiscountPercentOrDiscountAmount = c.DiscountAmount == 0 ?  c.DiscountPercent  :  c.DiscountAmount ,
+                DiscountPercentOrDiscountAmount = c.DiscountAmount == 0 ? c.DiscountPercent : c.DiscountAmount,
                 CourseName = c.Course.Name,
                 StartDate = c.StartDateTime.ToLocalDateTime().ToDateShortFormatString(),
                 StartTime = c.StartDateTime.ToLocalDateTime().TimeOfDay.ToTimeString(),
                 Duration = c.OnlineExam.Duration,
                 OnlineExamId = c.OnlineExam.Id,
-                 
+
             }).ToList();
             return new SysResult() { IsSuccess = true, Message = SystemCommonMessage.InformationFetchedSuccessfully, Value = result };
         }
@@ -186,15 +188,15 @@ namespace PanelBusinessLogicLayer.BusinessServices.OnlineExamsServices
             List<OnlineExamFieldsModel> _OnlineExamFieldsModel = null;
             if (request.OnlineExamFieldIds != null)
             {
-                  _OnlineExamFieldsModel = request.OnlineExamFieldIds
-                                .Select(item => new OnlineExamFieldsModel()
-                                {
-                                    OnlineExamId = request.OnlineExamId,
-                                    FieldId = Convert.ToInt32(item),
-                                    ModDateTime = DateTime.UtcNow,
-                                    RegDateTime = DateTime.UtcNow,
-                                    ModUserId = currentUserId
-                                }).ToList();
+                _OnlineExamFieldsModel = request.OnlineExamFieldIds
+                              .Select(item => new OnlineExamFieldsModel()
+                              {
+                                  OnlineExamId = request.OnlineExamId,
+                                  FieldId = Convert.ToInt32(item),
+                                  ModDateTime = DateTime.UtcNow,
+                                  RegDateTime = DateTime.UtcNow,
+                                  ModUserId = currentUserId
+                              }).ToList();
             }
 
 
@@ -228,6 +230,13 @@ namespace PanelBusinessLogicLayer.BusinessServices.OnlineExamsServices
                     throw new Exception("درصد تخفیف بایستی عددی بین 0 تا 100 باشد");
                 discountPercent = request.DiscountPercentOrDiscountAmount;
             }
+        }
+
+        public void UploadPDFUploadQuestion(int OnlineExamId, FileDataViewModel fileData, int CurrentUserId)
+        {
+            var onlineExam = independentOnlineExamsComponent.Find(OnlineExamId);
+            onlineExam.PDFQuestionPath = FileComponentProvider.Save(FileFolder.QuestionPDF, fileData.FileData);
+            independentOnlineExamsComponent.Update(onlineExam, CurrentUserId);
         }
 
         //=============================================================================== Disposing
