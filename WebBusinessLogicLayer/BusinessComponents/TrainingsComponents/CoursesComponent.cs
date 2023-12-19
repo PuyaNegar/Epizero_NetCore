@@ -171,7 +171,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                     .Select(c => new CourseMeetingsViewModel()
                     {
                         Id = c.Id,
-                        Inx = c.Inx, 
+                        Inx = c.Inx,
                         NumberQuestions = c.OnlineExam == null ? "ثبت نشده" : c.OnlineExam.OnlineExamQuestions.Count().ToString(),
                         AnalysisVideoLink = c.OnlineExam == null ? null : c.OnlineExam.AnalysisVideoLink,
                         IsPurchasable = c.IsPurchasable,
@@ -188,7 +188,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                         EndDateTime = c.OnlineExam != null ? c.OnlineExam.StartDateTime.AddMinutes(/*c.OnlineExam.Duration +*/ (c.OnlineExam.AllowedTimeToEnter == null ? 0 : c.OnlineExam.AllowedTimeToEnter.Value)).ToLocalDateTimeShortFormatString().Replace("ساعت", "-") : "ثیت نشده",
                         StartDateTimeOrginal = c.OnlineExam != null ? c.OnlineExam.StartDateTime : (DateTime?)null,
                         IsShowQuestionAnswer = c.OnlineExam != null ? (c.OnlineExam.StartDateTime.AddMinutes(c.OnlineExam.Duration + (c.OnlineExam.AllowedTimeToEnter == null ? 0 : c.OnlineExam.AllowedTimeToEnter.Value)) < DateTime.UtcNow && StudentOnlineExamFinalizeComponent.IsFinalized(c.OnlineExam.Id, studentUserId)) : false,
-                        IsStarted = c.OnlineExam.StartDateTime < DateTime.UtcNow,
+                        IsStarted = c.OnlineExam != null ? c.OnlineExam.StartDateTime < DateTime.UtcNow : false,
                         IsAvailableForSpecificFields = c.OnlineExam != null ? c.OnlineExam.IsAvailableForSpecificFields : false,
                         HasExam = c.HasExam,
                         HasHomework = c.HasHomework,
@@ -202,7 +202,7 @@ namespace WebBusinessLogicLayer.BusinessComponents.TrainingsComponents
                             TeacherUserId = c.CourseMeetingDedicatedTeacher.TeacherUser.Id,
                             PersonalPicPath = string.IsNullOrEmpty(c.CourseMeetingDedicatedTeacher.TeacherUser.PersonalPicPath) ? string.Empty : CdnUrl + c.CourseMeetingDedicatedTeacher.TeacherUser.PersonalPicPath
                         }
-                    }).OrderBy(c=> c.Inx).ToList();
+                    }).OrderBy(c => c.Inx).ToList();
                     return result;
                 }
             });
