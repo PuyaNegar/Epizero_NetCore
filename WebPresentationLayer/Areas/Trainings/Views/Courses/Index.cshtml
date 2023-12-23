@@ -295,6 +295,9 @@
                 $('#teachersModal').modal('show');
 
             });
+            function DownloadExcel(link){
+                window.open(link);
+            }
         });
     </script>
 }
@@ -1096,7 +1099,7 @@
                                                                             </a>
                                                                             @if (courseMeeting.IsStarted)
                                                                             {
-                                                                                <a class="enterExamBtn btn-back-color-blue" data-redirectUrl="@(AppConfigProvider.GetOnlineExamUrl() + "?RefId=" + EncriptRefId(courseMeeting.OnlineExamId.Value, ViewBag.UserId))" data-onlineExamId="@courseMeeting.OnlineExamId">
+                                                                                <a class="btn-back-color-blue" href="@courseMeeting.QuestionsPdf">
                                                                                     <span>دریافت سوالات آزمون</span>
                                                                                 </a>
                                                                             }

@@ -122,6 +122,11 @@ namespace WebViewModels.TrainingsViewModels
         /// <summary>
         /// 
         /// </summary>
+        public string QuestionsPdf { get; set; }
+        //=====================================================
+        /// <summary>
+        /// 
+        /// </summary>
         public List<int> OnlineExamFieldIds { get; set; }
         //=====================================================
         /// <summary>
